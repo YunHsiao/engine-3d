@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>spec-zed</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <style>
+    body {
+      background-color: #333;
+      margin: 0px;
+      overflow: hidden;
+    }
+
+    .fit {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .dgui {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+    }
+  </style>
+</head>
+
+<body class="fit">
+  <canvas id="canvas" tabindex="-1" class="fit"></canvas>
+  <script src="../../dist/engine.dev.js"></script>
+  <script src="./loadScene.js"></script>
+  <script src="../../node_modules/dat.gui/build/dat.gui.min.js"></script>
+  <script src="../../node_modules/lstats.js/dist/lstats.min.js"></script>
+  <script>
+    // init app
+    let app = new cc.App(document.getElementById('canvas'));
+    const { vec3 } = cc.math;
+
+    let dgui = new dat.GUI({ width: 200 });
+    dgui.domElement.classList.add('dgui');
+
+    let stats = new window.LStats(document.body);
+    window.stats = stats;
+
+    let ps = new Array;
+
+    app.resize();
+
+    load('../assets/out', 'spec-particlesystem-performance', () => {
+      let p = app.activeLevel.getCompsInChildren('ParticleSystem')[0];
+      p._entity.active = false;
+      let options = {
+        num: 1,
+        particles: 500,
+        velocity: false,
+        limitVelocity: false,
+        force: false,
+        color: false,
+        size: false,
+        rotation: false,
+        animation: false
+      };
+      dgui.add(options, 'num').onFinishChange(() => {
+        if (ps.length < Math.floor(options.num)) {
+          while (ps.length !== options.num) {
+            ps.push(app.cloneEntity(p._entity));
+            ps[ps.length - 1].setParent(app.activeLevel);
+            ps[ps.length - 1].active = true;
+          }
+        }
+        else {
+          while (ps.length !== Math.floor(options.num)) {
+            ps.pop().destroy();
+          }
+        }
+      });
+      dgui.add(options, 'particles').onFinishChange(() => {
+        ps.forEach((ele) => {
+          ele.getComp('ParticleSystem').capacity = options.particles;
+        });
+        p.capacity = options.particles;
+      });
+      dgui.add(options, 'velocity').onFinishChange(() => {
+        ps.forEach((ele) => {
+          ele.getComp('ParticleSystem').velocityOvertimeModule.enable = options.velocity;
+        });
+        p.velocityOvertimeModule.enable = options.velocity;
+      });
+      dgui.add(options, 'limitVelocity').onFinishChange(() => {
+        ps.forEach((ele) => {
+          ele.getComp('ParticleSystem').limitVelocityOvertimeModule.enable = options.limitVelocity;
+        });
+        p.limitVelocityOvertimeModule.enable = options.limitVelocity;
+      });
+      dgui.add(options, 'force').onFinishChange(() => {
+        ps.forEach((ele) => {
+          ele.getComp('ParticleSystem').forceOvertimeModule.enable = options.force;
+        });
+        p.forceOvertimeModule.enable = options.force;
+      });
+      dgui.add(options, 'color').onFinishChange(() => {
+        ps.forEach((ele) => {
+          ele.getComp('ParticleSystem').colorOverLifetimeModule.enable = options.color;
+        });
+        p.colorOverLifetimeModule.enable = options.color;
+      });
+      dgui.add(options, 'size').onFinishChange(() => {
+        ps.forEach((ele) => {
+          ele.getComp('ParticleSystem').sizeOvertimeModule.enable = options.size;
+        });
+        p.sizeOvertimeModule.enable = options.size;
+      });
+      dgui.add(options, 'rotation').onFinishChange(() => {
+        ps.forEach((ele) => {
+          ele.getComp('ParticleSystem').rotationOvertimeModule.enable = options.rotation;
+        });
+        p.rotationOvertimeModule.enable = options.rotation;
+      });
+      dgui.add(options, 'animation').onFinishChange(() => {
+        ps.forEach((ele) => {
+          ele.getComp('ParticleSystem').textureAnimationModule.enable = options.animation;
+        });
+        p.textureAnimationModule.enable = options.animation;
+      });
+    });
+
+    // run app
+    app.run();
+
+    app.on('tick', () => {
+      window.stats.tick();
+    });
+  </script>
+</body>
+
+</html>
