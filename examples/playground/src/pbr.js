@@ -132,14 +132,12 @@
     app._debugger._camera._clearFlags = camComp.clearFlags;
     app._debugger._camera._clearModel = model;
   };
-  let loadIBL = function(useIBL) {
+  let loadIBL = function() {
     define("USE_IBL", dobj.useIBL);
-    if (!useIBL) {
+    if (!dobj.useIBL) {
       activateSkyBox(null);
       return;
     }
-    // lightSwitch(false);
-
     // load environment box.
     let envSrc = `${dobj.envURL}/environment`;
     // front, back, top, bottom, right, left
@@ -199,6 +197,7 @@
   };
 
   // immediate init
+  loadIBL();
   const lutUrls = {
     json: '../assets/pbr/brdfLUT.json',
     image: '../assets/pbr/brdfLUT.png',
@@ -206,7 +205,6 @@
   app.assets.loadUrls('texture', lutUrls, (err, lutMap) => {
     setProperty('brdfLUT', lutMap);
   });
-  loadIBL(dobj.useIBL);
   define("USE_TEX_LOD", dobj.useTexLod);
   setProperty("maxReflectionLod", dobj.maxRefLod);
   loadTexture(dobj.albedo, 'albedo_texture');
@@ -217,17 +215,13 @@
 
   // dat.GUI controllers
   dgui.remember(dobj);
-  dgui.add(dobj, 'useIBL').onFinishChange(() => {
-    loadIBL(dobj.useIBL);
-  });
+  dgui.add(dobj, 'useIBL').onFinishChange(loadIBL);
+  dgui.add(dobj, 'envURL').onFinishChange(loadIBL);
   dgui.add(dobj, 'useTexLod').onFinishChange(() => {
     define("USE_TEX_LOD", dobj.useTexLod);
   });
   dgui.add(dobj, 'maxRefLod').onFinishChange(() => {
     setProperty("maxReflectionLod", dobj.maxRefLod);
-  });
-  dgui.add(dobj, 'envURL').onFinishChange(() => {
-    loadIBL(dobj.useIBL);
   });
   dgui.add(dobj, 'albedo').onFinishChange(() => {
     loadTexture(dobj.albedo, 'albedo_texture');
