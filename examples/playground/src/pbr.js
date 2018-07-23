@@ -77,7 +77,7 @@
   quat.fromEuler(camEnt.lrot, -27, 38-90, 0);
   let camComp = camEnt.addComp('Camera');
   camComp.clearFlags |= cc.renderer.CLEAR_SKYBOX;
-  // app._device._gl.canvas.width = 1280; app._device._gl.canvas.height = 720;
+  // app._canvas.width = 1280; app._canvas.height = 720;
 
   // util functions
   let setProperty = function(name, prop) {
