@@ -60,7 +60,6 @@ import renderer from './lib/renderer';
 import gfx from './lib/gfx';
 import * as memop from './lib/memop';
 import input from './lib/input';
-import * as physics from './lib/framework/physics';
 
 export default {
   // registry
@@ -133,6 +132,5 @@ export default {
   resl,
   path,
   input,
-  physics,
   async,
 };
