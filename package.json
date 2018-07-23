@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@gamedev-js/rollup-plugin-node-resolve": "^3.0.0",
+    "cannon": "^0.6.2",
     "dat.gui": "^0.7.2",
     "electron": "^1.8.1",
     "electron-node-tap": "^1.1.4",
