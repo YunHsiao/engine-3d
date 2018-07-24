@@ -68,6 +68,5 @@
       }
     });
   }
-  app.configuration.setOrientation(app.configuration.key.ORIENTATION_LANDSCAPE);
 
 })();
