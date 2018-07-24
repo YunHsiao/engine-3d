@@ -69,5 +69,10 @@ var files = {
 		"spec-particlesystem-texturesheet",
 		"spec-particlesystem-velocityovertime",
 		"spec-particlesystem-performance"
-	]
+	],
+  "physics": [
+    "spec-boxes",
+    "spec-spheres",
+    "spec-body-params"
+  ]
 };

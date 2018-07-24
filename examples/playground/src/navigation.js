@@ -27,7 +27,7 @@
     quat.fromEuler(ent.lrot, yaw, pitch, roll);
     vec3.set(ent.lscale, sx, sy, sz);
     // after transform changed, static objects must do a manual update
-    col.collider.manualUpdate();
+    col.body.manualUpdate();
   };
   // walls               positions       rotations       scales           colors
   createObject(quad,   0, -10,   0,      0, 0,   0,   20, 1, 20,   0.8, 0.7, 0.6);
@@ -51,8 +51,8 @@
     center: [0, -2, 0]
   });
   app.system('physics').world.setGravity(0, -50, 0);
-  col.collider.setUpdateMode({in: true, out: true});
-  col.collider.setFixedRotation(true);
+  col.body.setUpdateMode(true, true);
+  col.body.setFreezeRotation(true);
 
   // utils
   let dobj = {
@@ -91,7 +91,7 @@
       this.rot = this._entity.lrot;
       this.input = this._app._input;
       this.input._lock = cc.input.LOCK_ALWAYS;
-      this.velocity = this._entity.getComp('Collider').collider.velocity;
+      this.velocity = this._entity.getComp('Collider').body.velocity;
       this._entity.on('collide', () => { this.jumping = false; });
     }
 
