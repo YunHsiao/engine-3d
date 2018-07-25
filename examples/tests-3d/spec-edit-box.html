@@ -19,6 +19,11 @@
       left: 0;
       right: 0;
     }
+
+    .view {
+      position: relative;
+      height: 100%;
+    }
   </style>
 </head>
 
@@ -28,9 +33,15 @@
   <script src="./loadScene.js"></script>
   <script>
     // init app
-    let app = new cc.App(document.getElementById('canvas'));
+    let canvas = document.getElementById('canvas');
+    let view = document.createElement('div');
+    view.id = 'view';
+    view.className = 'view';
+    canvas.parentNode.insertBefore(view, canvas);
+    let app = new cc.App(canvas);
     const { vec3 } = cc.math;
 
+    view.appendChild(canvas);
     app.resize();
 
     load('../assets/out', 'spec-edit-box');
