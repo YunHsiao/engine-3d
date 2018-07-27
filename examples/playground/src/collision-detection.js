@@ -6,8 +6,7 @@
   const { enums } = cc.geometry;
 
   // use built-in collision detection engine
-  app.system('physics')._engine = 0;
-  app.system('physics').init();
+  app.system('physics').engine = 0;
 
   // util functions
   let border = 20;
@@ -27,6 +26,8 @@
       this.minAngle = toRadian(minAngle);
       this.maxAngle = toRadian(maxAngle);
       this.color = color;
+      this.group = group;
+      this.mask = mask;
       // emitter hint
       let emitter = this.app.createEntity('emitter_' + group);
       let modelComp = emitter.addComp('Model');
@@ -57,6 +58,7 @@
           if (ent.color.a > color.a) return;
           ent.color.a = 1;
           vec3.set(ent.velocity, 0, 0, 0);
+          col.body.setCollisionFilter(0, 0);
           setTimeout(() => { this.reap(ent); }, 100);
         });
         this.reap(ent);
@@ -87,6 +89,7 @@
       ent.velocity = vec3.new(Math.cos(theta) * Math.sin(phi) * speed,
         Math.cos(phi) * speed, Math.sin(theta) * Math.sin(phi) * speed);
       ent.color.a = this.color.a;
+      ent.getComp('Collider').body.setCollisionFilter(this.group, this.mask);
       vec3.copy(ent.lpos, this.pos);
       this.livepool.push(ent);
       ent.activate();
