@@ -61,6 +61,8 @@ import gfx from './lib/gfx';
 import * as memop from './lib/memop';
 import input from './lib/input';
 
+import * as animation from './lib/framework/animation';
+
 export default {
   // registry
   registerLoader: registry.registerLoader,
@@ -133,4 +135,6 @@ export default {
   path,
   input,
   async,
+
+  animation,
 };
