@@ -116,7 +116,7 @@
       this.pos = vec3.zero();
       this.hitInfo = {};
       this.input = app._input;
-      this.canvas = app._device._gl.canvas;
+      this.canvas = app._canvas;
       this.camera = camera.getComp('Camera')._camera;
       
       this.center = vec3.new(-2, 1, 1);
@@ -173,7 +173,7 @@
         cc.math.toDegree(-Math.atan2(this.height, this.dist)), 
         cc.math.toDegree(this.angle), 0);
       /* horribly redundant *
-      camera.lookAt(this.center); // TODO: wtf: y-axis oscillation
+      camera.lookAt(this.center);
       /**/
     }
 

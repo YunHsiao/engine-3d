@@ -35,7 +35,7 @@
     let image = ent.addComp('Image');
     image.setOffset(0, -50);
     image.setAnchors(0.5, 0.5, 0.5, 0.5);
-    image.setSize(160,30)
+    image.setSize(160, 30)
     let button = ent.addComp('Button');
 
     let entLabel = app.createEntity('label');
@@ -68,4 +68,5 @@
       }
     });
   }
+
 })();

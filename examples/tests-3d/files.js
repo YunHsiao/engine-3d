@@ -18,6 +18,7 @@ var files = {
 	"prefab": [
 		"spec-multiple-children",
 		"spec-prefab-instantiate",
+		"spec-prefab-skeleton-instantiate",
 		"spec-use-default-transform",
 		"spec-use-new-name"
 	],

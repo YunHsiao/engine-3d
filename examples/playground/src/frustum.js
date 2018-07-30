@@ -126,10 +126,10 @@
   app._forward.accurateFrustumCulling = dobj.accurateFrustumCulling;
 
   // adjust canvas ratio
-  let h = app._device._gl.canvas.width / 16 * 9;
-  if (app._device._gl.canvas.height > h) app._device._gl.canvas.height = h;
-  else app._device._gl.canvas.width = app._device._gl.canvas.height / 9 * 16;
-  let w = app._device._gl.canvas.width; h = app._device._gl.canvas.height;
+  let h = app._canvas.width / 16 * 9;
+  if (app._canvas.height > h) app._canvas.height = h;
+  else app._canvas.width = app._canvas.height / 9 * 16;
+  let w = app._canvas.width; h = app._canvas.height;
 
   // warp the frustum boundary hint
   let mulPos = (function() {
