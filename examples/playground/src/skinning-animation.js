@@ -1,21 +1,20 @@
 (() => {
   const { cc, app, dgui } = window;
   const { resl } = cc;
-  const { color4, quat } = cc.math;
 
   let dobj = {
     baseUrl: '../assets/out',
     scene: 'spec-skeleton',
     entityPath: 'Hero',
     animationclips: [],
-    movementSpeed : 0,
+    movementSpeed : 0.0,
     isHealth: true
   };
 
   dgui.remember(dobj);
-  dgui.add(dobj, 'baseUrl').onFinishChange(() => load());
-  dgui.add(dobj, 'scene').onFinishChange(() => load());
-  dgui.add(dobj, 'entityPath');
+  dgui.add(dobj, 'baseUrl').name("Base URL").onFinishChange(() => load());
+  dgui.add(dobj, 'scene').name("Scene").onFinishChange(() => load());
+  dgui.add(dobj, 'entityPath').name("Entity path");
 
   load();
 
@@ -37,13 +36,15 @@
           } else {
             app.loadLevel(level);
 
+            let charFolder = dgui.addFolder("Character");
+
             let mainEntity = app.find(dobj.entityPath);
             let mainEntityAnimation = mainEntity.getComp('Animation');
 
             let clips = [];
             for (let clip of mainEntityAnimation.clips)
               clips.push(clip.name);
-            dgui.add(dobj, 'animationclips', clips).onFinishChange((value) => {
+              charFolder.add(dobj, 'animationclips', clips).name("Clips").onFinishChange((value) => {
               mainEntityAnimation.play(value);
             });
 
@@ -85,11 +86,11 @@
 
             mainEntityAnimation.animationGraph.linearSwitch(movementMotion);
 
-            dgui.add(dobj, "movementSpeed", 0.0, 2.0).onFinishChange((value) => {
+            charFolder.add(dobj, "movementSpeed", 0.0, 2.0).name("Speed").onFinishChange((value) => {
               blender.setInput(value);
             });
 
-            dgui.add(dobj, "isHealth", true).onFinishChange((value) => {
+            charFolder.add(dobj, "isHealth", true).name("Health").onFinishChange((value) => {
               isHealth.value = value;
             });
           }
