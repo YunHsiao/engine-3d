@@ -63,7 +63,7 @@ import input from './lib/input';
 
 import enums from './lib/platform/enums';
 import sys from './lib/platform/sys';
-import * as animation from './lib/framework/animation'
+import * as animation from './lib/framework/animation';
 
 let cc = {
   // registry

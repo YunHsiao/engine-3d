@@ -84,9 +84,8 @@
             let reborn = deathMotion.makeTransitionTo(movementMotion);
             reborn.addCondition(new cc.animation.Condition(isHealth, 'equal', true));
 
-            mainEntityAnimation.animationGraph.linearSwitch(movementMotion);
-
             charFolder.add(dobj, "movementSpeed", 0.0, 2.0).name("Speed").onFinishChange((value) => {
+              mainEntityAnimation.animationGraph.linearSwitch(movementMotion);
               blender.setInput(value);
             });
 
