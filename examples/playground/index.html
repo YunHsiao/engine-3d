@@ -1,87 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1, minimum-scale=1,maximum-scale=1" />
-    <style>
-      body {
-        background: #333;
-        color: #888;
-        margin: 0px;
 
-        display: flex;
-        flex-direction: column;
-        padding: 5px;
-      }
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1, minimum-scale=1,maximum-scale=1" />
+  <style>
+    body {
+      background: #333;
+      color: #888;
+      margin: 0px;
 
-      .view {
-        position: relative;
-        flex: 1;
-      }
+      display: flex;
+      flex-direction: column;
+      padding: 5px;
+    }
 
-      .toolbar {
-        display: flex;
-        margin-top: 10px;
+    .view {
+      position: relative;
+      flex: 1;
+    }
 
-        font-size: 12px;
-      }
+    .toolbar {
+      display: flex;
+      margin-top: 10px;
 
-      .toolbar > * {
-        margin-right: 10px;
-      }
+      font-size: 12px;
+    }
 
-      .toolbar > *:last-child {
-        margin-right: 0px;
-      }
+    .toolbar>* {
+      margin-right: 10px;
+    }
 
-      .fit {
-        position: absolute;
-        top: 0; bottom: 0; left: 0; right: 0;
-      }
+    .toolbar>*:last-child {
+      margin-right: 0px;
+    }
 
-      canvas {
-        background: #09f;
-      }
+    .fit {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
 
-      canvas:focus {
-        outline: 0;
-      }
+    canvas {
+      background: #09f;
+    }
 
-      .field {
-        display: inline-block;
-        margin-right: 5px;
-      }
+    canvas:focus {
+      outline: 0;
+    }
 
-      .dgui {
-        position: absolute;
-        top: 5px;
-        left: 5px;
-      }
-    </style>
+    .field {
+      display: inline-block;
+      margin-right: 5px;
+    }
 
-    <!--<script src="../../node_modules/vconsole/dist/vconsole.min.js"></script>-->
-    <script src="../../node_modules/lstats.js/dist/lstats.min.js"></script>
-    <script src="../../dist/engine.dev.js"></script>
-    <script src="../../node_modules/dat.gui/build/dat.gui.min.js"></script>
-    <script src="./shell.js"></script>
-  </head>
+    .dgui {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+    }
+  </style>
 
-  <body class="fit">
-    <div id="view" class="view"></div>
-    <div class="toolbar">
-      <div>
-        <div class="field">
-          <input type="checkbox" id="showFPS"></input>FPS
-        </div>
-        <div class="field">
-          <input type="checkbox" id="spector"></input>Spector
-        </div>
-        <div class="field">
-          <input type="checkbox" id="debugger"></input>Debugger
-        </div>
+  <!--<script src="../../node_modules/vconsole/dist/vconsole.min.js"></script>-->
+  <script src="../../node_modules/lstats.js/dist/lstats.min.js"></script>
+  <script src="../../dist/engine.dev.js"></script>
+  <script src="../../node_modules/dat.gui/build/dat.gui.min.js"></script>
+  <script src="./shell.js"></script>
+</head>
+
+<body class="fit">
+  <div id="view" class="view"></div>
+  <div class="toolbar">
+    <div>
+      <div class="field">
+        <input type="checkbox" id="showFPS"></input>FPS
       </div>
-      <span style="flex: 1"></span>
-      <select id="exampleList">
+      <div class="field">
+        <input type="checkbox" id="spector"></input>Spector
+      </div>
+      <div class="field">
+        <input type="checkbox" id="debugger"></input>Debugger
+      </div>
+    </div>
+    <span style="flex: 1"></span>
+    <select id="orientationOps">
+      <option value = "Auto">Auto</option>
+      <option value = "Landscape">Landscape</option>
+      <option value = "Portrait">Portrait</option>
+    </select>
+    <select id="exampleList">
         <option value="./src/simple.js">Simple</option>
         <option value="./src/load-level.js">Level Loader</option>
         <option value="./src/widget.js">Debug Widget</option>
@@ -97,6 +106,8 @@
         <option value="./src/raycast.js">Raycast</option>
         <option value="./src/frustum.js">Frustum Culling</option>
         <option value="./src/custom-shader.js">Custom Shader</option>
+        <option value="./src/physics.js">Physics</option>
+        <option value="./src/navigation.js">Navigation</option>
         <option value="./src/transparent-stage.js">Transparent Stage</option>
         <option value="./src/skinning-animation.js">Skinning Animation</option>
         <option value="./src/bunny.js">Bunny (Sprite BenchMark)</option>
@@ -106,6 +117,7 @@
         <option value="./src/particle.js">Particle</option>
         <option value="./src/grid-layout.js">GridLayout</option>
       </select>
-    </div>
-  </body>
+  </div>
+</body>
+
 </html>

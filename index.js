@@ -61,9 +61,11 @@ import gfx from './lib/gfx';
 import * as memop from './lib/memop';
 import input from './lib/input';
 
-import * as animation from './lib/framework/animation';
+import enums from './lib/platform/enums';
+import sys from './lib/platform/sys';
+import * as animation from './lib/framework/animation'
 
-export default {
+let cc = {
   // registry
   registerLoader: registry.registerLoader,
   registerClass: registry.registerClass,
@@ -135,6 +137,9 @@ export default {
   path,
   input,
   async,
+  sys,
 
   animation,
 };
+Object.assign(cc, enums);
+export default cc;

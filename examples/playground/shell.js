@@ -25,7 +25,7 @@
     });
   }
 
-  function _load(view, url) {
+  function _load(view, url, orientation) {
     if (window.reqID) {
       window.cancelAnimationFrame(window.reqID);
     }
@@ -54,14 +54,14 @@
 
       // init app
       let app = new cc.App(canvas);
-      app.resize();
+      app.view.setOrientation(orientation);
       app.on('tick', () => {
         window.stats.tick();
       });
       window.app = app;
 
       // init dgui
-      let dgui = new dat.GUI({width:270});
+      let dgui = new dat.GUI({ width: 270 });
       dgui.domElement.classList.add('dgui');
       window.dgui = dgui;
 
@@ -91,6 +91,7 @@
     let enableDebugger = document.getElementById('debugger');
     let enableSpector = document.getElementById('spector');
     let exampleList = document.getElementById('exampleList');
+    let orientationOps = document.getElementById('orientationOps');
 
     // update profile
     showFPS.checked = localStorage.getItem('engine.showFPS') === 'true';
@@ -141,10 +142,17 @@
     enableSpector.addEventListener('click', event => {
       localStorage.setItem('engine.enableSpector', event.target.checked);
     });
-
+    let orienMap = {
+      Auto: cc.ORIENTATION_AUTO,
+      Landscape: cc.ORIENTATION_LANDSCAPE,
+      Portrait: cc.ORIENTATION_PORTRAIT,
+    };
+    orientationOps.addEventListener('change', event => {
+      window.app && window.app.view.setOrientation(orienMap[orientationOps.value] || cc.ORIENTATION_AUTO);
+    });
     exampleList.addEventListener('change', event => {
       localStorage.setItem('engine.exampleIndex', event.target.selectedIndex);
-      _load(view, exampleList.value);
+      _load(view, exampleList.value, orienMap[orientationOps.value] || cc.ORIENTATION_AUTO);
     });
   });
 })();
