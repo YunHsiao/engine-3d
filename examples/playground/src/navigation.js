@@ -106,7 +106,7 @@
     tick() {
       // do nothing if no inputs or already ended
       if (this.ended || !this.input._pointerLocked
-        && !this.input.touchCount && !this.input.hasKeyDown) return;
+        && !this.input.touchCount && !this.input._keys.length) return;
       // update axis
       scaleToXZ(vec3.transformQuat(this.forward, this.id_forward, this.rot), this.speed);
       scaleToXZ(vec3.transformQuat(this.right, this.id_right, this.rot), this.speed);
@@ -114,7 +114,7 @@
       // gather inputs
       if (this.input.touchCount && this.canvas) this.tickTouch();
       if (this.input._pointerLocked) this.tickMouse();
-      if (this.input.hasKeyDown) this.tickKeyboard();
+      if (this.input._keys.length) this.tickKeyboard();
       // apply to transform
       vec3.set(this.euler, clamp(this.euler.x + this.rotOff.x, -90, 90), this.euler.y + this.rotOff.y, 0);
       quat.fromEuler(this.rot, this.euler.x, this.euler.y, this.euler.z);
