@@ -3,7 +3,6 @@
   const { Material } = cc;
   const { vec3, quat, color4, randomRange, toRadian } = cc.math;
   const { sphere, capsule } = cc.primitives;
-  const { enums } = cc.geometry;
 
   // use built-in collision detection engine
   app.system('physics').engine = 0;
@@ -50,7 +49,7 @@
         modelComp.mesh = sphere_mesh;
         modelComp.material = m;
         ent.color = c;
-        let col = ent.addComp('Collider', { type: enums.SHAPE_SPHERE });
+        let col = ent.addComp('Collider', { type: 'sphere' });
         col.body.setCollisionFilter(group, mask);
         ent.on('collide', (event) => {
           // event.body is always 'this entity'

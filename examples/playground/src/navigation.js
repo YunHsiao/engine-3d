@@ -3,7 +3,6 @@
   const { Material } = cc;
   const { vec2, vec3, quat, color4, clamp } = cc.math;
   const { plane, box } = cc.primitives;
-  const { enums } = cc.geometry;
   
   // geometries
   let quad = cc.utils.createMesh(app, plane(1, 1));
@@ -47,7 +46,7 @@
   camEnt.addComp('Camera');
   let col = camEnt.addComp('Collider', {
     mass: 1,
-    type: enums.SHAPE_BOX,
+    type: 'box',
     size: [1, 4, 1],
     center: [0, -2, 0]
   });

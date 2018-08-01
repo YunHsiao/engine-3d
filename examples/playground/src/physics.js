@@ -3,7 +3,6 @@
   const { Material } = cc;
   const { vec3, quat, color4, randomRange, clamp } = cc.math;
   const { box, sphere } = cc.primitives;
-  const { enums } = cc.geometry;
 
   // controllers
   let dobj = {
@@ -40,7 +39,7 @@
     m.setProperty('diffuseColor', c);
     modelComp.mesh = isBox ? box_mesh : sphere_mesh;
     modelComp.material = m;
-    let col = ent.addComp('Collider', { type: isBox ? enums.SHAPE_BOX : enums.SHAPE_SPHERE, mass: 1 });
+    let col = ent.addComp('Collider', { type: isBox ? 'box' : 'sphere', mass: 1 });
     col.body.setUpdateMode(true, true);
     models.push(modelComp); colliders.push(col); colors.push(c);
   }
@@ -82,7 +81,7 @@
       else if (model._node.lpos.z < -(radius+3)) model._node.lpos.z =  (radius+3);
       // visualize speed
       let speed = vec3.magnitude(colliders[i].body.velocity); speed /= speed + 1;
-      color4.lerp(colors[i], static_color, colliders[i].type === enums.SHAPE_BOX ?
+      color4.lerp(colors[i], static_color, colliders[i].type === 'box' ?
         box_color : sphere_color, speed);
     }
     // spin the ground once in a while
