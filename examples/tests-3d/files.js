@@ -73,6 +73,7 @@ var files = {
   "physics": [
     "spec-boxes",
     "spec-spheres",
-    "spec-body-params"
+    "spec-body-params",
+    "spec-skiing"
   ]
 };

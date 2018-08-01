@@ -50,7 +50,7 @@
     size: [1, 4, 1],
     center: [0, -2, 0]
   });
-  app.system('physics').world.setGravity(0, -50, 0);
+  vec3.set(app.system('physics').world.gravity, 0, -50, 0);
   col.body.setUpdateMode(true, true);
   col.body.setFreezeRotation(true);
 
@@ -99,7 +99,9 @@
       this.input = this._app._input;
       this.input._lock = cc.input.LOCK_ALWAYS;
       this.velocity = this._entity.getComp('Collider').body.velocity;
-      this._entity.on('collide', () => { this.jumping = false; });
+      this._entity.on('collide', () => {
+        this.jumping = false;
+      });
     }
 
     tick() {
