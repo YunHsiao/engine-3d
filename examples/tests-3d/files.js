@@ -67,6 +67,7 @@ var files = {
 		"spec-particlesystem-sizeovertime",
 		"spec-particlesystem-sphere",
 		"spec-particlesystem-texturesheet",
-		"spec-particlesystem-velocityovertime"
+		"spec-particlesystem-velocityovertime",
+		"spec-particlesystem-performance"
 	]
 };
