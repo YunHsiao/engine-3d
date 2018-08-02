@@ -192,11 +192,11 @@
       "value": 0
     },
     {
-      "name": "USE_RGBE_HDR_IBL_SPECULAR",
+      "name": "USE_RGBE_IBL_SPECULAR",
       "value": false
     },
     {
-      "name": "USE_RGBE_HDR_IBL_DIFFUSE",
+      "name": "USE_RGBE_IBL_DIFFUSE",
       "value": false
     }
   ],
