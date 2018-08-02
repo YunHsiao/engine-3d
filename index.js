@@ -17,6 +17,7 @@ import AnimationComponent from './lib/framework/animation-component';
 import AudioSourceComponent from './lib/framework/audio-source-component';
 import SkyboxComponent from './lib/framework/skybox-component';
 import ParticleSystemComponent from './lib/framework/particle/particle-system-component';
+import ComplexAnimationComponent from './lib/framework/animation/complex-animation-component';
 
 // ui-widget components
 import ScreenComponent from './lib/framework/ui/screen-component';
@@ -104,6 +105,7 @@ let cc = {
   AudioSourceComponent,
   SkyboxComponent,
   ParticleSystemComponent,
+  ComplexAnimationComponent,
 
   // ui-widget components
   ScreenComponent,
