@@ -56,7 +56,7 @@
       let app = new cc.App(canvas);
       app.view.setOrientation(orientation);
       app.on('tick', () => {
-        window.stats.tick();
+        window.stats.update();
       });
       window.app = app;
 
@@ -104,8 +104,10 @@
     exampleList.selectedIndex = exampleIndex;
 
     // init lstats
-    let stats = new window.LStats(document.body);
-    showFPS.checked ? stats.show() : stats.hide();
+    let stats = new window.Stats();
+    showFPS.checked ? stats.dom.style.display = 'block' : stats.dom.style.display = 'none';
+    stats.dom.style.cssText = 'position:fixed;top:0;right:0;cursor:pointer;opacity:0.9;z-index:10000';
+    document.body.appendChild(stats.dom);
     window.stats = stats;
 
     // init spector
@@ -123,9 +125,9 @@
     showFPS.addEventListener('click', event => {
       localStorage.setItem('engine.showFPS', event.target.checked);
       if (event.target.checked) {
-        stats.show();
+        stats.dom.style.display = 'block';
       } else {
-        stats.hide();
+        stats.dom.style.display = 'none';
       }
     });
 
