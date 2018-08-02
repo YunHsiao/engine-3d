@@ -34,26 +34,13 @@
        * The character's normalized tranlating velocity.
        * @type {vec2}
        */
-      this._translatingVelocity = cc.math.vec2.zero();
-
-      /**
-       * The character's normalized motion velocity.
-       * @type {vec2}
-       */
-      this._motionVelocity = cc.math.vec2.zero();
+      this._destMoveVelocity = cc.math.vec2.zero();
 
       /**
        * The character's speed.
        * @type {Number}
        */
-      this._speed = 0;
-
-      /**
-       * The velocity argument passed to blender.
-       * Always equals to this._unitVelocity * this._speed.
-       * @type {vec2}
-       */
-      this._blenderVelocity = cc.math.vec2.zero();
+      this._destSpeed = 0;
 
       /**
        * The circle area center on which the character can move.
@@ -65,45 +52,32 @@
        * The circle area radius on which the character can move.
        * @type {Number}
        */
-      this._activityRadius = 10;
+      this._activityRadius = 5;
 
       /**
-       * Indicates whether next '_changeVelocity' should let character being under idle mode.
+       * Indicates whether next '_changeVelocity' should let character's speed become 0.
        * @type {Boolean}
        */
       this._shouldIdle = true;
 
       /**
-       * Indicates whether the character is under idle mode.
-       * The idle mode would last for a while and the speed would become 0.
-       * @type {Boolean}
-       */
-      this._underIdleMode = true;
-
-      /**
-       * The idle mode's time counter.
+       * The time counter that the character's speed keeps for.
        * @type {Number}
        */
-      this._idleTime = 0;
+      this._moveTime = 0;
 
       /**
        * The velocity argument passed to blender is not varied immediately.
        * Instead, it will be blended with last velocity argument as time goes by.
        * @type {Number}
        */
-      this._velocityFadeTime = 0.5;
+      this._speedFadeTime = 0.5;
 
       /**
        * _velocityFadeTime's time counter.
        * @type {Number}
        */
-      this._velocityFadeTimeCounter = this._velocityFadeTime;
-
-      /**
-       * Last velocity argument passed to blender.
-       * @type {vec2}
-       */
-      this._lastBlenderVelocity = cc.math.vec2.zero();
+      this._speedFadeTimeCounter = this._speedFadeTime;
 
       /**
        * Last speed.
@@ -117,17 +91,20 @@
        */
       this._destPos = null;
 
-      this._underRotateMode = false;
+      this._rotationSpeed = 45.0;
+      //this._rotationSpeed = 0.0;
 
-      this._rotationDelta = 0.0;
+      this._lastPos = null;
 
-      this._rotationStartTime = 0.0;
+      this._lastRotAngle = 0.0;
 
-      this._maxRotateTime = 0.0;
+      this._rotAngle = 0.0;
 
-      this._turnAroundMotion = null;
+      this._nextRotatingStartTime = 0.0;
 
-      this._movementMotion = null;
+      this._isRotating = false;
+
+      this._lastBlenderVelocity = null;
     }
 
     onDestroy() {
@@ -138,117 +115,107 @@
       this._blender = blender;
     }
 
-    set movementMotion(motion) {
-      this._movementMotion = motion;
-    }
-
-    set turnAroundMotion(motion) {
-      this._turnAroundMotion = motion;
-    }
-
     set maxRotateTime(time) {
       this._maxRotateTime = time;
     }
 
     update(deltaTimeSec) {
-      // Update input of blender, that's, the velocity of character.
-      // We interpolate the velocity to accuqire a smooth blend result.
-      this._velocityFadeTimeCounter += deltaTimeSec;
-      let blenderSpeed = cc.math.vec2.zero();
-      let fadeCoff = cc.math.clamp(this._velocityFadeTimeCounter / this._velocityFadeTime, 0, 1);
-      cc.math.vec2.lerp(blenderSpeed, this._lastBlenderVelocity, this._blenderVelocity, fadeCoff);
-      this._blender.setInput(blenderSpeed);
-
-      if (this._underIdleMode) {
-        // If we are in idle mode, we either process the idle time or change to non-idle mode.
-        if (this._idleTime <= 0)
-          this._changeVelocity();
+      if (this._isRotating) {
+        if (this._rotateTime <= 0) {
+          this._isRotating = false;
+          this._nextRotatingStartTime = cc.math.randomRange(1.0, 5.0);
+        }
         else {
-          this._idleTime -= deltaTimeSec;
-          if (this._idleTime <= this._rotationStartTime) {
-            if (!this._underRotateMode) {
-              this._underRotateMode = true;
-              this._entity.getComp("ComplexAnimation").animationGraph.linearSwitch(this._turnAroundMotion);
-            }
-            let lrot = this._entity.lrot;
-            cc.math.quat.rotateY(lrot, lrot, cc.math.toRadian(this._rotationDelta * deltaTimeSec));
-          }
+          this._rotateTime -= deltaTimeSec;
+          let dAngle = this._rotationSpeed * deltaTimeSec;
+          this._lastRotAngle = this._rotAngle;
+          this._rotAngle += dAngle;
+          let lrot = this._entity.lrot;
+          cc.math.quat.rotateY(lrot, lrot, cc.math.toRadian(dAngle));
         }
       }
+      else if (this._nextRotatingStartTime > 0)
+        this._nextRotatingStartTime -= deltaTimeSec;
       else {
-        let disDest = this.distanceToDestination();
-        if (disDest < 0.001)
-          this._changeVelocity();
-        else { // Update character's position.
-          let speed = this._lastSpeed * (1 - fadeCoff) + this._speed * fadeCoff;
-          let dmove = speed * deltaTimeSec;
-          let realdmove = Math.min(dmove, disDest);
-          let offsetVelocity = new cc.math.vec3(this._translatingVelocity.x, 0, this._translatingVelocity.y);
-          cc.math.vec3.scaleAndAdd(this._entity.lpos, this._entity.lpos, offsetVelocity, realdmove);
-        }
+        this._isRotating = true;
+        this._rotateTime = cc.math.randomRange(0.0, 3.0);
+        this._rotationSpeed = Math.random() > 0.5 ? -this._rotationSpeed : this._rotationSpeed;
       }
+
+      // We interpolate the speed to accuqire a smooth result.
+      this._speedFadeTimeCounter += deltaTimeSec;
+      let speedFadeCoff = cc.math.clamp(this._speedFadeTimeCounter / this._speedFadeTime, 0, 1);
+      let speed = this._lastSpeed * (1 - speedFadeCoff) + this._destSpeed * speedFadeCoff;
+
+      // Move the character.
+      if (this._moveTime <= 0) {
+        this._changeVelocity();
+        return;
+      }
+      else { // Update character's position.
+        this._moveTime -= deltaTimeSec;
+        let dmove = speed * deltaTimeSec;
+        let realdmove = dmove;
+        let offsetVelocity = new cc.math.vec3(this._destMoveVelocity.x, 0, this._destMoveVelocity.y);
+        cc.math.vec3.scaleAndAdd(this._entity.lpos, this._entity.lpos, offsetVelocity, realdmove);
+      }
+
+      // Set the blend result.
+      let pos = cc.math.vec3.zero();
+      this._entity.getWorldPos(pos);
+      if (this._lastPos == null)
+        this._lastPos = cc.math.vec3.clone(pos);
+      let moveVelocity3D = cc.math.vec3.zero();
+      cc.math.vec3.sub(moveVelocity3D, pos, this._lastPos);
+      cc.math.vec3.normalize(moveVelocity3D, moveVelocity3D);
+      let lastRot = cc.math.quat.create();
+      // We should neg the angle.
+      // Since the character is rotated by n degree,
+      // then the character need rotate n degrees back
+      // then perform the move direction that originally supposed no rotation applied.
+      // That is to say the move direction becomes larger.
+      cc.math.quat.rotateY(lastRot, lastRot, cc.math.toRadian(-this._lastRotAngle));
+      let faceVelocity3D = cc.math.vec3.zero();
+      cc.math.vec3.transformQuat(faceVelocity3D, moveVelocity3D, lastRot);
+      let blenderVelocity = new cc.math.vec2(faceVelocity3D.x * speed, faceVelocity3D.z * speed);
+      this._setBlenderVelocity(blenderVelocity);
+
+      cc.math.vec3.copy(this._lastPos, pos);
+      this._lastRotAngle = this._rotAngle;
+    }
+
+    _setBlenderVelocity(blenderVelocity) {
+      if (this._lastBlenderVelocity == null)
+        this._lastBlenderVelocity = cc.math.vec2.clone(blenderVelocity);
+      else if (cc.math.vec2.equals(this._lastBlenderVelocity, blenderVelocity))
+        return;
+      cc.math.vec2.copy(this._lastBlenderVelocity, blenderVelocity);
+      this._blender.setInput(blenderVelocity);
+      //console.log(`${blenderVelocity.x}, ${blenderVelocity.y}`);
     }
 
     _changeVelocity() {
-      this._lastSpeed = this._speed;
-      cc.math.vec2.copy(this._lastBlenderVelocity, this._blenderVelocity);
+      this._lastSpeed = this._destSpeed;
 
-      this._underRotateMode = false;
-      this._underIdleMode = this._shouldIdle;
-      this._shouldIdle = !this._shouldIdle;
-
-      if (this._underIdleMode) {
-        let rotateTime = cc.math.randomRange(0.0, this._maxRotateTime);
-        let idleTime = cc.math.randomRange(1.0, 3.0);
-        this._idleTime = rotateTime + idleTime;
-        this._rotationStartTime = idleTime;
-        
-        cc.math.vec2.set(this._blenderVelocity, 0, 0);
-        this._speed = 0;
-
-        let rotangle = cc.math.randomRange(10.0, 45.0);
-        this._rotationDelta = rotangle / rotateTime;
+      this._moveTime = cc.math.randomRange(1.0, 7.0);
+      if (this._shouldIdle) {
+        // Keep the _destMoveVelocity unchangedly.
+        this._destSpeed = 0;
       }
       else {
-        this._rotationDelta = 0;
-        this._entity.getComp("ComplexAnimation").animationGraph.linearSwitch(this._movementMotion);
-
-        // Generate the new destination position.
         let lastPos = new cc.math.vec2(this._entity.lpos.x, this._entity.lpos.z);
         let angle = cc.math.randomRange(0, Math.PI * 2);
         this._destPos = new cc.math.vec2(
           this._activityCenter.x + Math.cos(angle) * this._activityRadius,
           this._activityCenter.y + Math.sin(angle) * this._activityRadius);
-
-        cc.math.vec2.sub(this._translatingVelocity, this._destPos, lastPos);
-        cc.math.vec2.normalize(this._translatingVelocity, this._translatingVelocity);
-
-        // let originalForward = new cc.math.vec3(0, 0, 1);
-        // let forward = cc.math.vec3.zero();
-        // let worldRot = this._entity.getWorldRot();
-        // cc.math.vec3.transformQuat(forward, originalForward, worldRot);
-
-        // Calculate the new unit velocity.
-        let worldRot = cc.math.quat.create();
-        this._entity.getWorldRot(worldRot);
-        let motionVelocity3D = cc.math.vec3.zero();
-        cc.math.vec3.transformQuat(
-          motionVelocity3D,
-          new cc.math.vec3(this._translatingVelocity.x, 0, this._translatingVelocity.y),
-          worldRot);
-        cc.math.vec2.set(this._motionVelocity, motionVelocity3D.x, -motionVelocity3D.z);
-
-        this._speed = cc.math.randomRange(1.0, 2.8);
-        // Calculate the new velocity.
-        cc.math.vec2.copy(this._lastBlenderVelocity, this._blenderVelocity);
-        cc.math.vec2.scale(this._blenderVelocity, this._motionVelocity, this._speed);
-
-        this._speed *= 0.8;
-
-        //console.log(`New blender velocity: ${this._blenderVelocity.x}, ${this._blenderVelocity.y}.`);
+        cc.math.vec2.sub(this._destMoveVelocity, this._destPos, lastPos);
+        // Generate the new move velocity.
+        cc.math.vec2.normalize(this._destMoveVelocity, this._destMoveVelocity);
+        this._destSpeed = cc.math.randomRange(1.0, 2.8);
       }
 
-      this._velocityFadeTimeCounter = 0;
+      this._speedFadeTimeCounter = 0;
+      this._shouldIdle = !this._shouldIdle;
     }
 
     distanceToDestination() {
@@ -355,8 +322,6 @@
             wanderComponent.maxRotateTime = getClip("IdleWalk").length;
             let turnAroundMotion = new cc.animation.Motion("Turn around", getClip("IdleWalk"));
             animationGraph.addMotion(turnAroundMotion);
-            wanderComponent.turnAroundMotion = turnAroundMotion;
-            wanderComponent.movementMotion = movementMotion2D;
 
             let onUse2DMotionChanged = () => {
               if (dobj.use2DMotion)
