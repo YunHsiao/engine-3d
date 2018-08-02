@@ -32,7 +32,7 @@ tap.test('vtween', t => {
       lvec2: vec2A,
       lvec3: vec3A,
       lquat: quatA
-    }
+    };
 
     let ent = new entity(entProp);
 
@@ -66,14 +66,15 @@ tap.test('vtween', t => {
       lvec2: vec2A,
       lvec3: vec3A,
       lquat: quatA
-    }
+    };
     let ent1 = new entity(entProp);
     let ent2 = new entity(entProp);
 
-    let vtween1 = vEngine.newTask([ent1, ent2], {
-      lvec3: { keys: { value: [1, 1, 1] }, type: 'vec3' }
-    }, {
-      });
+    vEngine.newTask(
+      [ent1, ent2], 
+      { lvec3: { keys: { value: [1, 1, 1] }, type: 'vec3' } },
+      {}
+    );
 
     vEngine.tick(500);
     vEngine.tick(800);
@@ -97,7 +98,7 @@ tap.test('vtween', t => {
       lvec2: vec2A,
       lvec3: vec3A,
       lquat: quatA
-    }
+    };
 
     let ent = new entity(entProp);
     let vtween1 = vEngine.newTask(ent, {
@@ -131,7 +132,7 @@ tap.test('vtween', t => {
       lvec2: vec2A,
       lvec3: vec3A,
       lquat: quatA
-    }
+    };
 
     let ent = new entity(entProp);
 
@@ -171,7 +172,7 @@ tap.test('vtween', t => {
       lvec2: vec2A,
       lvec3: vec3A,
       lquat: quatA
-    }
+    };
     let ent = new entity(entProp);
 
     let vtween1 = vEngine.newTask(ent, {
@@ -205,7 +206,7 @@ tap.test('vtween', t => {
       lvec2: vec2A,
       lvec3: vec3A,
       lquat: quatA
-    }
+    };
 
     let ent = new entity(entProp);
     let vtween1 = vEngine.newTask(ent, {
@@ -238,23 +239,23 @@ tap.test('vtween', t => {
 
     let funA = function () {
       console.log('begin');
-    }
+    };
     let funB = function () {
       console.log('complete');
-    }
+    };
     let funC = function () {
       console.log('run');
-    }
+    };
     let funD = function () {
       console.log('update');
-    }
+    };
 
     const entProp = {
       lfloat: 1,
       lvec2: vec2A,
       lvec3: vec3A,
       lquat: quatA
-    }
+    };
 
     let ent = new entity(entProp);
 
@@ -276,5 +277,4 @@ tap.test('vtween', t => {
   });
 
   t.end();
-})
-
+});

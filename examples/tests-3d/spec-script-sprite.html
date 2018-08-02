@@ -30,10 +30,9 @@
 
   <script>
     // init app
-    let app = new cc.App(document.getElementById('canvas'));
-    const { vec3 } = cc.math;
+    var app = new window.cc.App(document.getElementById('canvas'));
 
-    class Asset extends cc.ScriptComponent {
+    class Asset extends window.cc.ScriptComponent {
       start() {
         let exitScreen = app.activeLevel.getCompsInChildren('Screen');
         let screen = null;
@@ -58,12 +57,12 @@
         type: 'asset',
         default: null
       }
-    }
+    };
 
     app.registerClass('Asset', Asset);
 
     app.resize();
-    load('../assets/out', 'spec-script-sprite');
+    window.load('../assets/out', 'spec-script-sprite');
 
     // run app
     app.run();

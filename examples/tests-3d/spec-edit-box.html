@@ -38,13 +38,12 @@
     view.id = 'view';
     view.className = 'view';
     canvas.parentNode.insertBefore(view, canvas);
-    let app = new cc.App(canvas);
-    const { vec3 } = cc.math;
+    var app = new window.cc.App(canvas);
 
     view.appendChild(canvas);
     app.resize();
 
-    load('../assets/out', 'spec-edit-box');
+    window.load('../assets/out', 'spec-edit-box');
 
     // run app
     app.run();

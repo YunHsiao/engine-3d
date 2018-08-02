@@ -36,20 +36,18 @@
   <script src="../../node_modules/lstats.js/dist/lstats.min.js"></script>
   <script>
     // init app
-    let app = new cc.App(document.getElementById('canvas'));
-    const { vec3 } = cc.math;
+    var app = new window.cc.App(document.getElementById('canvas'));
 
-    let dgui = new dat.GUI({ width: 200 });
+    let dgui = new window.dat.GUI({ width: 200 });
     dgui.domElement.classList.add('dgui');
 
-    let stats = new window.LStats(document.body);
-    window.stats = stats;
+    window.stats = new window.LStats(document.body);
 
     let ps = new Array;
 
     app.resize();
 
-    load('../assets/out', 'spec-particlesystem-performance', () => {
+    window.load('../assets/out', 'spec-particlesystem-performance', () => {
       let p = app.activeLevel.getCompsInChildren('ParticleSystem')[0];
       p._entity.active = false;
       let options = {

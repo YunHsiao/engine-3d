@@ -73,9 +73,9 @@
   </div>
   <script>
     'use strict';
-    let memStats = new LStats(document.body, ['mb']);
+    let memStats = new window.LStats(document.body, ['mb']);
 
-    let input = new Input(document.getElementById('touchInput'));
+    let input = new window.Input(document.getElementById('touchInput'));
     let info = document.getElementById('touchPos');
 
     function animate() {

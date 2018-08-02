@@ -28,12 +28,11 @@
   <script src="./loadScene.js"></script>
   <script>
     // init app
-    let app = new cc.App(document.getElementById('canvas'));
-    const { vec3 } = cc.math;
+    var app = new window.cc.App(document.getElementById('canvas'));
 
     app.resize();
 
-    class AssetComponent extends cc.ScriptComponent {
+    class AssetComponent extends window.cc.ScriptComponent {
 
       onInit() {
         console.log("AssetComponent onInit");
@@ -51,11 +50,11 @@
       test: {
         type: 'asset',
       }
-    }
+    };
 
     app.registerClass('Asset', AssetComponent);
 
-    load('../assets/out', 'spec-script-materials');
+    window.load('../assets/out', 'spec-script-materials');
 
     // run app
     app.run();

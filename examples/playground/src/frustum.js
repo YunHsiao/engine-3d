@@ -170,7 +170,7 @@
     models[0].extractDrawItemOld = models[0].extractDrawItem;
     models[0].extractDrawItem = function(out) {
       submitted[models[0]._node.name] = true;
-      models[0].extractDrawItemOld(out);
+      models[0].extractDrawItemOld.call(models[0], out);
     };
   }
   // on-screen text

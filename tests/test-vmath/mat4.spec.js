@@ -1,5 +1,5 @@
 const tap = require('./tap');
-const { vec3, vec4, quat, mat3, mat4 } = require('./dist/vmath');
+const { vec3, quat, mat4 } = require('./dist/vmath');
 
 tap.test('mat4', t => {
   let out = mat4.create();

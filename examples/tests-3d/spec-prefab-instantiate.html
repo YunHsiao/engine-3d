@@ -28,10 +28,9 @@
   <script src="./loadScene.js"></script>
   <script>
     // init app
-    let app = new cc.App(document.getElementById('canvas'));
-    const { vec3 } = cc.math;
+    var app = new window.cc.App(document.getElementById('canvas'));
 
-    class PrefabRef extends cc.Component {
+    class PrefabRef extends window.cc.Component {
       onInit(){
         if (this._prefab) {
           console.log('load ' + this._prefab + ' success ');
@@ -39,19 +38,19 @@
 
         this._prefab.instantiate();
       }
-    };
+    }
 
     PrefabRef.schema = {
       prefab: {
         type: 'asset',
       }
-    }
+    };
 
     app.registerClass('PrefabRef', PrefabRef);
 
     app.resize();
 
-    load('../assets/out', 'spec-prefab-instantiate');
+    window.load('../assets/out', 'spec-prefab-instantiate');
 
     // run app
     app.run();

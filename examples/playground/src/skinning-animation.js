@@ -1,6 +1,6 @@
 (() => {
   const { cc, app, dgui } = window;
-  const { resl, path } = cc;
+  const { resl } = cc;
 
   let dobj = {
     baseUrl: '../assets/out',

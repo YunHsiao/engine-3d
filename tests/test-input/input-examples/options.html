@@ -98,7 +98,7 @@
     <script>
       'use strict';
 
-      let memStats = new LStats(document.body, ['mb']);
+      let memStats = new window.LStats(document.body, ['mb']);
 
       ['normal', 'mask', 'grab', 'lock'].forEach(id => {
         let el = document.getElementById(id);
@@ -111,7 +111,7 @@
           opts.lock = true;
         }
 
-        let input = new Input(el, opts);
+        let input = new window.Input(el, opts);
         if (id === 'grab') {
           input.grabMouse(true);
         }

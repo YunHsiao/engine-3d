@@ -28,10 +28,9 @@
   <script src="./loadScene.js"></script>
   <script>
     // init app
-    let app = new cc.App(document.getElementById('canvas'));
-    const { vec3 } = cc.math;
+    var app = new window.cc.App(document.getElementById('canvas'));
 
-    class Foobar extends cc.ScriptComponent {
+    class Foobar extends window.cc.ScriptComponent {
       onInit() {
         console.log('Foobar.foo: ' + this._foo);
         console.log('Foobar.bar: ' + this._bar);
@@ -48,11 +47,11 @@
         type: 'string',
         default: ''
       }
-    }
+    };
 
     app.registerClass('Foobar', Foobar);
 
-    class User extends cc.ScriptComponent {
+    class User extends window.cc.ScriptComponent {
       onInit() {
         console.log('User.name: ' + this._name);
         console.log('User ID: ' + this._ID);
@@ -69,13 +68,13 @@
         type: 'string',
         default: '',
       },
-    }
+    };
 
     app.registerClass('User',User);
 
     app.resize();
 
-    load('../assets/out', 'spec-script-simple');
+    window.load('../assets/out', 'spec-script-simple');
 
     // run app
     app.run();

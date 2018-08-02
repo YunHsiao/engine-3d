@@ -35,15 +35,14 @@
   <script src="./loadScene.js"></script>
   <script>
     // init app
-    let app = new cc.App(document.getElementById('canvas'));
-    const { vec3 } = cc.math;
+    var app = new window.cc.App(document.getElementById('canvas'));
 
-    let dgui = new dat.GUI({ width: 270 });
+    let dgui = new window.dat.GUI({ width: 270 });
     dgui.domElement.classList.add('dgui');
 
     app.resize();
 
-    load('../assets/out', 'spec-skeleton',() => {
+    window.load('../assets/out', 'spec-skeleton',() => {
       // play random anim
       let ent = app.find('skeleton');
       let anim = ent.getComp('Animation');
@@ -53,10 +52,10 @@
         animClips.push(clip._name);
       }
 
-        let dobj = {
+      let dobj = {
         animName: animClips[Math.floor(Math.random() * animClips.length)],
         play: play,
-      }
+      };
 
       dgui.add(dobj, 'animName', animClips).onFinishChange(() => {
         play();

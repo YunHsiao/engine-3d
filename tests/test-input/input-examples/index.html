@@ -82,9 +82,9 @@
     <script>
       'use strict';
 
-      let memStats = new LStats(document.body, ['mb']);
+      let memStats = new window.LStats(document.body, ['mb']);
 
-      let input = new Input(document.getElementById('input'));
+      let input = new window.Input(document.getElementById('input'));
       let vline = document.getElementById('vline');
       let hline = document.getElementById('hline');
       let info = document.getElementById('info');

@@ -1,4 +1,4 @@
-var files = {
+window.files = {
 	"animation": [
 		"spec-animation"
 	],

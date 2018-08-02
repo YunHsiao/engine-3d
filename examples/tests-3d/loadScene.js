@@ -1,6 +1,6 @@
 // load level
-function load(baseUrl, sceneName, onLevelLoaded) {
-  cc.resl({
+window.load = function (baseUrl, sceneName, onLevelLoaded) {
+  window.cc.resl({
     manifest: {
       gameInfo: {
         type: 'text',
@@ -10,12 +10,12 @@ function load(baseUrl, sceneName, onLevelLoaded) {
     },
 
     onDone(data) {
-      app.loadGameConfig(baseUrl, data.gameInfo);
-      app.assets.loadLevel(sceneName, (err, level) => {
+      window.app.loadGameConfig(baseUrl, data.gameInfo);
+      window.app.assets.loadLevel(sceneName, (err, level) => {
         if (err) {
           console.error(err);
         } else {
-          app.loadLevel(level);
+          window.app.loadLevel(level);
           if (onLevelLoaded) {
             onLevelLoaded();
           }

@@ -231,11 +231,11 @@
 		<script>
 
 		function extractQuery() {
-      var p = window.location.search.indexOf( '?q=' );
+			var p = window.location.search.indexOf( '?q=' );
 			if( p !== -1 ) {
 				return window.location.search.substr( 3 );
 			}
-			return ''
+			return '';
 		}
 
 		var panel = document.getElementById( 'panel' );
@@ -290,9 +290,9 @@
 			return link;
 		}
 
-		for ( var key in files ) {
+		for ( var key in window.files ) {
 
-			var section = files[ key ];
+			var section = window.files[ key ];
 			var header = document.createElement( 'h2' );
 			header.textContent = key;
 			header.setAttribute( 'data-category', key );
@@ -341,7 +341,7 @@
 
 		// filter
 
-		filterInput.addEventListener( 'input', function( e ) {
+		filterInput.addEventListener( 'input', function() {
 
 			updateFilter();
 		});
@@ -364,9 +364,9 @@
 
 			var exp = new RegExp( v, 'gi' );
 
-			for ( var key in files ) {
+			for ( var key in window.files ) {
 
-				var section = files[ key ];
+				var section = window.files[ key ];
 
 				for ( var i = 0; i < section.length; i ++ ) {
 
@@ -409,10 +409,10 @@
 
 		function layoutList() {
 
-			for ( var key in files ) {
+			for ( var key in window.files ) {
 
 				var collapsed = true;
-				var section = files[ key ];
+				var section = window.files[ key ];
 
 				for ( var i = 0; i < section.length; i ++ ) {
 

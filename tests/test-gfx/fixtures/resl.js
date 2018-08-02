@@ -431,4 +431,4 @@ module.exports = function (config) {
       notifyProgress('done');
     }, 1);
   }
-}
+};
