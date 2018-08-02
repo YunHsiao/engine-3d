@@ -40,7 +40,7 @@
     modelComp.mesh = isBox ? box_mesh : sphere_mesh;
     modelComp.material = m;
     let col = ent.addComp('Collider', { type: isBox ? 'box' : 'sphere', mass: 1 });
-    col.collider.setUpdateMode({in: true, out: true});
+    col.body.setUpdateMode(true, true);
     models.push(modelComp); colliders.push(col); colors.push(c);
   }
   let radius = 12.5;
@@ -55,11 +55,11 @@
   modelComp.material = m;
   let col = ground.addComp('Collider');
   col.size = size;
-  col.collider.setUpdateMode({in: true});
+  col.body.setUpdateMode(true, false);
 
   // camera
   let camEnt = app.createEntity('camera');
-  camEnt.lpos = vec3.new(10, 20, 30);
+  camEnt.lpos = vec3.new(20, 30, 40);
   camEnt.lookAt(vec3.zero());
   camEnt.addComp('Camera');
 
@@ -80,8 +80,8 @@
       else if (model._node.lpos.z >  (radius+3)) model._node.lpos.z = -(radius+3);
       else if (model._node.lpos.z < -(radius+3)) model._node.lpos.z =  (radius+3);
       // visualize speed
-      let speed = vec3.magnitude(colliders[i].collider.velocity); speed /= speed + 1;
-      color4.lerp(colors[i], static_color, colliders[i].type === 'box' ? 
+      let speed = vec3.magnitude(colliders[i].body.velocity); speed /= speed + 1;
+      color4.lerp(colors[i], static_color, colliders[i].type === 'box' ?
         box_color : sphere_color, speed);
     }
     // spin the ground once in a while

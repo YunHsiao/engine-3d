@@ -169,8 +169,8 @@
       camera.lrot.z = - sx * sy;
       camera.lrot.w = cx * cy;
       /* simple *
-      cc.math.quat.fromEuler(camera.lrot, 
-        cc.math.toDegree(-Math.atan2(this.height, this.dist)), 
+      cc.math.quat.fromEuler(camera.lrot,
+        cc.math.toDegree(-Math.atan2(this.height, this.dist)),
         cc.math.toDegree(this.angle), 0);
       /* horribly redundant *
       camera.lookAt(this.center);
