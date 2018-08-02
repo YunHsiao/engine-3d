@@ -123,7 +123,7 @@
       if (this._isRotating) {
         if (this._rotateTime <= 0) {
           this._isRotating = false;
-          this._nextRotatingStartTime = cc.math.randomRange(1.0, 5.0);
+          this._nextRotatingStartTime = cc.math.randomRange(1.0, 3.0);
         }
         else {
           this._rotateTime -= deltaTimeSec;
@@ -138,7 +138,7 @@
         this._nextRotatingStartTime -= deltaTimeSec;
       else {
         this._isRotating = true;
-        this._rotateTime = cc.math.randomRange(0.0, 3.0);
+        this._rotateTime = cc.math.randomRange(0.0, 4.0);
         this._rotationSpeed = Math.random() > 0.5 ? -this._rotationSpeed : this._rotationSpeed;
       }
 
