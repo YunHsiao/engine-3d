@@ -164,6 +164,7 @@
 
     // create screen
     let screen = app.createEntity('screen');
+    screen.addComp('Widget');
     screen.addComp('Screen');
 
     // create widget

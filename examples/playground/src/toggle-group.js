@@ -8,6 +8,7 @@
   camEnt.addComp('Camera');
 
   let screen = app.createEntity('screen');
+  screen.addComp('Widget');
   screen.addComp('Screen');
 
   let toggleEntity = app.createEntity('toggle-group');
@@ -19,9 +20,10 @@
   function addToggle(x, y, parent) {
     let toggle = app.createEntity('toggle');
     toggle.setParent(screen);
-    let image = toggle.addComp('Image');
-    image.setSize(40, 40);
-    image.setOffset(x, y);
+    let widget = toggle.addComp('Widget');
+    widget.setSize(40, 40);
+    widget.setOffset(x, y);
+    toggle.addComp('Image');
     let toggleComp = toggle.addComp('Toggle');
     toggleComp.transition = 'color';
     toggleComp.transitionColors.normal = color4.new(0.8, 0.8, 0.8, 1);
@@ -31,10 +33,11 @@
 
     let checker = app.createEntity('checker');
     checker.setParent(toggle);
+    let checkerWidget = checker.addComp('Widget');
+    checkerWidget.setAnchors(0, 0, 1, 1);
+    checkerWidget.setSize(-10, -10);
     let checkerImage = checker.addComp('Image');
     checkerImage.color = color4.new(1, 0, 0, 1);
-    checkerImage.setAnchors(0, 0, 1, 1);
-    checkerImage.setSize(-10, -10);
 
     toggleComp.background = toggle;
     toggleComp.checker = checker;

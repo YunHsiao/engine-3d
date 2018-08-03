@@ -56,13 +56,14 @@
     bunny.speedX = Math.random() * 10;
     bunny.speedY = (Math.random() * 10) - 5;
 
-    let image = entity.addComp('Image');
-    image.width = Math.random() * 15 + 15;
-    image.height = image.width;
-    image.setAnchors(0, 0, 0, 0);
-    image.offsetX = minX + 10;
-    image.offsetY = screenY * 0.7;
+    let widget = entity.addComp('Widget');
+    widget.width = Math.random() * 15 + 15;
+    widget.height = widget.width;
+    widget.setAnchors(0, 0, 0, 0);
+    widget.offsetX = minX + 10;
+    widget.offsetY = screenY * 0.7;
 
+    let image = entity.addComp('Image');
     image.sprite = bunnyTexture._sprites[bunnyIDs[count % 5]];
     image.scale = 0.5 + Math.random() * 0.5;
     image.rotation = 360 * (Math.random() * 0.2 - 0.1);
@@ -75,6 +76,7 @@
   camEnt.addComp('Camera');
 
   let screen = app.createEntity('screen');
+  screen.addComp('Widget');
   screen.addComp('Screen');
 
   let bunnyTexture = null;

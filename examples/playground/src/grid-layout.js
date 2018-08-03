@@ -8,13 +8,14 @@
   camEnt.addComp('Camera');
 
   let screen = app.createEntity('screen');
+  screen.addComp('Widget');
   screen.addComp('Screen');
 
   let ent = app.createEntity('ent');
   ent.setParent(screen);
-  let widget = ent.addComp('Image');
-  widget.color = color4.create();
+  let widget = ent.addComp('Widget');
   widget.setSize(320, 250);
+  ent.addComp('Image');
   let layout = ent.addComp('GridLayout');
   layout.spacingX = 5;
   layout.spacingY = 5;
@@ -24,16 +25,18 @@
   for (let i = 0; i < 10; ++i) {
     let child = app.createEntity('child_' + i);
     child.setParent(ent);
-    let childWidget = child.addComp('Image');
-    childWidget.color = color4.new(0, 1, 1, 1);
+    let childWidget = child.addComp('Widget');
     childWidget.setPivot(0, 0);
+    let childImageComp = child.addComp('Image');
+    childImageComp.color = color4.new(0, 1, 1, 1);
 
     let label = app.createEntity('label');
     label.setParent(child);
+    let widgetComp = label.addComp('Widget');
+    widgetComp.setSize(0, 0);
+    widgetComp.setAnchors(0, 0, 1, 1);
     let labelComp = label.addComp('Text');
     labelComp.color = color4.new(0, 0, 0, 1);
-    labelComp.setSize(0, 0);
-    labelComp.setAnchors(0, 0, 1, 1);
     labelComp.align = 'middle-center';
     labelComp.text = i + '';
   }

@@ -8,6 +8,7 @@
   camEnt.addComp('Camera');
 
   let screen = app.createEntity('screen');
+  screen.addComp('Widget');
   screen.addComp('Screen');
 
   let rot = quat.create();
@@ -18,10 +19,11 @@
     let ent = app.createEntity('ent');
     ent.setParent(screen);
     ent.setWorldRot(rot);
+    let bgWidgetComp = ent.addComp('Widget');
+    bgWidgetComp.setOffset(-150, 0);
+    bgWidgetComp.setSize(300, 40);
     let bgSprite = ent.addComp('Image');
     bgSprite._color = color4.new(1, 1, 1, 1);
-    bgSprite.setOffset(-150, 0);
-    bgSprite.setSize(300, 40);
     let scrollBar = ent.addComp('ScrollBar');
 
     let area = app.createEntity('area');
@@ -32,10 +34,11 @@
 
     let handle = app.createEntity('handle');
     handle.setParent(area);
+    let handleWidgetComp = handle.addComp('Widget');
+    handleWidgetComp.setAnchors(0, 0, 0, 1);
+    handleWidgetComp.setSize(40, 40);
     let handleSprite = handle.addComp('Image');
     handleSprite._color = color4.new(0, 1, 1, 1);
-    handleSprite.setAnchors(0, 0, 0, 1);
-    handleSprite.setSize(40, 40);
     scrollBar.background = handle;
     scrollBar.transition = 'color';
     scrollBar.transitionColors.normal = color4.new(0, 1, 1, 1);
@@ -54,10 +57,11 @@
     let ent = app.createEntity('ent');
     ent.setParent(screen);
     ent.setWorldRot(rot);
+    let bgWidgetComp = ent.addComp('Widget');
+    bgWidgetComp.setOffset(200, 0);
+    bgWidgetComp.setSize(40, 300);
     let bgSprite = ent.addComp('Image');
     bgSprite._color = color4.new(1, 1, 1, 1);
-    bgSprite.setOffset(200, 0);
-    bgSprite.setSize(40, 300);
     let scrollBar = ent.addComp('ScrollBar');
 
     let area = app.createEntity('area');
@@ -68,10 +72,11 @@
 
     let handle = app.createEntity('handle');
     handle.setParent(area);
+    let handleWidgetComp = handle.addComp('Widget');
+    handleWidgetComp.setAnchors(0, 0, 1, 0);
+    handleWidgetComp.setSize(40, 40);
     let handleSprite = handle.addComp('Image');
     handleSprite._color = color4.new(0, 1, 1, 1);
-    handleSprite.setAnchors(0, 0, 1, 0);
-    handleSprite.setSize(40, 40);
     scrollBar.background = handle;
     scrollBar.transition = 'color';
     scrollBar.transitionColors.normal = color4.new(0, 1, 1, 1);

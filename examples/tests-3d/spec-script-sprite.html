@@ -42,11 +42,13 @@
 
         if (screen === null) {
           screen = app.createEntity('screen');
+          screen.addComp('Widget');
           screen.addComp('Screen');
         }
 
         let ent = app.createEntity('ent');
         ent.setParent(screen);
+        ent.addComp('Widget');
         let image = ent.addComp('Image');
         image.sprite = this._test;
       }
