@@ -12,7 +12,7 @@
     pauseSpinning: false
   };
   let updateGravity = function() {
-    app.system('physics').world.setGravity(dobj.gravityX, dobj.gravityY, dobj.gravityZ);
+    vec3.set(app.system('physics').world.gravity, dobj.gravityX, dobj.gravityY, dobj.gravityZ);
   };
   updateGravity();
   dgui.remember(dobj);

@@ -9,7 +9,8 @@
   let block = cc.utils.createMesh(app, box(1, 1, 1));
   let models = [];
   let createObject = function(mesh, x, y, z, yaw = 0, pitch = 0, roll = 0,
-  sx = 1, sy = 1, sz = 1, cr = 0.5, cg = 0.5, cb = 0.5) {
+  sx = 1, sy = 1, sz = 1, cr = 0.5, cg = 0.5, cb = 0.5, isTrigger = false, 
+  tx = 0, ty = 0, tz = 0, tyaw = 0, tpitch = 0, troll = 0) {
     let ent = app.createEntity(`object_${models.length}`);
     let modelComp = ent.addComp('Model');
     let m = new Material();
@@ -21,13 +22,19 @@
     models.push(modelComp);
     let col = ent.addComp('Collider', {
       size: [1, 1, 1],
-      center: [0, mesh === quad ? -0.5 : 0, 0]
+      center: [0, mesh === quad ? -0.5 : 0, 0],
+      isTrigger: isTrigger
+    });
+    if (isTrigger) ent.on('collide', () => {
+      vec3.set(camEnt.lpos, tx, ty, tz);
+      vec3.set(camEnt.getComp('FPCamera').euler, tyaw, tpitch, troll);
     });
     vec3.set(ent.lpos, x, y, z);
     quat.fromEuler(ent.lrot, yaw, pitch, roll);
     vec3.set(ent.lscale, sx, sy, sz);
     // after transform changed, static objects must do a manual update
     col.body.manualUpdate();
+    return ent;
   };
   // walls               positions       rotations       scales           colors
   createObject(quad,   0, -10,   0,      0, 0,   0,   20, 1, 20,   0.8, 0.7, 0.6);
@@ -40,6 +47,9 @@
   createObject(block,    7, -7.7,    0,   32, 0, 0,    6, 1, 10,   0.5, 0.5, 0.0);
   createObject(block,    0,   -5, -7.1,    0, 0, 0,   20, 1,  6,   0.0, 0.5, 0.5);
   createObject(block, -7.5,   -4,    5,    0, 0, 0,    5, 1, 10,   0.5, 0.0, 0.5);
+  // portals              position       rotations       scales           colors               target    rotation
+  createObject(block,  -8, -1, 9.5,       0,  0, 0,     4, 6, 1,   0.0, 0.0, 0.5,   true,    8, 0, -8,   0, 90, 0);
+  createObject(block, 9.5, -2,  -8,       0, 90, 0,     4, 6, 1,   0.0, 0.0, 0.5,   true,   -8, 1,  8,   0,  0, 0);
 
   // camera
   let camEnt = app.createEntity('camera');
@@ -50,7 +60,7 @@
     size: [1, 4, 1],
     center: [0, -2, 0]
   });
-  app.system('physics').world.setGravity(0, -50, 0);
+  vec3.set(app.system('physics').world.gravity, 0, -50, 0);
   col.body.setUpdateMode(true, true);
   col.body.setFreezeRotation(true);
 
@@ -63,7 +73,7 @@
       models[i].material.setProperty(name, prop);
   };
   let loadTexture = function() {
-    if (!dobj.texture) { setProperty('mainTexture', null); return; }
+    if (!dobj.texture) { setProperty('diffuse_texture', null); return; }
     app.assets.loadUrls('texture', { image: dobj.texture }, (err, texture) => {
       setProperty('diffuse_texture', texture);
     });
@@ -89,7 +99,6 @@
       this.jumping = false;
       this.posOff = vec3.zero();
       this.rotOff = vec2.zero();
-      this.id_up = vec3.new(0, this.speed, 0);
     }
 
     start() {
@@ -99,7 +108,9 @@
       this.input = this._app._input;
       this.input._lock = cc.input.LOCK_ALWAYS;
       this.velocity = this._entity.getComp('Collider').body.velocity;
-      this._entity.on('collide', () => { this.jumping = false; });
+      this._entity.on('collide', () => {
+        this.jumping = false;
+      });
     }
 
     tick() {
@@ -130,8 +141,6 @@
       if (this.input.keypress('s')) vec3.add(this.posOff, this.posOff, this.forward);
       if (this.input.keypress('a')) vec3.sub(this.posOff, this.posOff, this.right);
       if (this.input.keypress('d')) vec3.add(this.posOff, this.posOff, this.right);
-      if (this.input.keypress('q')) vec3.sub(this.posOff, this.posOff, this.id_up);
-      if (this.input.keypress('e')) vec3.add(this.posOff, this.posOff, this.id_up);
       if (this.input.keypress(' ') && !this.jumping) this.jump();
     }
 

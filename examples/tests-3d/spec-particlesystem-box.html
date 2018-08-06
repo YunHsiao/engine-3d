@@ -28,12 +28,11 @@
   <script src="./loadScene.js"></script>
   <script>
     // init app
-    let app = new cc.App(document.getElementById('canvas'));
-    const { vec3 }  = cc.math;
+    var app = new window.cc.App(document.getElementById('canvas'));
 
     app.resize();
 
-    load('../assets/out', 'spec-particlesystem-box');
+    window.load('../assets/out', 'spec-particlesystem-box');
 
     // run app
     app.run();

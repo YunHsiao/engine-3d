@@ -247,7 +247,7 @@ void main() {
     vec3 kS = F;
     vec3 kD = vec3(1.0) - kS;
     kD *= 1.0 - metallic;
-    #if USE_RGBE_HDR_IBL_DIFFUSE
+    #if USE_RGBE_IBL_DIFFUSE
       vec3 diffuseEnv = unpackRGBE(textureCube(diffuseEnvTexture, N));
     #else
       vec3 diffuseEnv = textureCube(diffuseEnvTexture, N).rgb;
@@ -256,13 +256,13 @@ void main() {
     // sample both the specularEnvTexture and the BRDF lut and combine them together as per the Split-Sum approximation to get the IBL specular part.
     vec3 R = reflect(-V, N);
     #if USE_TEX_LOD
-      #if USE_RGBE_HDR_IBL_SPECULAR
+      #if USE_RGBE_IBL_SPECULAR
         vec3 specularEnv = unpackRGBE(textureCubeLodEXT(specularEnvTexture, R, roughness * maxReflectionLod));
       #else
         vec3 specularEnv = textureCubeLodEXT(specularEnvTexture, R, roughness * maxReflectionLod).rgb;
       #endif
     #else
-      #if USE_RGBE_HDR_IBL_SPECULAR
+      #if USE_RGBE_IBL_SPECULAR
         vec3 specularEnv = unpackRGBE(textureCube(specularEnvTexture, R));
       #else
         vec3 specularEnv = textureCube(specularEnvTexture, R).rgb;

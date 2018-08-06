@@ -59,8 +59,8 @@
       m.setProperty('albedo', color4.new(0.5, 0, 0, 1));
       m.setProperty('metallic', i/rows);
       m.setProperty('roughness', clamp(j/cols, 0.05, 1));
-      m.define("USE_RGBE_HDR_IBL_DIFFUSE", true);
-      m.define("USE_RGBE_HDR_IBL_SPECULAR", true);
+      m.define("USE_RGBE_IBL_DIFFUSE", true);
+      m.define("USE_RGBE_IBL_SPECULAR", true);
 
       let ent = app.createEntity('sphere'+i);
       let modelComp = ent.addComp('Model');
@@ -156,7 +156,7 @@
         skyboxComp = camEnt.addComp('Skybox');
         let skyboxMaterial = new Material();
         skyboxMaterial.effect = app.assets.get('builtin-effect-skybox');
-        skyboxMaterial.define("USE_RGBE_HDR", true);
+        skyboxMaterial.define("USE_RGBE_CUBEMAP", true);
         skyboxComp.material = skyboxMaterial;
       }
       skyboxComp.material.setProperty('cubeMap', cubeMap);

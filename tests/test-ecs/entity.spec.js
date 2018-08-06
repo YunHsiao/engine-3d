@@ -430,7 +430,7 @@ tap.test('entity', t => {
       destroy() {
 
       }
-      _onEntityActiveChanged(val) {
+      _onEntityActiveChanged() {
       }
     }
     let app = new App();
@@ -457,7 +457,7 @@ tap.test('entity', t => {
       destroy() {
 
       }
-      _onEntityActiveChanged(val) {
+      _onEntityActiveChanged() {
       }
     }
     let app = new App();

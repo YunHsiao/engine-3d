@@ -32,7 +32,7 @@ tap.test('vtween', t => {
       lvec2: vec2A,
       lvec3: vec3A,
       lquat: quatA
-    }
+    };
 
     let ent = new entity(entProp);
     let vtween1 = vEngine.newTask(ent, {
@@ -72,7 +72,7 @@ tap.test('vtween', t => {
       lvec2: vec2A,
       lvec3: vec3A,
       lquat: quatA
-    }
+    };
 
     let ent = new entity(entProp);
     let vtween1 = vEngine.newTask(ent, {

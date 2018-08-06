@@ -884,7 +884,7 @@ tap.test('vec3', t => {
     });
 
     t.test('when calling a function that does not modify the out letiable', t => {
-      result = vec3.forEach(vecArray, 0, 0, 0, function (out, vec) { });
+      result = vec3.forEach(vecArray, 0, 0, 0, () => {});
 
       t.approxArray(vecArray, [
         1, 2, 3,

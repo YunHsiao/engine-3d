@@ -23,7 +23,7 @@
 
   "defines": [
     {
-      "name": "USE_RGBE_HDR",
+      "name": "USE_RGBE_CUBEMAP",
       "value": false
     }
   ]

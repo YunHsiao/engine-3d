@@ -31,8 +31,8 @@
       <script src="./shell.js"></script> -->
   <script>
     // init app
-    let app = new cc.App(document.getElementById('canvas'));
-    const { vec3 } = cc.math;
+    const { vec3 } = window.cc.math;
+    var app = new window.cc.App(document.getElementById('canvas'));
 
     let camEnt = app.createEntity('camera');
     vec3.set(camEnt.lpos, 10, 10, 10);
@@ -44,7 +44,7 @@
 
     app.resize();
 
-    class AssetComponent extends cc.ScriptComponent {
+    class AssetComponent extends window.cc.ScriptComponent {
       onInit() {
         if (this._test) {
           console.log('load mesh success!');
@@ -67,11 +67,11 @@
       test: {
         type: 'asset',
       }
-    }
+    };
 
     app.registerClass('Asset', AssetComponent);
 
-    load('../assets/out', 'spec-script-mesh');
+    window.load('../assets/out', 'spec-script-mesh');
 
     // run app
     app.run();

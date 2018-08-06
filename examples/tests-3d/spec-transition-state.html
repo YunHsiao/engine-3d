@@ -35,13 +35,12 @@
   <script src="./loadScene.js"></script>
   <script>
     // init app
-    let app = new cc.App(document.getElementById('canvas'));
-    const { vec3 } = cc.math;
+    var app = new window.cc.App(document.getElementById('canvas'));
 
-    let dgui = new dat.GUI({ width: 270 });
+    let dgui = new window.dat.GUI({ width: 270 });
     dgui.domElement.classList.add('dgui');
 
-    class Transition extends cc.ScriptComponent {
+    class Transition extends window.cc.ScriptComponent {
 
     }
 
@@ -65,13 +64,13 @@
         type: 'asset',
         default: null,
       }
-    }
+    };
 
     app.registerClass('Transition', Transition);
 
     app.resize();
 
-    load('../assets/out', 'spec-transition-state',() => {
+    window.load('../assets/out', 'spec-transition-state',() => {
       let button = app.activeLevel.getCompsInChildren('Button')[0];
       let options = {
         transition: button.transition,

@@ -28,9 +28,8 @@
   <script src="./loadScene.js"></script>
   <script>
     // init app
-    let app = new cc.App(document.getElementById('canvas'));
-    const { vec3 } = cc.math;
-    class FoobarComponent extends cc.ScriptComponent {
+    var app = new window.cc.App(document.getElementById('canvas'));
+    class FoobarComponent extends window.cc.ScriptComponent {
       constructor() {
         super();
       }
@@ -44,7 +43,7 @@
       }
     }
 
-    class UserComponent extends cc.ScriptComponent {
+    class UserComponent extends window.cc.ScriptComponent {
       constructor() {
         super();
       }
@@ -63,7 +62,7 @@
 
     app.resize();
 
-    load('../assets/out', 'spec-script-comps');
+    window.load('../assets/out', 'spec-script-comps');
 
     // run app
     app.run();

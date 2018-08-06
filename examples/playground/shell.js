@@ -149,7 +149,7 @@
       Landscape: cc.ORIENTATION_LANDSCAPE,
       Portrait: cc.ORIENTATION_PORTRAIT,
     };
-    orientationOps.addEventListener('change', event => {
+    orientationOps.addEventListener('change', () => {
       window.app && window.app.view.setOrientation(orienMap[orientationOps.value] || cc.ORIENTATION_AUTO);
     });
     exampleList.addEventListener('change', event => {

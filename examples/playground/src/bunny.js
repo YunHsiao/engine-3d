@@ -109,15 +109,6 @@
     screenX = app._canvas.width;
     screenY = app._canvas.height;
 
-    // update keyboard states
-    let cnt = 0;
-    for (let name in app.input._keyboard) {
-      let state = app.input._keyboard[name];
-      if (state === 1) {
-        cnt += 1;
-      }
-    }
-
     if (app.input.mousedown('left')) {
       count++;
     }

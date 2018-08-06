@@ -723,7 +723,7 @@ tap.test('vec2', t => {
     });
 
     t.test('when calling a function that does not modify the out variable', t => {
-      result = vec2.forEach(vecArray, 0, 0, 0, function (out, vec) { });
+      result = vec2.forEach(vecArray, 0, 0, 0, () => {});
 
       t.deepEqual(vecArray, [
         1, 2,

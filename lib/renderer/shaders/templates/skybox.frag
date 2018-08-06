@@ -7,7 +7,7 @@ uniform samplerCube cubeMap;
 #include <unpack.frag>
 
 void main() {
-#if USE_RGBE_HDR
+#if USE_RGBE_CUBEMAP
     vec3 c = unpackRGBE(textureCube(cubeMap, viewDir));
     c = linearToGammaSpaceRGB(c / (1.0 + c));
     gl_FragColor = vec4(c, 1.0);

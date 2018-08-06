@@ -14,7 +14,6 @@ suite(tap, 'texture', { timeout: 20000 }, t => {
       let canvasEL = document.createElement('canvas');
       let device = new gfx.Device(canvasEL);
       let counter = 0;
-      let texture = null;
 
       resl({
         manifest: {
@@ -29,8 +28,8 @@ suite(tap, 'texture', { timeout: 20000 }, t => {
           device._gl.generateMipmap = function (target) {
             counter += 1;
             _generateMipmap.call(device._gl, target);
-          }
-          texture = new gfx.Texture2D(device, {
+          };
+          new gfx.Texture2D(device, {
             width: image.width,
             height: image.height,
             images: [image],
@@ -52,7 +51,6 @@ suite(tap, 'texture', { timeout: 20000 }, t => {
       let canvasEL = document.createElement('canvas');
       let device = new gfx.Device(canvasEL);
       let counter = 0;
-      let texture = null;
 
       resl({
         manifest: {
@@ -67,9 +65,9 @@ suite(tap, 'texture', { timeout: 20000 }, t => {
           device._gl.generateMipmap = function (target) {
             counter += 1;
             _generateMipmap.call(device._gl, target);
-          }
+          };
 
-          texture = new gfx.Texture2D(device, {
+          new gfx.Texture2D(device, {
             width: image.width,
             height: image.height,
             images: [image],
@@ -96,7 +94,6 @@ suite(tap, 'texture', { timeout: 20000 }, t => {
       let canvasEL = document.createElement('canvas');
       let device = new gfx.Device(canvasEL);
       let counter = 0;
-      let texture = null;
 
       resl({
         manifest: {
@@ -131,8 +128,8 @@ suite(tap, 'texture', { timeout: 20000 }, t => {
           device._gl.generateMipmap = function (target) {
             counter += 1;
             _generateMipmap.call(device._gl, target);
-          }
-          texture = new gfx.TextureCube(device, {
+          };
+          new gfx.TextureCube(device, {
             width: image.width,
             height: image.height,
             images: [[assets.image0, assets.image1, assets.image2, assets.image3, assets.image4, assets.image5]],
@@ -154,7 +151,6 @@ suite(tap, 'texture', { timeout: 20000 }, t => {
       let canvasEL = document.createElement('canvas');
       let device = new gfx.Device(canvasEL);
       let counter = 0;
-      let texture = null;
 
       resl({
         manifest: {
@@ -189,9 +185,9 @@ suite(tap, 'texture', { timeout: 20000 }, t => {
           device._gl.generateMipmap = function (target) {
             counter += 1;
             _generateMipmap.call(device._gl, target);
-          }
+          };
 
-          texture = new gfx.TextureCube(device, {
+          new gfx.TextureCube(device, {
             width: image.width,
             height: image.height,
             images: [[assets.image0, assets.image1, assets.image2, assets.image3, assets.image4, assets.image5]],

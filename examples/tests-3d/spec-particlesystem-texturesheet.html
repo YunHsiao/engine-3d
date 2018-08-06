@@ -29,15 +29,14 @@
   <script src="./loadScene.js"></script>
   <script>
     // init app
-    let app = new cc.App(document.getElementById('canvas'));
-    const { vec3 }  = cc.math;
+    var app = new window.cc.App(document.getElementById('canvas'));
 
-	  let dgui = new dat.GUI({ width: 270 });
+    let dgui = new window.dat.GUI({ width: 270 });
     dgui.domElement.classList.add('dgui');
 
     app.resize();
 
-    load('../assets/out', 'spec-particlesystem-texturesheet',() => {
+    window.load('../assets/out', 'spec-particlesystem-texturesheet',() => {
       app.debugger.start();
       let dobj = {
         cycles:3
