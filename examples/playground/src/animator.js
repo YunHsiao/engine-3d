@@ -269,9 +269,9 @@
             let charFolder = dgui.addFolder("Character");
 
             let mainEntity = app.find(dobj.entityPath);
-            let mainEntityComplexAnimation = mainEntity.addComp('ComplexAnimation');
+            let mainEntityAnimator = mainEntity.addComp('Animator');
             let mainEntityAnimation = mainEntity.getComp('Animation');
-            let animationGraph = mainEntityComplexAnimation.animationGraph;
+            let animationGraph = mainEntityAnimator.animationGraph;
 
             let clips = [];
             for (let clip of mainEntityAnimation.clips)
