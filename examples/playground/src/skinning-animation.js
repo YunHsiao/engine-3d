@@ -1,29 +1,18 @@
 (() => {
   const { cc, app, dgui } = window;
-  const { resl, path } = cc;
+  const { resl } = cc;
 
   let dobj = {
     baseUrl: '../assets/out',
     scene: 'spec-skeleton',
-    entityPath: 'skeleton',
-    animName: 'Idle',
-    load: load,
-    play: play,
+    entityPath: 'Hero',
+    animationclips: [],
   };
 
   dgui.remember(dobj);
-  dgui.add(dobj, 'baseUrl').onFinishChange(() => {
-    load();
-  });
-  dgui.add(dobj, 'scene').onFinishChange(() => {
-    load();
-  });
-  dgui.add(dobj, 'entityPath');
-  dgui.add(dobj, 'animName').onFinishChange(() => {
-    play();
-  });
-  dgui.add(dobj, 'load');
-  dgui.add(dobj, 'play');
+  dgui.add(dobj, 'baseUrl').name("Base URL").onFinishChange(() => load());
+  dgui.add(dobj, 'scene').name("Scene").onFinishChange(() => load());
+  dgui.add(dobj, 'entityPath').name("Entity path");
 
   load();
 
@@ -44,16 +33,19 @@
             console.error(err);
           } else {
             app.loadLevel(level);
+
+            let mainEntity = app.find(dobj.entityPath);
+            let mainEntityAnimation = mainEntity.getComp('Animation');
+
+            let clips = [];
+            for (let clip of mainEntityAnimation.clips)
+              clips.push(clip.name);
+            dgui.add(dobj, 'animationclips', clips).name("Clips").onFinishChange((value) => {
+              mainEntityAnimation.play(value);
+            });
           }
         });
-
       }
     });
-  }
-
-  function play() {
-    let ent = app.find(dobj.entityPath);
-    let anim = ent.getComp('Animation');
-    anim.play(dobj.animName);
   }
 })();

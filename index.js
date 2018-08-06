@@ -17,6 +17,7 @@ import AnimationComponent from './lib/framework/animation-component';
 import AudioSourceComponent from './lib/framework/audio-source-component';
 import SkyboxComponent from './lib/framework/skybox-component';
 import ParticleSystemComponent from './lib/framework/particle/particle-system-component';
+import ComplexAnimationComponent from './lib/framework/animation/complex-animation-component';
 
 // ui-widget components
 import ScreenComponent from './lib/framework/ui/screen-component';
@@ -63,6 +64,7 @@ import input from './lib/input';
 
 import enums from './lib/platform/enums';
 import sys from './lib/platform/sys';
+import * as animation from './lib/framework/animation';
 
 let cc = {
   // registry
@@ -103,6 +105,7 @@ let cc = {
   AudioSourceComponent,
   SkyboxComponent,
   ParticleSystemComponent,
+  ComplexAnimationComponent,
 
   // ui-widget components
   ScreenComponent,
@@ -137,6 +140,8 @@ let cc = {
   input,
   async,
   sys,
+
+  animation,
 };
 Object.assign(cc, enums);
 export default cc;
