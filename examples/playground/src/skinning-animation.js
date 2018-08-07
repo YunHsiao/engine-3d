@@ -7,6 +7,7 @@
     scene: 'spec-skeleton',
     entityPath: 'Hero',
     animationclips: [],
+    speed: 1.0,
   };
 
   dgui.remember(dobj);
@@ -42,6 +43,12 @@
               clips.push(clip.name);
             dgui.add(dobj, 'animationclips', clips).name("Clips").onFinishChange((value) => {
               mainEntityAnimation.play(value);
+            });
+
+            dgui.add(dobj, 'speed', 0.0, 4.0).name("Speed").onChange(() => {
+              if (mainEntityAnimation._animCtrl._current) {
+                mainEntityAnimation._animCtrl._current.speed = dobj.speed;
+              }
             });
           }
         });
