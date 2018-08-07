@@ -34,19 +34,26 @@
 
     window.load('../assets/out', 'spec-audio',() => {
       let ent = app.find('1');
-      let as = ent.getComp('AudioSource');
-      // as.play(); // playOnAwake from schema
-      setTimeout(function(){ as.volume = 0.5; }, 10000);
-      setTimeout(function(){ as.volume = 0.1; }, 17000);
-      setTimeout(function(){ as.stop(); }, 24000);
+      let source = ent.getComp('AudioSource');
+      // source.play(); // playOnAwake from schema
 
       let ent2 = app.find('2');
-      let as2 = ent2.getComp('AudioSource');
-      // as2.loop = true; // loop from schema
-      as2.volume = 0.5;
-      setTimeout(function(){ as2.play(); }, 5000);
-      setTimeout(function(){ as2.volume = 0.75; }, 10000);
-      setTimeout(function(){ as2.volume = 1; }, 20000);
+      let source2 = ent2.getComp('AudioSource');
+      // source2.loop = true; // loop from schema
+      source2.volume = 0.5;
+
+      let callbacks = () => {
+        setTimeout(function(){ source.volume = 0.5; }, 10000);
+        setTimeout(function(){ source.volume = 0.1; }, 17000);
+        setTimeout(function(){ source.stop(); }, 24000);
+
+        setTimeout(function(){ source2.play(); }, 5000);
+        setTimeout(function(){ source2.volume = 0.75; }, 10000);
+        setTimeout(function(){ source2.volume = 1; }, 20000);
+      };
+      if (source.playing) callbacks();
+      else window.addEventListener('touchstart', callbacks, { once: true });
+
     });
 
     // run app
