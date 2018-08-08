@@ -8,15 +8,17 @@
   camEnt.addComp('Camera');
 
   let screen = app.createEntity('screen');
+  screen.addComp('Widget');
   screen.addComp('Screen');
 
   // toggle1 (simple)
   {
     let ent = app.createEntity('toggle');
     ent.setParent(screen);
-    let image = ent.addComp('Image');
-    image.setOffset(0, 50);
-    image.setSize(40, 40);
+    let widget = ent.addComp('Widget');
+    widget.setOffset(0, 50);
+    widget.setSize(40, 40);
+    ent.addComp('Image');
     let toggle = ent.addComp('Toggle');
     toggle.transition = 'color';
     toggle.transitionColors.normal = color4.new(0.8, 0.8, 0.8, 1);
@@ -26,10 +28,11 @@
 
     let checker = app.createEntity('checker');
     checker.setParent(ent);
-    let checkerImage = checker.addComp('Image');
-    checkerImage._color = color4.new(1, 0, 0, 1);
-    checkerImage.setAnchors(0, 0, 1, 1);
-    checkerImage.setSize(-10, -10);
+    let checkerWidgetComp = checker.addComp('Widget');
+    checkerWidgetComp.setAnchors(0, 0, 1, 1);
+    checkerWidgetComp.setSize(-10, -10);
+    let checkerImageComp = checker.addComp('Image');
+    checkerImageComp._color = color4.new(1, 0, 0, 1);
 
     toggle.background = ent;
     toggle.checker = checker;
@@ -52,27 +55,30 @@
 
     let entBG = app.createEntity('background');
     entBG.setParent(entToggle);
-    let image = entBG.addComp('Image');
-    image.setAnchors(0, 1, 0, 1);
-    image.setOffset(30, 0);
-    image.setSize(40, 40);
+    let bgWidget = entBG.addComp('Widget');
+    bgWidget.setAnchors(0, 1, 0, 1);
+    bgWidget.setOffset(30, 0);
+    bgWidget.setSize(40, 40);
+    entBG.addComp('Image');
 
     let entChecker = app.createEntity('checker');
     entChecker.setParent(entBG);
-    let checkerImage = entChecker.addComp('Image');
-    checkerImage._color = color4.new(1, 0, 0, 1);
-    checkerImage.setAnchors(0, 0, 1, 1);
-    checkerImage.setSize(-10, -10);
+    let checkerWidgetComp = entChecker.addComp('Widget');
+    checkerWidgetComp.setAnchors(0, 0, 1, 1);
+    checkerWidgetComp.setSize(-10, -10);
+    let checkerImageComp = entChecker.addComp('Image');
+    checkerImageComp._color = color4.new(1, 0, 0, 1);
 
     let entLabel = app.createEntity('label');
     entLabel.setParent(entToggle);
-    let text = entLabel.addComp('Text');
-    text.setAnchors(0, 1, 0, 1);
-    text.setOffset(110, 0);
-    text.setSize(100, 30);
-    text.text = 'Foobar';
-    text.color = color4.new(0.1, 0.1, 0.1, 1);
-    text.align = 'middle-center';
+    let labelWidgetComp = entLabel.addComp('Widget');
+    labelWidgetComp.setAnchors(0, 1, 0, 1);
+    labelWidgetComp.setOffset(110, 0);
+    labelWidgetComp.setSize(100, 30);
+    let textComp = entLabel.addComp('Text');
+    textComp.text = 'Foobar';
+    textComp.color = color4.new(0.1, 0.1, 0.1, 1);
+    textComp.align = 'middle-center';
 
     //
     toggle.background = entBG;

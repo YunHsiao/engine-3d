@@ -8,6 +8,7 @@
   camEnt.addComp('Camera');
 
   let screen = app.createEntity('screen');
+  screen.addComp('Widget');
   screen.addComp('Screen');
 
   let rotation = quat.create();
@@ -25,10 +26,10 @@
 
     let sliderBg = app.createEntity('bg');
     sliderBg.setParent(sliderEnt);
-    let bgSprite = sliderBg.addComp('Image');
-    bgSprite.color = color4.new(1, 1, 1, 1);
-    bgSprite.setAnchors(0, 0, 1, 1);
-    bgSprite.setSize(0, 0);
+    let bgWidgetComp = sliderBg.addComp('Widget');
+    bgWidgetComp.setAnchors(0, 0, 1, 1);
+    bgWidgetComp.setSize(0, 0);
+    sliderBg.addComp('Image');
 
     let fillArea = app.createEntity('fillArea');
     fillArea.setParent(sliderEnt);
@@ -39,10 +40,11 @@
 
     let fill = app.createEntity('fill');
     fill.setParent(fillArea);
-    let fillSprite = fill.addComp('Image');
-    fillSprite.color = color4.new(1, 0, 0, 1);
-    fillSprite.setAnchors(0, 0, 0, 1);
-    fillSprite.setSize(10, 0);
+    let fillWidgetComp = fill.addComp('Widget');
+    fillWidgetComp.setAnchors(0, 0, 0, 1);
+    fillWidgetComp.setSize(10, 0);
+    let fillImageComp = fill.addComp('Image');
+    fillImageComp.color = color4.new(1, 0, 0, 1);
 
     let handleArea = app.createEntity('handleArea');
     handleArea.setParent(sliderEnt);
@@ -52,10 +54,11 @@
 
     let handle = app.createEntity('handle');
     handle.setParent(handleArea);
-    let handleSprite = handle.addComp('Image');
-    handleSprite.color = color4.new(0, 1, 1, 1);
-    handleSprite.setAnchors(0, 0, 0, 1);
-    handleSprite.setSize(20, 20);
+    let handleWidgetComp = handle.addComp('Widget');
+    handleWidgetComp.setAnchors(0, 0, 0, 1);
+    handleWidgetComp.setSize(20, 20);
+    let handleImageComp = handle.addComp('Image');
+    handleImageComp.color = color4.new(0, 1, 1, 1);
     sliderComp.background = handle;
     sliderComp.transition = 'color';
     sliderComp.transitionColors.normal = color4.new(0, 1, 1, 1);
@@ -81,10 +84,11 @@
 
     let sliderBg = app.createEntity('bg');
     sliderBg.setParent(sliderEnt);
-    let bgSprite = sliderBg.addComp('Image');
-    bgSprite.color = color4.new(1, 1, 1, 1);
-    bgSprite.setAnchors(0, 0, 1, 1);
-    bgSprite.setSize(0, 0);
+    let bgWidgetComp = sliderBg.addComp('Widget');
+    bgWidgetComp.setAnchors(0, 0, 1, 1);
+    bgWidgetComp.setSize(0, 0);
+    let bgImageComp = sliderBg.addComp('Image');
+    bgImageComp.color = color4.new(1, 1, 1, 1);
 
     let fillArea = app.createEntity('fillArea');
     fillArea.setParent(sliderEnt);
@@ -95,10 +99,11 @@
 
     let fill = app.createEntity('fill');
     fill.setParent(fillArea);
-    let fillSprite = fill.addComp('Image');
-    fillSprite.color = color4.new(1, 0, 0, 1);
-    fillSprite.setAnchors(0, 0, 1, 0);
-    fillSprite.setSize(0, 10);
+    let fillWidgetComp = fill.addComp('Widget');
+    fillWidgetComp.setAnchors(0, 0, 1, 0);
+    fillWidgetComp.setSize(0, 10);
+    let fillImageComp = fill.addComp('Image');
+    fillImageComp.color = color4.new(1, 0, 0, 1);
 
     let handleArea = app.createEntity('handleArea');
     handleArea.setParent(sliderEnt);
@@ -108,10 +113,11 @@
 
     let handle = app.createEntity('handle');
     handle.setParent(handleArea);
-    let handleSprite = handle.addComp('Image');
-    handleSprite.color = color4.new(0, 1, 1, 1);
-    handleSprite.setAnchors(0, 0, 1, 0);
-    handleSprite.setSize(20, 20);
+    let handleWidgetComp = handle.addComp('Widget');
+    handleWidgetComp.setAnchors(0, 0, 1, 0);
+    handleWidgetComp.setSize(20, 20);
+    let handleImageComp= handle.addComp('Image');
+    handleImageComp.color = color4.new(0, 1, 1, 1);
 
     sliderComp.background = handle;
     sliderComp.transition = 'color';

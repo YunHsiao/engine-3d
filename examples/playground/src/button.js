@@ -8,16 +8,18 @@
   camEnt.addComp('Camera');
 
   let screen = app.createEntity('screen');
+  screen.addComp('Widget');
   screen.addComp('Screen');
 
   // button1 (simple)
   {
     let ent = app.createEntity('button');
     ent.setParent(screen);
-    let image = ent.addComp('Image');
-    image.setOffset(0, 50);
-    image.setAnchors(0.5, 0.5, 0.5, 0.5);
-    image.setSize(160, 30);
+    let widget = ent.addComp('Widget');
+    widget.setOffset(0, 50);
+    widget.setAnchors(0.5, 0.5, 0.5, 0.5);
+    widget.setSize(160, 30);
+    ent.addComp('Image');
     let button = ent.addComp('Button');
     button.background = ent;
     button.transition = 'color';
@@ -32,17 +34,19 @@
   {
     let ent = app.createEntity('button-02');
     ent.setParent(screen);
-    let image = ent.addComp('Image');
-    image.setOffset(0, -50);
-    image.setAnchors(0.5, 0.5, 0.5, 0.5);
-    image.setSize(160, 30);
+    let widget = ent.addComp('Widget');
+    widget.setOffset(0, -50);
+    widget.setAnchors(0.5, 0.5, 0.5, 0.5);
+    widget.setSize(160, 30);
+    ent.addComp('Image');
     let button = ent.addComp('Button');
 
     let entLabel = app.createEntity('label');
     entLabel.setParent(ent);
+    let widgetComp = entLabel.addComp('Widget');
+    widgetComp.setAnchors(0, 0, 1, 1);
+    widgetComp.setSize(0, 0);
     let text = entLabel.addComp('Text');
-    text.setAnchors(0, 0, 1, 1);
-    text.setSize(0, 0);
     text.text = 'Foobar';
     text.color = color4.new(0, 0, 0, 1);
     text.align = 'middle-center';

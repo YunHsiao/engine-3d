@@ -175,23 +175,27 @@
   }
   // on-screen text
   let screen = app.createEntity('screen');
+  screen.addComp('Widget');
   screen.addComp('Screen');
+
   let entWidget = app.createEntity('widget');
   entWidget.setParent(screen);
   let widget = entWidget.addComp('Widget');
   widget.setSize(w, h);
+
   let entLabel = app.createEntity('label');
   entLabel.setParent(entWidget);
-  let text = entLabel.addComp('Text');
-  text.setSize(w, h);
-  text.text = '';
-  text.align = 'middle-center';
-  text.color = color4.new(1, 0.7, 0, 1);
-  text.fontSize = 14;
+  let entLabelWidgetComp = entLabel.addComp('Widget');
+  entLabelWidgetComp.setSize(w, h);
+  let textComp = entLabel.addComp('Text');
+  textComp.text = '';
+  textComp.align = 'middle-center';
+  textComp.color = color4.new(1, 0.7, 0, 1);
+  textComp.fontSize = 14;
   // sync the result to screen every frame
   app.on('tick', () => {
-    text.text = "Drawing models:\n";
-    for (let m in submitted) text.text += m + "\n";
+    textComp.text = "Drawing models:\n";
+    for (let m in submitted) textComp.text += m + "\n";
     submitted = {};
   });
 

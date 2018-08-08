@@ -51,29 +51,30 @@
   camComp.color = color4.new(1,1,0,1);
 
   let screenEnt = app.createEntity('screen');
+  screenEnt.addComp('Widget');
   screenEnt.addComp('Screen');
 
 
   // OpenType Font Text
   let otTextEnt = app.createEntity('OpenTypeFontText');
   otTextEnt.setParent(screenEnt);
+  let otWidgetComp = otTextEnt.addComp('Widget');
+  otWidgetComp.setSize(512, 256);
+  otWidgetComp.setOffset(-100, -100);
   let otTextComp = otTextEnt.addComp('Text');
   otTextComp.color = color4.new(1, 1, 0, 1);
   otTextComp.align = 'middle-center';
-  otTextComp.sizeX = 512;
-  otTextComp.sizeY = 256;
-  otTextComp.setOffset(-100, -100);
 
   let debugEnt = app.createEntity('debugEntity');
   debugEnt.setParent(screenEnt);
   let fontAltasSprite = new cc.Sprite();
   fontAltasSprite.width = 512;
   fontAltasSprite.height = 512;
+  let debugWidgetComp = debugEnt.addComp('Widget');
+  debugWidgetComp.setSize(512, 512);
+  debugWidgetComp.setOffset(500, -300);
   let debugImageComp = debugEnt.addComp('Image');
   debugImageComp.color = color4.new(1, 1, 1, 1);
-  debugImageComp.sizeX = 512;
-  debugImageComp.sizeY = 512;
-  debugImageComp.setOffset(500, -300);
 
   let otfontUrls = {
     bin: `../assets/fonts/Roboto-Black.ttf`,
@@ -91,13 +92,14 @@
   // Bitmap Font Text
   let bmTextEnt = app.createEntity('BitmapFontText');
   bmTextEnt.setParent(screenEnt);
+  let bmWidgetComp = bmTextEnt.addComp('Widget');
+  bmWidgetComp.setSize(512, 256);
+  bmWidgetComp.setOffset(500, 200);
   let bmTextComp = bmTextEnt.addComp('Text');
   bmTextComp.align = 'middle-center';
   bmTextComp.wrap = true;
   bmTextComp.color = color4.new(0, 1, 0, 1);
-  bmTextComp.sizeX = 512;
-  bmTextComp.sizeY = 256;
-  bmTextComp.setOffset(500, 200);
+
   let bmfontUrls = {
     json: `../assets/fonts/bmfontdata.json`,
   };
@@ -118,6 +120,9 @@
   // System Font Text
   let sysTextEnt = app.createEntity('SystemFontText');
   sysTextEnt.setParent(screenEnt);
+  let sysWidgetComp = sysTextEnt.addComp('Widget');
+  sysWidgetComp.setSize(600, 300);
+  sysWidgetComp.setOffset(-100, 200);
   let sysTextComp = sysTextEnt.addComp('Text');
   sysTextComp.text = 'SYSTEM FONT\n\nHello, Engine3D!\n' +
   'a long paragraph is presented here. it is used to demonstrate long labels which need more than one pool. \n' +
@@ -125,7 +130,4 @@
   sysTextComp.align = 'middle-center';
   sysTextComp.wrap = true;
   sysTextComp.color = color4.new(1, 1, 1, 1);
-  sysTextComp.sizeX = 600;
-  sysTextComp.sizeY = 300;
-  sysTextComp.setOffset(-100, 200);
 })();
