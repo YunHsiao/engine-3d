@@ -154,7 +154,7 @@
       }
       else { // Update character's position.
         this._moveTime -= deltaTimeSec;
-        let dmove = speed * deltaTimeSec;
+        let dmove = speed * 0.8 * deltaTimeSec;
         let realdmove = dmove;
         let offsetVelocity = new cc.math.vec3(this._destMoveVelocity.x, 0, this._destMoveVelocity.y);
         cc.math.vec3.scaleAndAdd(this._entity.lpos, this._entity.lpos, offsetVelocity, realdmove);
@@ -313,7 +313,48 @@
               ]);
               let blendTree = new cc.animation.BlendTree(blender2D);
 
-              movementMotion2D = new cc.animation.Motion("Movement 2D", blendTree);
+              let maskedAnimation = null;
+              {
+                let skeleton = mainEntityAnimator.skeleton;
+                if (skeleton) {
+                  let maskUpperBody = null;
+                  let maskLowwerBody = null;
+
+                  maskedAnimation = new cc.animation.MaskedAnimation();
+                  maskedAnimation.add(getClip("Idle"), maskUpperBody);
+                  maskedAnimation.add(blendTree, maskLowwerBody);
+
+                  let maskJointNames = ["LeftGun", "RightShoulder"];
+                  for (let i = 0; i < maskJointNames.length; ++i) {
+                    let maskJointName = maskJointNames[i];
+                    let idx = skeleton.getJointIndex(maskJointName);
+                    if (idx < 0) {
+                      console.log(`$Cannot find joint {maskJointName}.`);
+                    } else {
+                      if (!maskLowwerBody) {
+                        maskLowwerBody = skeleton.createMask();
+                      }
+                      maskLowwerBody.setMaskedRecursive(idx);
+                    }
+                  }
+                  if (maskLowwerBody) {
+                    maskUpperBody = maskLowwerBody.complement();
+                  }
+
+                  if (maskUpperBody && maskLowwerBody) {
+                    maskedAnimation = new cc.animation.MaskedAnimation();
+                    maskedAnimation.add(getClip("Idle"), maskUpperBody);
+                    maskedAnimation.add(blendTree, maskLowwerBody);
+                  }
+                }
+              }
+
+              if (maskedAnimation) {
+                movementMotion2D = new cc.animation.Motion("Movement 2D", maskedAnimation);
+              }
+              else {
+                movementMotion2D = new cc.animation.Motion("Movement 2D", blendTree);
+              }
               animationGraph.addMotion(movementMotion2D);
             }
 
