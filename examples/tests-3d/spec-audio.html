@@ -29,15 +29,16 @@
   <script src="../../dist/engine.dev.js"></script>
   <script src="./loadScene.js"></script>
   <script>
+    // new window.VConsole();
     // init app
-    new window.VConsole();
     var app = new window.cc.App(document.getElementById('canvas'));
 
-    let dgui = new window.dat.GUI({ width: 270 });
+    let dgui = new window.dat.GUI({ width: 300 });
     dgui.domElement.classList.add('dgui');
 
     app.resize();
 
+    // explicitly using DOM mode
     // window.cc.sys.supportWebAudio = false;
 
     window.load('../assets/out', 'spec-audio',() => {
@@ -50,61 +51,68 @@
       // source2.loop = true; // loop from schema
       source2.volume = 0.5;
 
-      let t1 = 17, t2 = 5, t3 = 15;
+      let t1 = 17, off2 = 5, t2 = 15;
       /* discrete callbacks *
       ent.once('AudioSource:started', () => {
         setTimeout(function(){ source.volume = 0.55; }, t1 * 500);
         setTimeout(function(){ source.volume = 0.1; }, t1 * 1000);
 
-        setTimeout(function(){ source2.play(); }, t2 * 1000);
-        setTimeout(function(){ source2.volume = 0.75; }, (t2 + t3 * 0.5) * 1000);
-        setTimeout(function(){ source2.volume = 1; }, (t2 + t3) * 1000);
+        setTimeout(function(){ source2.play(); }, off2 * 1000);
+        setTimeout(function(){ source2.volume = 0.75; }, (off2 + t2 * 0.5) * 1000);
+        setTimeout(function(){ source2.volume = 1; }, (off2 + t2) * 1000);
       });
       /* smooth transition */
-      let startTime = app.totalTime, started = false, waiting = true;
-      let setActive = (c, active) => {
-        c.domElement.style.pointerEvents = active ? "all" : "none";
-        c.domElement.style.opacity = active ? 1.0 : 0.5;
+      let startTime = app.totalTime;
+      let sineLerp = (b, e, t) => {
+        return b + (e - b) * (Math.sin((t - 0.5) * Math.PI) + 1) * 0.5;
+      };
+      let animation1 = () => {
+        source.volume = sineLerp(1, 0.1, (app.totalTime - startTime) / t1);
+      };
+      let animation2 = () => {
+        source2.volume = sineLerp(0.5, 1, (app.totalTime - startTime - off2) / t2);
       };
       ent.once('AudioSource:started', () => {
-        app.on('tick', () => {
-          if (!started) { startTime = app.totalTime; started = true; }
-          if (app.totalTime - startTime > t2 + t3) {
-            setActive(volumes[0], true); setActive(volumes[1], true);
-            return;
-          }
-
-          let time1 = (app.totalTime - startTime) * (Math.PI / t1);
-          time1 = window.cc.math.clamp(time1, 0, Math.PI);
-          source.volume = Math.cos(time1) * 0.45 + 0.55; // 1 -> 0.1
-          setActive(volumes[0], false);
-
-          let time2 = app.totalTime - startTime;
-          if (time2 < t2) return;
-          if (waiting) { source2.play(); waiting = false; }
-          time2 = (time2 - t2) * (Math.PI / t3) - Math.PI * 0.5;
-          time2 = window.cc.math.clamp(time2, -Math.PI * 0.5, Math.PI * 0.5);
-          source2.volume = Math.sin(time2) * 0.25 + 0.75; // 0.5 -> 1
+        // animate audio 1
+        startTime = app.totalTime;
+        setActive(volumes[0], false);
+        app.on('tick', animation1);
+        setTimeout(() => {
+          app.off('tick', animation1);
+          setActive(volumes[0], true);
+        }, t1 * 1000);
+        // animate audio 2
+        setTimeout(() => {
+          source2.play();
           setActive(volumes[1], false);
-        });
+          app.on('tick', animation2);
+        }, off2 * 1000);
+        setTimeout(() => {
+          app.off('tick', animation2);
+          setActive(volumes[1], true);
+        }, (off2 + t2) * 1000);
       });
+      /**/
 
       // controlls
       let sources = [source, source2];
       let names = ['Morceaux de Fantasie', 'Nocturne'];
       let volumes = [];
+      let setActive = (c, active) => {
+        c.domElement.style.pointerEvents = active ? "all" : "none";
+        c.domElement.style.opacity = active ? 1.0 : 0.3;
+      };
+      setActive(dgui.add(window.cc.sys, 'supportWebAudio').listen(), false);
       for (let i = 0; i < sources.length; i++) {
         let f = dgui.addFolder(names[i]);
         f.add(sources[i], 'play');
         f.add(sources[i], 'pause');
         f.add(sources[i], 'stop');
-        let c = f.add(sources[i], 'volume', 0, 1).listen();
-        volumes.push(c);
+        volumes.push(f.add(sources[i], 'volume', 0, 1).listen());
         f.add(sources[i], 'currentTime', 0, sources[i].duration).listen();
         f.add(sources[i], 'loop').listen();
         f.add(sources[i], 'playOnAwake').listen();
-        let c2 = f.add(sources[i], 'playing').listen();
-        setActive(c2, false);
+        setActive(f.add(sources[i], 'playing').listen(), false);
         f.open();
       }
     });
