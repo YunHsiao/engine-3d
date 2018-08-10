@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>spec-zed</title>
+  <title>spec-particlesystem-performance</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <style>
@@ -33,7 +33,7 @@
   <script src="../../dist/engine.dev.js"></script>
   <script src="./loadScene.js"></script>
   <script src="../../node_modules/dat.gui/build/dat.gui.min.js"></script>
-  <script src="../../node_modules/lstats.js/dist/lstats.min.js"></script>
+  <script src="../../node_modules/stats.js/build/stats.min.js"></script>
   <script>
     // init app
     var app = new window.cc.App(document.getElementById('canvas'));
@@ -41,7 +41,7 @@
     let dgui = new window.dat.GUI({ width: 200 });
     dgui.domElement.classList.add('dgui');
 
-    window.stats = new window.LStats(document.body);
+    window.stats = new window.Stats();
 
     let ps = new Array;
 
@@ -129,7 +129,7 @@
     app.run();
 
     app.on('tick', () => {
-      window.stats.tick();
+      window.stats.update();
     });
   </script>
 </body>

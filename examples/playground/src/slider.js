@@ -28,7 +28,7 @@
     sliderBg.setParent(sliderEnt);
     let bgWidgetComp = sliderBg.addComp('Widget');
     bgWidgetComp.setAnchors(0, 0, 1, 1);
-    bgWidgetComp.setSize(0, 0);
+    bgWidgetComp.setSize(-20, 0);
     sliderBg.addComp('Image');
 
     let fillArea = app.createEntity('fillArea');
@@ -36,13 +36,12 @@
     let faWidget = fillArea.addComp('Widget');
     faWidget.setAnchors(0, 0, 1, 1);
     faWidget.setSize(-20, 0);
-    faWidget.setOffset(-5, 0);
 
     let fill = app.createEntity('fill');
     fill.setParent(fillArea);
     let fillWidgetComp = fill.addComp('Widget');
     fillWidgetComp.setAnchors(0, 0, 0, 1);
-    fillWidgetComp.setSize(10, 0);
+    fillWidgetComp.setSize(20, 0);
     let fillImageComp = fill.addComp('Image');
     fillImageComp.color = color4.new(1, 0, 0, 1);
 
@@ -95,13 +94,12 @@
     let faWidget = fillArea.addComp('Widget');
     faWidget.setAnchors(0, 0, 1, 1);
     faWidget.setSize(0, -20);
-    faWidget.setOffset(0, -5);
 
     let fill = app.createEntity('fill');
     fill.setParent(fillArea);
     let fillWidgetComp = fill.addComp('Widget');
     fillWidgetComp.setAnchors(0, 0, 1, 0);
-    fillWidgetComp.setSize(0, 10);
+    fillWidgetComp.setSize(0, 20);
     let fillImageComp = fill.addComp('Image');
     fillImageComp.color = color4.new(1, 0, 0, 1);
 
@@ -130,6 +128,6 @@
     sliderComp.handle = handle;
     sliderComp.fill = fill;
     sliderComp.reverse = true;
-    sliderComp.progress = 0.3;
+    sliderComp.value = 0.3;
   }
 })();
