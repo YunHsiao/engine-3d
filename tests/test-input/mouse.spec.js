@@ -1,6 +1,6 @@
 'use strict';
 
-const Input = require('./dist/input');
+const cc = require('../../dist/engine');
 
 let el = document.createElement('div');
 el.id = 'mouse';
@@ -8,7 +8,8 @@ el.style.width = '400px';
 el.style.height = '300px';
 el.tabIndex = -1;
 document.body.appendChild(el);
-let input = new Input(document.getElementById('mouse'));
+let bcr = el.getBoundingClientRect();
+let input = new cc.input(document.getElementById('mouse'));
 
 suite(tap, 'input', t => {
 
@@ -121,7 +122,7 @@ suite(tap, 'input', t => {
 
       setInterval(() => {
         t.equal(input.mouseX + 8, results[idx].x);
-        t.equal(input.mouseY + 8, results[idx].y);
+        t.equal(bcr.height - input.mouseY + 8, results[idx].y);
         idx += 1;
 
         if (idx === results.length) {

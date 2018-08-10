@@ -67,9 +67,8 @@
         text-align: left;
       }
     </style>
-    <script src="../node_modules/lstats.js/dist/lstats.dev.js"></script>
-    <script src="../node_modules/memop/dist/memop.dev.js"></script>
-    <script src="../dist/input.dev.js"></script>
+    <script src="../../../node_modules/stats.js/build/stats.min.js"></script>
+    <script src="../../../dist/engine.dev.js"></script>
   </head>
 
   <body>
@@ -82,9 +81,12 @@
     <script>
       'use strict';
 
-      let memStats = new window.LStats(document.body, ['mb']);
+      // let memStats = new LStats(document.body, ['mb']);
+      let memStats = new Stats();
+      memStats.showPanel(2);
+      document.body.appendChild(memStats.dom);
 
-      let input = new window.Input(document.getElementById('input'));
+      let input = new cc.input(document.getElementById('input'));
       let vline = document.getElementById('vline');
       let hline = document.getElementById('hline');
       let info = document.getElementById('info');
@@ -99,7 +101,7 @@
 
         // end of the frame
         input.reset();
-        memStats.tick();
+        memStats.update();
 
         requestAnimationFrame(animate);
       }
