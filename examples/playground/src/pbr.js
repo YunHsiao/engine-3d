@@ -1,6 +1,6 @@
 (() => {
   const { cc, app, dgui } = window;
-  const { resl, Texture2D, Material } = cc;
+  const { Material } = cc;
   const { vec3, color3, color4, quat, clamp } = cc.math;
   const { sphere } = cc.primitives;
 
@@ -90,37 +90,13 @@
   };
   let loadTexture = (function() {
     let cb = function(texture, prop) {
-      if (texture) {
-        define('USE_'+prop.toUpperCase(), true);
-        setProperty(prop, texture);
-      } else {
-        define('USE_'+prop.toUpperCase(), false);
-      }
+      define('USE_'+prop.toUpperCase(), !!texture);
+      setProperty(prop, texture);
     };
     return function (url, prop) {
-      if (!url) {
-        cb(null, prop);
-        return;
-      }
-
-      resl({
-        manifest: {
-          image: {
-            type: 'image',
-            src: url,
-          },
-        },
-        onDone(assets) {
-          let texture = new Texture2D(app.device);
-          texture.setImage(0, assets.image);
-          texture.wrapS = 'clamp';
-          texture.wrapT = 'clamp';
-          texture.mipmap = true;
-          texture.commit();
-
-          cb(texture, prop);
-        }
-      });
+      if (!url) cb(null, prop);
+      else app.assets.loadUrls('texture', { image: url }, 
+        (err, texture) => { cb(texture, prop); });
     };
   })();
   let activateSkyBox = function(model) {

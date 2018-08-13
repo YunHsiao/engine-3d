@@ -4,8 +4,14 @@
 
   let dobj = {
     maxObj: 100,
+    material: 'unlit'
   };
   dgui.add(dobj, 'maxObj', 0, 200).step(1).onChange(updateObjs);
+  dgui.add(dobj, 'material', ['unlit', 'phong', 'pbr']).onFinishChange(() => {
+    for (let i = 0; i < ents.length; i++) {
+      ents[i].getComp('Model').material = mats[dobj.material];
+    }
+  });
 
   let ents = [];
   function updateObjs(val) {
@@ -34,7 +40,7 @@
 
         let modelComp = ent.addComp('Model');
         modelComp.mesh = meshBox;
-        modelComp.material = material;
+        modelComp.material = mats[dobj.material];
 
         ents.push(ent);
       }
@@ -54,28 +60,30 @@
   }));
 
   // create material
-  let material = new cc.Material();
-  /**/
-  material.effect = app.assets.get('builtin-effect-unlit-transparent');
-  material.define('USE_COLOR', true);
-  material.define('USE_TEXTURE', true);
-  material.setProperty('color', color4.create(1, 1, 1, 0.6));
-  /**
-  material.effect = app.assets.get('builtin-effect-phong-transparent');
-  material.define('USE_DIFFUSE_TEXTURE', true);
-  material.setProperty('diffuseColor', color4.create(1, 1, 1, 0.6));
-  /**
-  material.effect = app.assets.get('builtin-effect-pbr-transparent');
-  material.define('USE_ALBEDO_TEXTURE', true);
-  material.setProperty('albedo', color4.create(1, 1, 1, 0.6));
-  /**/
+  let mats = {};
+  mats.unlit = new cc.Material();
+  mats.unlit.effect = app.assets.get('builtin-effect-unlit-transparent');
+  mats.unlit.define('USE_COLOR', true);
+  mats.unlit.define('USE_TEXTURE', true);
+  mats.unlit.setProperty('color', color4.create(1, 1, 1, 0.6));
+
+  mats.phong = new cc.Material();
+  mats.phong.effect = app.assets.get('builtin-effect-phong-transparent');
+  mats.phong.define('USE_DIFFUSE_TEXTURE', true);
+  mats.phong.setProperty('diffuseColor', color4.create(1, 1, 1, 0.6));
+
+  mats.pbr = new cc.Material();
+  mats.pbr.effect = app.assets.get('builtin-effect-pbr-transparent');
+  mats.pbr.define('USE_ALBEDO_TEXTURE', true);
+  mats.pbr.setProperty('albedo', color4.create(1, 1, 1, 0.6));
+  mats.pbr.setProperty('ao', 1);
 
   app.assets.loadUrls('texture', {
     image: '../assets/textures/checker_uv.jpg'
   }, (err, texture) => {
-    material.setProperty('mainTexture', texture);
-    // material.setProperty('diffuse_texture', texture);
-    // material.setProperty('albedo_texture', texture);
+    mats.unlit.setProperty('mainTexture', texture);
+    mats.phong.setProperty('diffuse_texture', texture);
+    mats.pbr.setProperty('albedo_texture', texture);
   });
 
   // create camera

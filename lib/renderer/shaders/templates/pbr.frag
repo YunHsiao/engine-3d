@@ -231,7 +231,7 @@ void main() {
   #endif
 
   #if USE_EMISSIVE
-    vec3 emissiveColor = gammaToLinearSpaceRGB(emissive);
+    vec3 emissiveColor = emissive;
     #if USE_EMISSIVE_TEXTURE
       emissiveColor *= gammaToLinearSpaceRGB(texture2D(emissive_texture, uv0).rgb);
     #endif
