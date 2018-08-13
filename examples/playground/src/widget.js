@@ -21,7 +21,7 @@
   dgui.add(dobj, 'preset');
 
   function _debugUI(root) {
-    let color = color3.new(0.5, 0.5, 0.0);
+    let color = color3.create(0.5, 0.5, 0.0);
     let a = vec3.zero();
     let b = vec3.zero();
     let c = vec3.zero();
@@ -31,7 +31,7 @@
 
     let curHover = null;
     let curMousedown = null;
-    let curLineColor = color3.new(0.5, 0.5, 0.0);
+    let curLineColor = color3.create(0.5, 0.5, 0.0);
 
     function _debugEvent(ent) {
       ent.on('mouseenter', () => {

@@ -89,7 +89,7 @@
   // DEBUG
   app.on('tick', () => {
     cc.utils.walk(screen, ent => {
-      let color = color3.new(0, 0, 0);
+      let color = color3.create(0, 0, 0);
       let a = vec3.zero();
       let b = vec3.zero();
       let c = vec3.zero();

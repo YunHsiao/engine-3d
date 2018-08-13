@@ -40,7 +40,7 @@
     vec3.set(lightEnt.lpos, lightPos[i].x, lightPos[i].y, lightPos[i].z);
     let light = lightEnt.addComp('Light');
     light.type = 'point';
-    light.color = color3.new(1, 1, 1);
+    light.color = color3.create(1, 1, 1);
     light.intensity = 2;
     light.range = 1000;
   }

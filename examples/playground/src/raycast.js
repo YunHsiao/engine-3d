@@ -28,8 +28,8 @@
       vec3.create(-10, 10, -5),
     ],
     color: [
-      color3.new(1, 1, 1),
-      color3.new(0.3, 0.3, 0.3),
+      color3.create(1, 1, 1),
+      color3.create(0.3, 0.3, 0.3),
     ],
   };
   manifest.geometries = {
