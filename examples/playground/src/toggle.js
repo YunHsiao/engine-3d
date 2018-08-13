@@ -21,10 +21,10 @@
     ent.addComp('Image');
     let toggle = ent.addComp('Toggle');
     toggle.transition = 'color';
-    toggle.transitionColors.normal = color4.new(0.8, 0.8, 0.8, 1);
-    toggle.transitionColors.highlight = color4.new(1, 1, 0, 1);
-    toggle.transitionColors.pressed = color4.new(0.5, 0.5, 0.5, 1);
-    toggle.transitionColors.disabled = color4.new(0.2, 0.2, 0.2, 1);
+    toggle.transitionColors.normal = color4.create(0.8, 0.8, 0.8, 1);
+    toggle.transitionColors.highlight = color4.create(1, 1, 0, 1);
+    toggle.transitionColors.pressed = color4.create(0.5, 0.5, 0.5, 1);
+    toggle.transitionColors.disabled = color4.create(0.2, 0.2, 0.2, 1);
 
     let checker = app.createEntity('checker');
     checker.setParent(ent);
@@ -32,7 +32,7 @@
     checkerWidgetComp.setAnchors(0, 0, 1, 1);
     checkerWidgetComp.setSize(-10, -10);
     let checkerImageComp = checker.addComp('Image');
-    checkerImageComp._color = color4.new(1, 0, 0, 1);
+    checkerImageComp._color = color4.create(1, 0, 0, 1);
 
     toggle.background = ent;
     toggle.checker = checker;
@@ -48,10 +48,10 @@
     widget.setSize(200, 40);
     let toggle = entToggle.addComp('Toggle');
     toggle.transition = 'color';
-    toggle.transitionColors.normal = color4.new(0.8, 0.8, 0.8, 1);
-    toggle.transitionColors.highlight = color4.new(1, 1, 0, 1);
-    toggle.transitionColors.pressed = color4.new(0.5, 0.5, 0.5, 1);
-    toggle.transitionColors.disabled = color4.new(0.2, 0.2, 0.2, 1);
+    toggle.transitionColors.normal = color4.create(0.8, 0.8, 0.8, 1);
+    toggle.transitionColors.highlight = color4.create(1, 1, 0, 1);
+    toggle.transitionColors.pressed = color4.create(0.5, 0.5, 0.5, 1);
+    toggle.transitionColors.disabled = color4.create(0.2, 0.2, 0.2, 1);
 
     let entBG = app.createEntity('background');
     entBG.setParent(entToggle);
@@ -67,7 +67,7 @@
     checkerWidgetComp.setAnchors(0, 0, 1, 1);
     checkerWidgetComp.setSize(-10, -10);
     let checkerImageComp = entChecker.addComp('Image');
-    checkerImageComp._color = color4.new(1, 0, 0, 1);
+    checkerImageComp._color = color4.create(1, 0, 0, 1);
 
     let entLabel = app.createEntity('label');
     entLabel.setParent(entToggle);
@@ -77,7 +77,7 @@
     labelWidgetComp.setSize(100, 30);
     let textComp = entLabel.addComp('Text');
     textComp.text = 'Foobar';
-    textComp.color = color4.new(0.1, 0.1, 0.1, 1);
+    textComp.color = color4.create(0.1, 0.1, 0.1, 1);
     textComp.align = 'middle-center';
 
     //

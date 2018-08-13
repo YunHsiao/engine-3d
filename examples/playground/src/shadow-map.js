@@ -50,17 +50,17 @@
   // create material
   let cube1Mat = new cc.Material();
   cube1Mat.effect = app.assets.get('builtin-effect-pbr');
-  cube1Mat.setProperty('albedo', color4.new(1, 1, 0, 1));
+  cube1Mat.setProperty('albedo', color4.create(1, 1, 0, 1));
   cube1Mat.setProperty('roughness', 0.5);
   cube1Mat.setProperty('metallic', 1);
   let cube2Mat = new cc.Material();
   cube2Mat.effect = app.assets.get('builtin-effect-pbr');
-  cube2Mat.setProperty('albedo', color4.new(0, 1, 1, 1));
+  cube2Mat.setProperty('albedo', color4.create(0, 1, 1, 1));
   cube2Mat.setProperty('roughness', 0.6);
   cube2Mat.setProperty('metallic', 0.8);
   let sphere1Mat = new cc.Material();
   sphere1Mat.effect = app.assets.get('builtin-effect-pbr');
-  sphere1Mat.setProperty('albedo', color4.new(0, 0, 1, 1));
+  sphere1Mat.setProperty('albedo', color4.create(0, 0, 1, 1));
   sphere1Mat.setProperty('roughness', 0.7);
   sphere1Mat.setProperty('metallic', 1);
   let planeMat = new cc.Material();

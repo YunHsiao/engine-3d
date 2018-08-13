@@ -16,7 +16,7 @@
     let m = new Material();
     m.effect = app.assets.get('builtin-effect-phong');
     m.define('USE_DIFFUSE_TEXTURE', true);
-    m.setProperty('diffuseColor', color4.new(cr, cg, cb, 1));
+    m.setProperty('diffuseColor', color4.create(cr, cg, cb, 1));
     modelComp.mesh = mesh;
     modelComp.material = m;
     models.push(modelComp);

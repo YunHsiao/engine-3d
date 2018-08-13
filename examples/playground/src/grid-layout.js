@@ -28,7 +28,7 @@
     let childWidget = child.addComp('Widget');
     childWidget.setPivot(0, 0);
     let childImageComp = child.addComp('Image');
-    childImageComp.color = color4.new(0, 1, 1, 1);
+    childImageComp.color = color4.create(0, 1, 1, 1);
 
     let label = app.createEntity('label');
     label.setParent(child);
@@ -36,7 +36,7 @@
     widgetComp.setSize(0, 0);
     widgetComp.setAnchors(0, 0, 1, 1);
     let labelComp = label.addComp('Text');
-    labelComp.color = color4.new(0, 0, 0, 1);
+    labelComp.color = color4.create(0, 0, 0, 1);
     labelComp.align = 'middle-center';
     labelComp.text = i + '';
   }

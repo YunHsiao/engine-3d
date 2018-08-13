@@ -62,19 +62,19 @@
           color3.set(curLineColor, 0, 1, 0);
 
           if (widget.color) {
-            widget.color = color4.new(0, 1, 0, 1);
+            widget.color = color4.create(0, 1, 0, 1);
           }
         } else if (ent === curHover) {
           color3.set(curLineColor, 1, 0, 0);
 
           if (widget) {
-            widget.color = color4.new(1, 0, 0, 1);
+            widget.color = color4.create(1, 0, 0, 1);
           }
         } else {
           color3.copy(curLineColor, color);
 
           if (widget) {
-            widget.color = color4.new(1, 1, 1, 1);
+            widget.color = color4.create(1, 1, 1, 1);
           }
         }
 

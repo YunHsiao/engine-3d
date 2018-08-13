@@ -17,7 +17,7 @@
     ],
     properties: [
       {}, 
-      { "diffuseColor": color4.new(1, 1, 1, 0.3) },
+      { "diffuseColor": color4.create(1, 1, 1, 0.3) },
     ]
   };
   manifest.lights = {
@@ -190,7 +190,7 @@
   let textComp = entLabel.addComp('Text');
   textComp.text = '';
   textComp.align = 'middle-center';
-  textComp.color = color4.new(1, 0.7, 0, 1);
+  textComp.color = color4.create(1, 0.7, 0, 1);
   textComp.fontSize = 14;
   // sync the result to screen every frame
   app.on('tick', () => {

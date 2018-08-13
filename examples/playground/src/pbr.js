@@ -56,7 +56,7 @@
       let m = new Material();
       m.effect = app.assets.get('builtin-effect-pbr');
       m.setProperty('ao', 1.0);
-      m.setProperty('albedo', color4.new(0.5, 0, 0, 1));
+      m.setProperty('albedo', color4.create(0.5, 0, 0, 1));
       m.setProperty('metallic', i/rows);
       m.setProperty('roughness', clamp(j/cols, 0.05, 1));
       m.define("USE_RGBE_IBL_DIFFUSE", true);

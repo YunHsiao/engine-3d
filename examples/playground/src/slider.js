@@ -44,7 +44,7 @@
     fillWidgetComp.setAnchors(0, 0, 0, 1);
     fillWidgetComp.setSize(10, 0);
     let fillImageComp = fill.addComp('Image');
-    fillImageComp.color = color4.new(1, 0, 0, 1);
+    fillImageComp.color = color4.create(1, 0, 0, 1);
 
     let handleArea = app.createEntity('handleArea');
     handleArea.setParent(sliderEnt);
@@ -58,13 +58,13 @@
     handleWidgetComp.setAnchors(0, 0, 0, 1);
     handleWidgetComp.setSize(20, 20);
     let handleImageComp = handle.addComp('Image');
-    handleImageComp.color = color4.new(0, 1, 1, 1);
+    handleImageComp.color = color4.create(0, 1, 1, 1);
     sliderComp.background = handle;
     sliderComp.transition = 'color';
-    sliderComp.transitionColors.normal = color4.new(0, 1, 1, 1);
-    sliderComp.transitionColors.highlight = color4.new(1, 1, 0, 1);
-    sliderComp.transitionColors.pressed = color4.new(0.5, 0.5, 0.5, 1);
-    sliderComp.transitionColors.disabled = color4.new(0.2, 0.2, 0.2, 1);
+    sliderComp.transitionColors.normal = color4.create(0, 1, 1, 1);
+    sliderComp.transitionColors.highlight = color4.create(1, 1, 0, 1);
+    sliderComp.transitionColors.pressed = color4.create(0.5, 0.5, 0.5, 1);
+    sliderComp.transitionColors.disabled = color4.create(0.2, 0.2, 0.2, 1);
     sliderComp._updateState();
 
     sliderComp.handle = handle;
@@ -88,7 +88,7 @@
     bgWidgetComp.setAnchors(0, 0, 1, 1);
     bgWidgetComp.setSize(0, 0);
     let bgImageComp = sliderBg.addComp('Image');
-    bgImageComp.color = color4.new(1, 1, 1, 1);
+    bgImageComp.color = color4.create(1, 1, 1, 1);
 
     let fillArea = app.createEntity('fillArea');
     fillArea.setParent(sliderEnt);
@@ -103,7 +103,7 @@
     fillWidgetComp.setAnchors(0, 0, 1, 0);
     fillWidgetComp.setSize(0, 10);
     let fillImageComp = fill.addComp('Image');
-    fillImageComp.color = color4.new(1, 0, 0, 1);
+    fillImageComp.color = color4.create(1, 0, 0, 1);
 
     let handleArea = app.createEntity('handleArea');
     handleArea.setParent(sliderEnt);
@@ -117,14 +117,14 @@
     handleWidgetComp.setAnchors(0, 0, 1, 0);
     handleWidgetComp.setSize(20, 20);
     let handleImageComp= handle.addComp('Image');
-    handleImageComp.color = color4.new(0, 1, 1, 1);
+    handleImageComp.color = color4.create(0, 1, 1, 1);
 
     sliderComp.background = handle;
     sliderComp.transition = 'color';
-    sliderComp.transitionColors.normal = color4.new(0, 1, 1, 1);
-    sliderComp.transitionColors.highlight = color4.new(1, 1, 0, 1);
-    sliderComp.transitionColors.pressed = color4.new(0.5, 0.5, 0.5, 1);
-    sliderComp.transitionColors.disabled = color4.new(0.2, 0.2, 0.2, 1);
+    sliderComp.transitionColors.normal = color4.create(0, 1, 1, 1);
+    sliderComp.transitionColors.highlight = color4.create(1, 1, 0, 1);
+    sliderComp.transitionColors.pressed = color4.create(0.5, 0.5, 0.5, 1);
+    sliderComp.transitionColors.disabled = color4.create(0.2, 0.2, 0.2, 1);
     sliderComp._updateState();
 
     sliderComp.handle = handle;

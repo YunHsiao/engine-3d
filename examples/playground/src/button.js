@@ -23,10 +23,10 @@
     let button = ent.addComp('Button');
     button.background = ent;
     button.transition = 'color';
-    button.transitionColors.normal = color4.new(0.8, 0.8, 0.8, 1);
-    button.transitionColors.highlight = color4.new(1, 1, 0, 1);
-    button.transitionColors.pressed = color4.new(0.5, 0.5, 0.5, 1);
-    button.transitionColors.disabled = color4.new(0.2, 0.2, 0.2, 1);
+    button.transitionColors.normal = color4.create(0.8, 0.8, 0.8, 1);
+    button.transitionColors.highlight = color4.create(1, 1, 0, 1);
+    button.transitionColors.pressed = color4.create(0.5, 0.5, 0.5, 1);
+    button.transitionColors.disabled = color4.create(0.2, 0.2, 0.2, 1);
     button._updateState();
   }
 
@@ -48,15 +48,15 @@
     widgetComp.setSize(0, 0);
     let text = entLabel.addComp('Text');
     text.text = 'Foobar';
-    text.color = color4.new(0, 0, 0, 1);
+    text.color = color4.create(0, 0, 0, 1);
     text.align = 'middle-center';
 
     button.background = ent;
     button.transition = 'color';
-    button.transitionColors.normal = color4.new(1, 1, 1, 1);
-    button.transitionColors.highlight = color4.new(1, 1, 0, 1);
-    button.transitionColors.pressed = color4.new(0.5, 0.5, 0.5, 1);
-    button.transitionColors.disabled = color4.new(0.2, 0.2, 0.2, 1);
+    button.transitionColors.normal = color4.create(1, 1, 1, 1);
+    button.transitionColors.highlight = color4.create(1, 1, 0, 1);
+    button.transitionColors.pressed = color4.create(0.5, 0.5, 0.5, 1);
+    button.transitionColors.disabled = color4.create(0.2, 0.2, 0.2, 1);
     button._updateState();
 
     ent.on('transition', e => {
@@ -64,11 +64,11 @@
       let state = e.detail.newState;
 
       if (state === 'normal') {
-        text.color = color4.new(0, 0, 0, 1);
+        text.color = color4.create(0, 0, 0, 1);
       } else if (state === 'highlight') {
-        text.color = color4.new(1, 0, 0, 1);
+        text.color = color4.create(1, 0, 0, 1);
       } else if (state === 'pressed') {
-        text.color = color4.new(0.2, 0.2, 0.2, 1);
+        text.color = color4.create(0.2, 0.2, 0.2, 1);
       }
     });
   }

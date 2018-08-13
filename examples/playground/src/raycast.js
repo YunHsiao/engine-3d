@@ -13,8 +13,8 @@
     ],
     properties: [
       {}, 
-      { "diffuseColor": color4.new(1, 1, 1, 0.3) },
-      { "diffuseColor": color4.new(1, 1, 1, 0.1) },
+      { "diffuseColor": color4.create(1, 1, 1, 0.3) },
+      { "diffuseColor": color4.create(1, 1, 1, 0.1) },
     ]
   };
   manifest.lights = {

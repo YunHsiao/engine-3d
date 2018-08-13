@@ -59,15 +59,15 @@
   material.effect = app.assets.get('builtin-effect-unlit-transparent');
   material.define('USE_COLOR', true);
   material.define('USE_TEXTURE', true);
-  material.setProperty('color', color4.new(1, 1, 1, 0.6));
+  material.setProperty('color', color4.create(1, 1, 1, 0.6));
   /**
   material.effect = app.assets.get('builtin-effect-phong-transparent');
   material.define('USE_DIFFUSE_TEXTURE', true);
-  material.setProperty('diffuseColor', color4.new(1, 1, 1, 0.6));
+  material.setProperty('diffuseColor', color4.create(1, 1, 1, 0.6));
   /**
   material.effect = app.assets.get('builtin-effect-pbr-transparent');
   material.define('USE_ALBEDO_TEXTURE', true);
-  material.setProperty('albedo', color4.new(1, 1, 1, 0.6));
+  material.setProperty('albedo', color4.create(1, 1, 1, 0.6));
   /**/
 
   app.assets.loadUrls('texture', {
