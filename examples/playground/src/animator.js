@@ -271,6 +271,7 @@
             let mainEntity = app.find(dobj.entityPath);
             let mainEntityAnimator = mainEntity.addComp('Animator');
             let mainEntityAnimation = mainEntity.getComp('Animation');
+            mainEntityAnimation.enabled = false;
             let animationGraph = mainEntityAnimator.animationGraph;
 
             let clips = [];
