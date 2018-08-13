@@ -21,9 +21,9 @@ tap.test('utils', t => {
 
     let n0_2 = utils.clone(n0);
     t.equal(n0_2.name, 'n0');
-    t.assert(vec3.equals(n0_2.lpos, vec3.new(1,2,3)));
-    t.assert(vec3.equals(n0_2.lrot, quat.new(0,0,0,1)));
-    t.assert(vec3.equals(n0_2.lscale, vec3.new(2,2,2)));
+    t.assert(vec3.equals(n0_2.lpos, vec3.create(1,2,3)));
+    t.assert(vec3.equals(n0_2.lrot, quat.create(0,0,0,1)));
+    t.assert(vec3.equals(n0_2.lscale, vec3.create(2,2,2)));
     t.deepEqual(n0_2._children, []);
     t.equal(n0_2._parent, null);
 

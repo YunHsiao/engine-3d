@@ -9,10 +9,10 @@ tap.test('mat2', t => {
   let result = mat2.create();
 
   t.beforeEach(done => {
-    out = mat2.new(0, 0, 0, 0);
-    matA = mat2.new(1, 2, 3, 4);
-    matB = mat2.new(5, 6, 7, 8);
-    identity = mat2.new(1, 0, 0, 1);
+    out = mat2.create(0, 0, 0, 0);
+    matA = mat2.create(1, 2, 3, 4);
+    matB = mat2.create(5, 6, 7, 8);
+    identity = mat2.create(1, 0, 0, 1);
 
     done();
   });
@@ -186,7 +186,7 @@ tap.test('mat2', t => {
   });
 
   t.test('scale', t => {
-    let vecA = vec2.zero();
+    let vecA = vec2.create(0, 0);
     t.beforeEach(done => {
       vec2.set(vecA, 2, 3);
       done();
@@ -242,7 +242,7 @@ tap.test('mat2', t => {
     let L = mat2.create();
     let D = mat2.create();
     let U = mat2.create();
-    mat2.LDU(L, D, U, mat2.new(4, 3, 6, 3));
+    mat2.LDU(L, D, U, mat2.create(4, 3, 6, 3));
 
     let L_result = mat2.create(); L_result.m02 = 1.5;
     let D_result = mat2.create();
@@ -327,7 +327,7 @@ tap.test('mat2', t => {
   });
 
   t.test('new', t => {
-    result = mat2.new(1, 2, 3, 4);
+    result = mat2.create(1, 2, 3, 4);
 
     t.equal_m2(result, [1, 2, 3, 4]);
 
@@ -404,7 +404,7 @@ tap.test('mat2', t => {
   t.test('exactEquals', t => {
     mat2.set(matA, 0, 1, 2, 3);
     mat2.set(matB, 0, 1, 2, 3);
-    let matC = mat2.new(1, 2, 3, 4);
+    let matC = mat2.create(1, 2, 3, 4);
     let r0 = mat2.exactEquals(matA, matB);
     let r1 = mat2.exactEquals(matA, matC);
 
@@ -419,8 +419,8 @@ tap.test('mat2', t => {
   t.test('equals', t => {
     mat2.set(matA, 0, 1, 2, 3);
     mat2.set(matB, 0, 1, 2, 3);
-    let matC = mat2.new(1, 2, 3, 4);
-    let matD = mat2.new(1e-16, 1, 2, 3);
+    let matC = mat2.create(1, 2, 3, 4);
+    let matD = mat2.create(1e-16, 1, 2, 3);
     let r0 = mat2.equals(matA, matB);
     let r1 = mat2.equals(matA, matC);
     let r2 = mat2.equals(matA, matD);

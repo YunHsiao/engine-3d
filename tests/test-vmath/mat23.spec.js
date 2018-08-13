@@ -11,37 +11,37 @@ tap.test('mat23', t => {
   let oldB = mat23.create();
 
   t.beforeEach(done => {
-    matA = mat23.new(
+    matA = mat23.create(
       1, 2,
       3, 4,
       5, 6
     );
 
-    oldA = mat23.new(
+    oldA = mat23.create(
       1, 2,
       3, 4,
       5, 6
     );
 
-    matB = mat23.new(
+    matB = mat23.create(
       7, 8,
       9, 10,
       11, 12
     );
 
-    oldB = mat23.new(
+    oldB = mat23.create(
       7, 8,
       9, 10,
       11, 12
     );
 
-    out = mat23.new(
+    out = mat23.create(
       0, 0,
       0, 0,
       0, 0
     );
 
-    identity = mat23.new(
+    identity = mat23.create(
       1, 0,
       0, 1,
       0, 0
@@ -174,7 +174,7 @@ tap.test('mat23', t => {
   });
 
   t.test('scale', t => {
-    let vecA = vec2.zero();
+    let vecA = vec2.create(0, 0);
     t.beforeEach(done => {
       vec2.set(vecA, 2, 3);
       done();
@@ -203,7 +203,7 @@ tap.test('mat23', t => {
   });
 
   t.test('translate', t => {
-    let vecA = vec2.zero();
+    let vecA = vec2.create(0, 0);
     t.beforeEach(done => {
       vec2.set(vecA, 2, 3);
       done();
@@ -232,7 +232,7 @@ tap.test('mat23', t => {
   });
 
   t.test('fromRTS', t => {
-    let vecA = vec2.zero();
+    let vecA = vec2.create(0, 0);
     t.beforeEach(done => {
       vec2.set(vecA, 2, 3);
       done();
@@ -343,7 +343,7 @@ tap.test('mat23', t => {
   });
 
   t.test('new', t => {
-    result = mat23.new(1, 2, 3, 4, 5, 6);
+    result = mat23.create(1, 2, 3, 4, 5, 6);
 
     t.equal_m23(result, [1, 2, 3, 4, 5, 6]);
 
@@ -420,7 +420,7 @@ tap.test('mat23', t => {
   t.test('exactEquals', t => {
     mat23.set(matA, 0, 1, 2, 3, 4, 5);
     mat23.set(matB, 0, 1, 2, 3, 4, 5);
-    let matC = mat23.new(1, 2, 3, 4, 5, 6);
+    let matC = mat23.create(1, 2, 3, 4, 5, 6);
     let r0 = mat23.exactEquals(matA, matB);
     let r1 = mat23.exactEquals(matA, matC);
 
@@ -435,8 +435,8 @@ tap.test('mat23', t => {
   t.test('equals', t => {
     mat23.set(matA, 0, 1, 2, 3, 4, 5);
     mat23.set(matB, 0, 1, 2, 3, 4, 5);
-    let matC = mat23.new(1, 2, 3, 4, 5, 6);
-    let matD = mat23.new(1e-16, 1, 2, 3, 4, 5);
+    let matC = mat23.create(1, 2, 3, 4, 5, 6);
+    let matD = mat23.create(1e-16, 1, 2, 3, 4, 5);
     let r0 = mat23.equals(matA, matB);
     let r1 = mat23.equals(matA, matC);
     let r2 = mat23.equals(matA, matD);
