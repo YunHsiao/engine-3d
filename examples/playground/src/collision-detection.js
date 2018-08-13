@@ -98,7 +98,7 @@
   // camera
   let camEnt = app.createEntity('camera');
   camEnt.lpos = vec3.create(-20, 7, 12);
-  camEnt.lookAt(vec3.zero());
+  camEnt.lookAt(vec3.create(0, 0, 0));
   camEnt.addComp('Camera');
 
   // light

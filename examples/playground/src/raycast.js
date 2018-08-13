@@ -94,7 +94,7 @@
     geometries.push(e);
   }
   let bbhints = [];
-  let bbsize = vec3.zero();
+  let bbsize = vec3.create(0, 0, 0);
   for (let i = 0; i < manifest.geometries.num; i++) {
     let e = app.createEntity("bb_" + manifest.geometries.names[i]);
     let g = e.addComp('Model');
@@ -113,7 +113,7 @@
   class RaycastTest extends cc.ScriptComponent {
     constructor() {
       super();
-      this.pos = vec3.zero();
+      this.pos = vec3.create(0, 0, 0);
       this.hitInfo = {};
       this.input = app._input;
       this.canvas = app._canvas;

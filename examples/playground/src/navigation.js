@@ -97,8 +97,8 @@
       this.euler = vec3.create(0, 0, 0);
       this.speed = 0.1;
       this.jumping = false;
-      this.posOff = vec3.zero();
-      this.rotOff = vec2.zero();
+      this.posOff = vec3.create(0, 0, 0);
+      this.rotOff = vec2.create(0, 0);
     }
 
     start() {

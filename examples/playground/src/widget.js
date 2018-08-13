@@ -22,11 +22,11 @@
 
   function _debugUI(root) {
     let color = color3.create(0.5, 0.5, 0.0);
-    let a = vec3.zero();
-    let b = vec3.zero();
-    let c = vec3.zero();
-    let d = vec3.zero();
-    let wpos = vec3.zero();
+    let a = vec3.create(0, 0, 0);
+    let b = vec3.create(0, 0, 0);
+    let c = vec3.create(0, 0, 0);
+    let d = vec3.create(0, 0, 0);
+    let wpos = vec3.create(0, 0, 0);
     let wrot = quat.create();
 
     let curHover = null;

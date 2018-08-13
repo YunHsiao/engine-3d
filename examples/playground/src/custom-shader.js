@@ -58,7 +58,7 @@
       models[i].material = m;
     }
   });
-  let border = vec2.zero();
+  let border = vec2.create(0, 0);
   let color = color4.create();
   app.on('tick', () => {
     // uv animation
