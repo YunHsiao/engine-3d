@@ -29,7 +29,7 @@
     psys.shapeModule.shapeType = dobj.emitShape;
     switch(dobj.emitShape) {
       case 'box':
-        psys.shapeModule.boxScale = vec3.new(10.0, 10.0, 10.0);
+        psys.shapeModule.boxScale = vec3.create(10.0, 10.0, 10.0);
         psys.shapeModule.emitFrom = 'volume';
         break;
       case 'circle':
@@ -118,7 +118,7 @@
 
   let camEnt = app.createEntity('camera');
   vec3.set(camEnt.lpos, 0, 10, 80);
-  camEnt.lookAt(vec3.new(0, 10, 0));
+  camEnt.lookAt(vec3.create(0, 10, 0));
   camEnt.addComp('Camera');
 
   let particleMaterial = new cc.Material();

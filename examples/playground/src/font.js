@@ -46,7 +46,7 @@
 
   let camEnt = app.createEntity('camera');
   vec3.set(camEnt.lpos, 10, 10, 10);
-  camEnt.lookAt(vec3.new(0, 0, 0));
+  camEnt.lookAt(vec3.create(0, 0, 0));
   let camComp = camEnt.addComp('Camera');
   camComp.color = color4.new(1,1,0,1);
 

@@ -44,9 +44,9 @@
     models.push(modelComp); colliders.push(col); colors.push(c);
   }
   let radius = 12.5;
-  let size = vec3.new(radius * 2, 0.2, radius * 2);
+  let size = vec3.create(radius * 2, 0.2, radius * 2);
   let ground = app.createEntity('ground');
-  ground.lpos = vec3.new(0, 1, 0);
+  ground.lpos = vec3.create(0, 1, 0);
   let modelComp = ground.addComp('Model');
   let m = new Material();
   m.effect = app.assets.get('builtin-effect-phong');
@@ -59,7 +59,7 @@
 
   // camera
   let camEnt = app.createEntity('camera');
-  camEnt.lpos = vec3.new(20, 30, 40);
+  camEnt.lpos = vec3.create(20, 30, 40);
   camEnt.lookAt(vec3.zero());
   camEnt.addComp('Camera');
 

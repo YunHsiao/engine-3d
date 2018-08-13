@@ -90,11 +90,11 @@
   class FPCamera extends cc.ScriptComponent {
     constructor() {
       super();
-      this.id_forward = vec3.new(0, 0, 1);
-      this.id_right = vec3.new(1, 0, 0);
-      this.forward = vec3.new(0, 0, 1);
-      this.right = vec3.new(1, 0, 0);
-      this.euler = vec3.new(0, 0, 0);
+      this.id_forward = vec3.create(0, 0, 1);
+      this.id_right = vec3.create(1, 0, 0);
+      this.forward = vec3.create(0, 0, 1);
+      this.right = vec3.create(1, 0, 0);
+      this.euler = vec3.create(0, 0, 0);
       this.speed = 0.1;
       this.jumping = false;
       this.posOff = vec3.zero();

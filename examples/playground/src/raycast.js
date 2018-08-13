@@ -24,8 +24,8 @@
       "point-light2",
     ],
     pos: [
-      vec3.new(10, 10, 5),
-      vec3.new(-10, 10, -5),
+      vec3.create(10, 10, 5),
+      vec3.create(-10, 10, -5),
     ],
     color: [
       color3.new(1, 1, 1),
@@ -51,12 +51,12 @@
       cc.primitives.torus(),
     ],
     pos: [
-      vec3.new(0, 0, -1),
-      vec3.new(-4, 0, -1),
-      vec3.new(-2, 3, 1),
-      vec3.new(-2, 0, 4),
-      vec3.new(-2, 1, 1),
-      vec3.new(-4, -1, 2),
+      vec3.create(0, 0, -1),
+      vec3.create(-4, 0, -1),
+      vec3.create(-2, 3, 1),
+      vec3.create(-2, 0, 4),
+      vec3.create(-2, 1, 1),
+      vec3.create(-4, -1, 2),
     ],
   };
 
@@ -119,7 +119,7 @@
       this.canvas = app._canvas;
       this.camera = camera.getComp('Camera')._camera;
       
-      this.center = vec3.new(-2, 1, 1);
+      this.center = vec3.create(-2, 1, 1);
       this.dist = 10; this.height = 4; this.angle = 0;
     }
 

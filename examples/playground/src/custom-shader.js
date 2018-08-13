@@ -6,7 +6,7 @@
 
   // geometries
   let radius = 5, length = 30;
-  let center = vec3.new(0, 1 + radius, -length * radius);
+  let center = vec3.create(0, 1 + radius, -length * radius);
   let quad = cc.utils.createMesh(app, plane(radius * 2, radius * 2));
   let models = [];
   let createQuad = function(num, face, x, y, z, yaw, pitch, roll) {

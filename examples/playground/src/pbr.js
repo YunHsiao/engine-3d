@@ -30,10 +30,10 @@
 
   // lights
   let lightPos = [
-    vec3.new( 10,  10, 10),
-    vec3.new(-10,  10, 10),
-    vec3.new( 10, -10, 10),
-    vec3.new(-10, -10, 10),
+    vec3.create( 10,  10, 10),
+    vec3.create(-10,  10, 10),
+    vec3.create( 10, -10, 10),
+    vec3.create(-10, -10, 10),
   ];
   for (let i = 0; i < 4; i++) {
     let lightEnt = app.createEntity('point-light');
