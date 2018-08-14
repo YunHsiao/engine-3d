@@ -9,7 +9,7 @@ el.style.height = '300px';
 el.tabIndex = -1;
 document.body.appendChild(el);
 let bcr = el.getBoundingClientRect();
-let input = new cc.input(document.getElementById('mouse'));
+let input = new cc.Input(document.getElementById('mouse'));
 
 suite(tap, 'input', t => {
 

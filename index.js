@@ -60,7 +60,7 @@ import * as primitives from './lib/primitives';
 import renderer from './lib/renderer';
 import gfx from './lib/gfx';
 import * as memop from './lib/memop';
-import input from './lib/input';
+import Input from './lib/input';
 
 import enums from './lib/platform/enums';
 import sys from './lib/platform/sys';
@@ -132,12 +132,12 @@ let cc = {
   primitives,
   renderer,
   gfx,
+  Input,
 
   // misc
   utils,
   resl,
   path,
-  input,
   async,
   sys,
 

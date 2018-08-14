@@ -106,7 +106,7 @@
       this.rot = this._entity.lrot;
       this.canvas = this._app._canvas;
       this.input = this._app._input;
-      this.input._lock = cc.input.LOCK_ALWAYS;
+      this.input._lock = cc.Input.LOCK_ALWAYS;
       this.velocity = this._entity.getComp('Collider').body.velocity;
       this._entity.on('collide', () => {
         this.jumping = false;
@@ -147,10 +147,10 @@
     tickTouch() {
       for (let i = 0; i < this.input.touchCount; i++) {
         let touch = this.input.getTouchInfo(i);
-        if (touch._phase === cc.input.TOUCH_START) { // store necessary info when touch began
+        if (touch._phase === cc.Input.TOUCH_START) { // store necessary info when touch began
           touch.initX = touch.x; touch.initY = touch.y;
           touch.timeBegin = this._app.totalTime;
-        } else if (touch._phase === cc.input.TOUCH_END) { // jump if it was a brief tap
+        } else if (touch._phase === cc.Input.TOUCH_END) { // jump if it was a brief tap
           if (!this.jumping && this._app.totalTime - touch.timeBegin < 100
             && Math.abs(touch.x - touch.initX) < 10
             && Math.abs(touch.y - touch.initY) < 10) this.jump();

@@ -9,7 +9,7 @@ el.style.height = '0px';
 el.tabIndex = -1;
 document.body.appendChild(el);
 
-let input = new cc.input(document.getElementById('keyboard'));
+let input = new cc.Input(document.getElementById('keyboard'));
 
 suite(tap, 'input', t => {
 
