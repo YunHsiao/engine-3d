@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>spec-zed</title>
+  <title>spec-skeleton</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <style>
@@ -44,7 +44,7 @@
 
     window.load('../assets/out', 'spec-skeleton',() => {
       // play random anim
-      let ent = app.find('skeleton');
+      let ent = app.find('Hero');
       let anim = ent.getComp('Animation');
       let animClips = [];
       for (let i = 0; i < anim.clips.length; i++) {
