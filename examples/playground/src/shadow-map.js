@@ -50,17 +50,17 @@
   // create material
   let cube1Mat = new cc.Material();
   cube1Mat.effect = app.assets.get('builtin-effect-pbr');
-  cube1Mat.setProperty('albedo', color4.new(1, 1, 0, 1));
+  cube1Mat.setProperty('albedo', color4.create(1, 1, 0, 1));
   cube1Mat.setProperty('roughness', 0.5);
   cube1Mat.setProperty('metallic', 1);
   let cube2Mat = new cc.Material();
   cube2Mat.effect = app.assets.get('builtin-effect-pbr');
-  cube2Mat.setProperty('albedo', color4.new(0, 1, 1, 1));
+  cube2Mat.setProperty('albedo', color4.create(0, 1, 1, 1));
   cube2Mat.setProperty('roughness', 0.6);
   cube2Mat.setProperty('metallic', 0.8);
   let sphere1Mat = new cc.Material();
   sphere1Mat.effect = app.assets.get('builtin-effect-pbr');
-  sphere1Mat.setProperty('albedo', color4.new(0, 0, 1, 1));
+  sphere1Mat.setProperty('albedo', color4.create(0, 0, 1, 1));
   sphere1Mat.setProperty('roughness', 0.7);
   sphere1Mat.setProperty('metallic', 1);
   let planeMat = new cc.Material();
@@ -70,7 +70,7 @@
 
   let camEnt = app.createEntity('camera');
   vec3.set(camEnt.lpos, 10, 10, 10);
-  camEnt.lookAt(vec3.new(0, 0, 0));
+  camEnt.lookAt(vec3.create(0, 0, 0));
   camEnt.addComp('Camera');
 
   let cube1 = app.createEntity('cube1');
@@ -114,7 +114,7 @@
   let lightComp1 = light1.addComp('Light');
   //lightComp1.type = cc.renderer.LIGHT_SPOT;
   lightComp1.type = 'directional';
-  lightComp1.color = color3.new(1, 1, 1);
+  lightComp1.color = color3.create(1, 1, 1);
   lightComp1.intensity = 2;
   lightComp1.range = 1000.0;
   lightComp1.shadowType = 'hard';

@@ -38,7 +38,7 @@
       let player = app.find('player');
       let cam = app.find('Main Camera');
       let spawn = vec3.clone(player.lpos);
-      let cam_offset = vec3.zero();
+      let cam_offset = vec3.create(0, 0, 0);
       vec3.sub(cam_offset, cam.lpos, player.lpos);
       let col = player.getComp('Collider');
       col.body.setUpdateMode(false, false); // disable default callbacks

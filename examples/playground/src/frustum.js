@@ -17,7 +17,7 @@
     ],
     properties: [
       {}, 
-      { "diffuseColor": color4.new(1, 1, 1, 0.3) },
+      { "diffuseColor": color4.create(1, 1, 1, 0.3) },
     ]
   };
   manifest.lights = {
@@ -27,12 +27,12 @@
       "point-light2",
     ],
     pos: [
-      vec3.new(100, 100, 50),
-      vec3.new(-100, 100, -50),
+      vec3.create(100, 100, 50),
+      vec3.create(-100, 100, -50),
     ],
     color: [
-      color3.new(1, 1, 1),
-      color3.new(0.3, 0.3, 0.3),
+      color3.create(1, 1, 1),
+      color3.create(0.3, 0.3, 0.3),
     ],
   };
   manifest.geometries = {
@@ -52,18 +52,18 @@
       cc.primitives.box(30, 50, 30),
     ],
     pos: [
-      vec3.new(0, 0, 0),
-      vec3.new(7, 2, 5),
-      vec3.new(1, 2, 3),
-      vec3.new(-90, 20, -135),
-      vec3.new(160, 20, -80),
+      vec3.create(0, 0, 0),
+      vec3.create(7, 2, 5),
+      vec3.create(1, 2, 3),
+      vec3.create(-90, 20, -135),
+      vec3.create(160, 20, -80),
     ],
     axis: [
-      vec3.new(0, 1, 0),
-      vec3.new(2, 2, 2),
-      vec3.new(3, 2, 1),
-      vec3.new(2, 2, 2),
-      vec3.new(1, 2, 3),
+      vec3.create(0, 1, 0),
+      vec3.create(2, 2, 2),
+      vec3.create(3, 2, 1),
+      vec3.create(2, 2, 2),
+      vec3.create(1, 2, 3),
     ],
     angle: [
       0, Math.PI / 16, Math.PI / 16 * 13, -Math.PI / 16, -Math.PI / 16 * 13,
@@ -122,7 +122,7 @@
 
 
   // TWEAK: look at point
-  camera.lookAt(vec3.new(5, 4, 3));
+  camera.lookAt(vec3.create(5, 4, 3));
   app._forward.accurateFrustumCulling = dobj.accurateFrustumCulling;
 
   // adjust canvas ratio
@@ -190,7 +190,7 @@
   let textComp = entLabel.addComp('Text');
   textComp.text = '';
   textComp.align = 'middle-center';
-  textComp.color = color4.new(1, 0.7, 0, 1);
+  textComp.color = color4.create(1, 0.7, 0, 1);
   textComp.fontSize = 14;
   // sync the result to screen every frame
   app.on('tick', () => {

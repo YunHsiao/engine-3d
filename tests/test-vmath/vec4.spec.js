@@ -5,15 +5,15 @@ tap.test('vec4', t => {
   let out, vecA, vecB, result;
 
   t.beforeEach(done => {
-    vecA = vec4.new(1, 2, 3, 4);
-    vecB = vec4.new(5, 6, 7, 8);
-    out = vec4.new(0, 0, 0, 0);
+    vecA = vec4.create(1, 2, 3, 4);
+    vecB = vec4.create(5, 6, 7, 8);
+    out = vec4.create(0, 0, 0, 0);
 
     done();
   });
 
   t.test('create', t => {
-    result = vec4.zero();
+    result = vec4.create(0, 0, 0, 0);
 
     t.equal_v4(result, [0, 0, 0, 0]);
 
@@ -29,7 +29,7 @@ tap.test('vec4', t => {
   });
 
   t.test('new', t => {
-    result = vec4.new(1, 2, 3, 4);
+    result = vec4.create(1, 2, 3, 4);
 
     t.equal_v4(result, [1, 2, 3, 4]);
 
@@ -712,7 +712,7 @@ tap.test('vec4', t => {
   t.test('exactEquals', t => {
     vec4.set(vecA, 0, 1, 2, 3);
     vec4.set(vecB, 0, 1, 2, 3);
-    let vecC = vec4.new(1, 2, 3, 4);
+    let vecC = vec4.create(1, 2, 3, 4);
     let r0 = vec4.exactEquals(vecA, vecB);
     let r1 = vec4.exactEquals(vecA, vecC);
 
@@ -728,8 +728,8 @@ tap.test('vec4', t => {
     vec4.set(vecA, 0, 1, 2, 3);
     vec4.set(vecB, 0, 1, 2, 3);
 
-    let vecC = vec4.new(1, 2, 3, 4);
-    let vecD = vec4.new(1e-16, 1, 2, 3);
+    let vecC = vec4.create(1, 2, 3, 4);
+    let vecD = vec4.create(1e-16, 1, 2, 3);
     let r0 = vec4.equals(vecA, vecB);
     let r1 = vec4.equals(vecA, vecC);
     let r2 = vec4.equals(vecA, vecD);

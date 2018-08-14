@@ -15,7 +15,7 @@ tap.test('intersect', t => {
      -0.5, -1, 0,
       0.5, -1, 0
     );
-    let out = vec3.zero();
+    let out = vec3.create(0, 0, 0);
     let intersects = intersect.ray_triangle(r1, t1, out);
 
     t.assert(intersects);
@@ -38,7 +38,7 @@ tap.test('intersect', t => {
      -0.5, -1, 0,
       0.5, -1, 0
     );
-    let out = vec3.zero();
+    let out = vec3.create(0, 0, 0);
     let intersects = intersect.line_triangle(l1, t1, out);
 
     t.assert(intersects);
@@ -52,14 +52,14 @@ tap.test('intersect', t => {
   });
 
   t.test('line_quad', t => {
-    let out = vec3.zero();
+    let out = vec3.create(0, 0, 0);
     let intersects = intersect.line_quad(
-      vec3.new(0, 0.5, 1),
-      vec3.new(0, 0.5, -1),
-      vec3.new(-0.5, 1, 0),
-      vec3.new(-0.5, -1, 0),
-      vec3.new(0.5, -1, 0),
-      vec3.new(0.5, 1, 0),
+      vec3.create(0, 0.5, 1),
+      vec3.create(0, 0.5, -1),
+      vec3.create(-0.5, 1, 0),
+      vec3.create(-0.5, -1, 0),
+      vec3.create(0.5, -1, 0),
+      vec3.create(0.5, 1, 0),
       out
     );
 
@@ -75,7 +75,7 @@ tap.test('intersect', t => {
       1, 1, 1
     );
     let s1 = sphere.new(2, 2, 2, 1);
-    let out = vec3.zero();
+    let out = vec3.create(0, 0, 0);
     let intersects = intersect.ray_sphere(r1, s1, out);
 
     t.assert(intersects);
@@ -89,22 +89,22 @@ tap.test('intersect', t => {
       0, 0, 0,
       1, 0, 0
     );
-    let axis_x = vec3.zero();
-    let axis_y = vec3.zero();
-    let axis_z = vec3.zero();
+    let axis_x = vec3.create(0, 0, 0);
+    let axis_y = vec3.create(0, 0, 0);
+    let axis_z = vec3.create(0, 0, 0);
     vec3.set(axis_x, 1, 0, 0);
     vec3.set(axis_y, 0, 1, 0);
     vec3.set(axis_z, 0, 0, 1);
 
-    let box_center = vec3.zero();
+    let box_center = vec3.create(0, 0, 0);
     vec3.set(box_center, 2, 1, 0);
 
-    let ori_x = vec3.zero();
-    let ori_y = vec3.zero();
-    let ori_z = vec3.zero();
-    let ori_center = vec3.zero();
+    let ori_x = vec3.create(0, 0, 0);
+    let ori_y = vec3.create(0, 0, 0);
+    let ori_z = vec3.create(0, 0, 0);
+    let ori_center = vec3.create(0, 0, 0);
     let angle = (-45) * Math.PI / 180;
-    let ori_rot = vec3.zero();
+    let ori_rot = vec3.create(0, 0, 0);
     vec3.rotateZ(ori_x, axis_x, ori_rot, angle);
     vec3.rotateZ(ori_y, axis_y, ori_rot, angle);
     vec3.rotateZ(ori_z, axis_z, ori_rot, angle);
@@ -117,7 +117,7 @@ tap.test('intersect', t => {
       ori_y.x, ori_y.y, ori_y.z,
       ori_z.x, ori_z.y, ori_z.z
     );
-    let out = vec3.zero();
+    let out = vec3.create(0, 0, 0);
     let intersects = intersect.ray_box(r1, b1, out);
 
     t.assert(intersects);
@@ -133,10 +133,10 @@ tap.test('intersect', t => {
   mat4.perspective(pj, Math.PI / 3, 16 / 9, 0.5, 100);
 
   t.test('sphere_frustum', t => {
-    let eye = vec3.new(4, 5, 6);
-    let at = vec3.zero();
-    let up = vec3.new(0, 1, 0);
-    let center = vec3.new(7, 2, 5);
+    let eye = vec3.create(4, 5, 6);
+    let at = vec3.create(0, 0, 0);
+    let up = vec3.create(0, 1, 0);
+    let center = vec3.create(7, 2, 5);
     let s = sphere.new(center.x, center.y, center.z, 1);
 
     let v = new renderer.View();
@@ -165,13 +165,13 @@ tap.test('intersect', t => {
   });
 
   t.test('box_frustum', t => {
-    let eye = vec3.new(4, 5, 6);
-    let at = vec3.zero();
-    let up = vec3.new(0, 1, 0);
-    let center = vec3.new(1, 2, 3);
-    let axis = vec3.new(3, 2, 1);
+    let eye = vec3.create(4, 5, 6);
+    let at = vec3.create(0, 0, 0);
+    let up = vec3.create(0, 1, 0);
+    let center = vec3.create(1, 2, 3);
+    let axis = vec3.create(3, 2, 1);
     let angle = Math.PI / 16 * 13;
-    let size = vec3.new(1, 1, 1);
+    let size = vec3.create(1, 1, 1);
 
     let q = quat.create(); quat.fromAxisAngle(q, vec3.normalize(axis, axis), angle);
     let m = mat3.create(); mat3.fromQuat(m, q);
@@ -207,10 +207,10 @@ tap.test('intersect', t => {
   });
 
   t.test('sphere_frustum_accurate', t => {
-    let eye = vec3.new(4, 5, 6);
-    let at = vec3.new(5, 4, 3);
-    let up = vec3.new(0, 1, 0);
-    let center = vec3.new(-90, 20, -135);
+    let eye = vec3.create(4, 5, 6);
+    let at = vec3.create(5, 4, 3);
+    let up = vec3.create(0, 1, 0);
+    let center = vec3.create(-90, 20, -135);
     let s = sphere.new(center.x, center.y, center.z, 30);
 
     let v = new renderer.View();
@@ -233,11 +233,11 @@ tap.test('intersect', t => {
   });
 
   t.test('box_frustum_accurate', t => {
-    let eye = vec3.new(4, 5, 6);
-    let at = vec3.new(5, 4, 3);
-    let up = vec3.new(0, 1, 0);
-    let center = vec3.new(160, 20, -80);
-    let axis = vec3.new(1, 2, 3);
+    let eye = vec3.create(4, 5, 6);
+    let at = vec3.create(5, 4, 3);
+    let up = vec3.create(0, 1, 0);
+    let center = vec3.create(160, 20, -80);
+    let axis = vec3.create(1, 2, 3);
     let angle = -Math.PI / 16 * 13;
 
     let q = quat.create(); quat.fromAxisAngle(q, vec3.normalize(axis, axis), angle);

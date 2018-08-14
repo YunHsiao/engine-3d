@@ -43,7 +43,7 @@
         let modelComp = ent.addComp('Model');
         let m = new Material();
         m.effect = this.app.assets.get('builtin-effect-phong-transparent');
-        let c = color4.new(color.r * randomRange(0.3, 1), 
+        let c = color4.create(color.r * randomRange(0.3, 1), 
           color.g * randomRange(0.3, 1), color.b * randomRange(0.3, 1), 1);
         m.setProperty('diffuseColor', c);
         modelComp.mesh = sphere_mesh;
@@ -85,7 +85,7 @@
       let theta = randomRange(this.minAngle, this.maxAngle);
       let phi = randomRange(1, 2);
       let speed = randomRange(0.1, 0.3);
-      ent.velocity = vec3.new(Math.cos(theta) * Math.sin(phi) * speed,
+      ent.velocity = vec3.create(Math.cos(theta) * Math.sin(phi) * speed,
         Math.cos(phi) * speed, Math.sin(theta) * Math.sin(phi) * speed);
       ent.color.a = this.color.a;
       ent.getComp('Collider').body.setCollisionFilter(this.group, this.mask);
@@ -97,8 +97,8 @@
 
   // camera
   let camEnt = app.createEntity('camera');
-  camEnt.lpos = vec3.new(-20, 7, 12);
-  camEnt.lookAt(vec3.zero());
+  camEnt.lpos = vec3.create(-20, 7, 12);
+  camEnt.lookAt(vec3.create(0, 0, 0));
   camEnt.addComp('Camera');
 
   // light
@@ -108,10 +108,10 @@
 
   // set the stage
   let emitters = []; // particles collide with each other if they are emitted by different emitters
-  emitters.push(new Emitter(app, 1, ~1, vec3.new(-10, 0,  10),   0,  -90, color4.new(  1, 0.1, 0.1, 0.5)));
-  emitters.push(new Emitter(app, 2, ~2, vec3.new( 10, 0, -10),  90,  180, color4.new(0.1, 0.1,   1, 0.5)));
-  // emitters.push(new Emitter(app, 4, ~4, vec3.new(-10, 0, -10),   0,   90, color4.new(  1,   1, 0.1, 0.5)));
-  // emitters.push(new Emitter(app, 8, ~8, vec3.new( 10, 0,  10), -90, -180, color4.new(0.1,   1,   1, 0.5)));
+  emitters.push(new Emitter(app, 1, ~1, vec3.create(-10, 0,  10),   0,  -90, color4.create(  1, 0.1, 0.1, 0.5)));
+  emitters.push(new Emitter(app, 2, ~2, vec3.create( 10, 0, -10),  90,  180, color4.create(0.1, 0.1,   1, 0.5)));
+  // emitters.push(new Emitter(app, 4, ~4, vec3.create(-10, 0, -10),   0,   90, color4.create(  1,   1, 0.1, 0.5)));
+  // emitters.push(new Emitter(app, 8, ~8, vec3.create( 10, 0,  10), -90, -180, color4.create(0.1,   1,   1, 0.5)));
 
   // tick
   app.on('tick', () => {

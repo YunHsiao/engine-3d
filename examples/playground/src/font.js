@@ -46,9 +46,9 @@
 
   let camEnt = app.createEntity('camera');
   vec3.set(camEnt.lpos, 10, 10, 10);
-  camEnt.lookAt(vec3.new(0, 0, 0));
+  camEnt.lookAt(vec3.create(0, 0, 0));
   let camComp = camEnt.addComp('Camera');
-  camComp.color = color4.new(1,1,0,1);
+  camComp.color = color4.create(1,1,0,1);
 
   let screenEnt = app.createEntity('screen');
   screenEnt.addComp('Widget');
@@ -62,7 +62,7 @@
   otWidgetComp.setSize(512, 256);
   otWidgetComp.setOffset(-100, -100);
   let otTextComp = otTextEnt.addComp('Text');
-  otTextComp.color = color4.new(1, 1, 0, 1);
+  otTextComp.color = color4.create(1, 1, 0, 1);
   otTextComp.align = 'middle-center';
 
   let debugEnt = app.createEntity('debugEntity');
@@ -74,7 +74,7 @@
   debugWidgetComp.setSize(512, 512);
   debugWidgetComp.setOffset(500, -300);
   let debugImageComp = debugEnt.addComp('Image');
-  debugImageComp.color = color4.new(1, 1, 1, 1);
+  debugImageComp.color = color4.create(1, 1, 1, 1);
 
   let otfontUrls = {
     bin: `../assets/fonts/Roboto-Black.ttf`,
@@ -98,7 +98,7 @@
   let bmTextComp = bmTextEnt.addComp('Text');
   bmTextComp.align = 'middle-center';
   bmTextComp.wrap = true;
-  bmTextComp.color = color4.new(0, 1, 0, 1);
+  bmTextComp.color = color4.create(0, 1, 0, 1);
 
   let bmfontUrls = {
     json: `../assets/fonts/bmfontdata.json`,
@@ -129,5 +129,5 @@
   '你好 こんにちは';
   sysTextComp.align = 'middle-center';
   sysTextComp.wrap = true;
-  sysTextComp.color = color4.new(1, 1, 1, 1);
+  sysTextComp.color = color4.create(1, 1, 1, 1);
 })();

@@ -9,28 +9,28 @@ tap.test('mat4', t => {
   let result = mat4.create();
 
   t.beforeEach(done => {
-    matA = mat4.new(
+    matA = mat4.create(
       1, 0, 0, 0,
       0, 1, 0, 0,
       0, 0, 1, 0,
       1, 2, 3, 1
     );
 
-    matB = mat4.new(
+    matB = mat4.create(
       1, 0, 0, 0,
       0, 1, 0, 0,
       0, 0, 1, 0,
       4, 5, 6, 1
     );
 
-    out = mat4.new(
+    out = mat4.create(
       0, 0, 0, 0,
       0, 0, 0, 0,
       0, 0, 0, 0,
       0, 0, 0, 0
     );
 
-    identity = mat4.new(
+    identity = mat4.create(
       1, 0, 0, 0,
       0, 1, 0, 0,
       0, 0, 1, 0,
@@ -268,7 +268,7 @@ tap.test('mat4', t => {
 
   t.test('translate', t => {
     t.test('with a separate output matrix', t => {
-      result = mat4.translate(out, matA, vec3.new(4, 5, 6));
+      result = mat4.translate(out, matA, vec3.create(4, 5, 6));
 
       t.equal_m4(out, [
         1, 0, 0, 0,
@@ -288,7 +288,7 @@ tap.test('mat4', t => {
     });
 
     t.test('when matA is the output matrix', t => {
-      result = mat4.translate(matA, matA, vec3.new(4, 5, 6));
+      result = mat4.translate(matA, matA, vec3.create(4, 5, 6));
 
       t.equal_m4(matA, [
         1, 0, 0, 0,
@@ -306,7 +306,7 @@ tap.test('mat4', t => {
 
   t.test('scale', t => {
     t.test('with a separate output matrix', t => {
-      result = mat4.scale(out, matA, vec3.new(4, 5, 6));
+      result = mat4.scale(out, matA, vec3.create(4, 5, 6));
 
       t.equal_m4(out, [
         4, 0, 0, 0,
@@ -326,7 +326,7 @@ tap.test('mat4', t => {
     });
 
     t.test('when matA is the output matrix', t => {
-      result = mat4.scale(matA, matA, vec3.new(4, 5, 6));
+      result = mat4.scale(matA, matA, vec3.create(4, 5, 6));
 
       t.equal_m4(matA, [
         4, 0, 0, 0,
@@ -344,7 +344,7 @@ tap.test('mat4', t => {
 
   t.test('rotate', t => {
     let rad = Math.PI * 0.5;
-    let axis = vec3.new(1, 0, 0);
+    let axis = vec3.create(1, 0, 0);
 
     t.test('with a separate output matrix', t => {
       result = mat4.rotate(out, matA, rad, axis);
@@ -507,8 +507,8 @@ tap.test('mat4', t => {
 
   t.test('getTranslation', t => {
     t.test('from the identity matrix', t => {
-      result = vec3.new(1, 2, 3);
-      out = vec3.new(1, 2, 3);
+      result = vec3.create(1, 2, 3);
+      out = vec3.create(1, 2, 3);
       result = mat4.getTranslation(out, identity);
 
       t.equal(result, out);
@@ -518,8 +518,8 @@ tap.test('mat4', t => {
     });
 
     t.test('from a translation-only matrix', t => {
-      result = vec3.new(1, 2, 3);
-      out = vec3.new(1, 2, 3);
+      result = vec3.create(1, 2, 3);
+      out = vec3.create(1, 2, 3);
       result = mat4.getTranslation(out, matB);
 
       t.equal_v3(out, [4, 5, 6]);
@@ -529,11 +529,11 @@ tap.test('mat4', t => {
 
     t.test('from a translation and rotation matrix', t => {
       let q = quat.create();
-      let v = vec3.new(5, 6, 7);
+      let v = vec3.create(5, 6, 7);
       q = quat.fromAxisAngle(q, [0.26726124, 0.534522474, 0.8017837], 0.55);
       mat4.fromRT(out, q, v);
 
-      result = vec3.zero();
+      result = vec3.create(0, 0, 0);
       mat4.getTranslation(result, out);
 
       t.equal_v3(result, [5, 6, 7]);
@@ -555,9 +555,9 @@ tap.test('mat4', t => {
     });
 
     t.test('from a scale-only matrix', t => {
-      let v = vec3.new(4, 5, 6);
-      result = vec3.new(1, 2, 3);
-      out = vec3.new(1, 2, 3);
+      let v = vec3.create(4, 5, 6);
+      result = vec3.create(1, 2, 3);
+      out = vec3.create(1, 2, 3);
       mat4.fromScaling(matA, v);
       result = mat4.getScaling(out, matA);
 
@@ -568,11 +568,11 @@ tap.test('mat4', t => {
 
     t.test('from a translation and rotation matrix', t => {
       let q = quat.create();
-      let v = vec3.new(5, 6, 7);
-      q = quat.fromAxisAngle(q, vec3.new(1, 0, 0), 0.5);
+      let v = vec3.create(5, 6, 7);
+      q = quat.fromAxisAngle(q, vec3.create(1, 0, 0), 0.5);
       mat4.fromRT(out, q, v);
 
-      result = vec3.new(1, 2, 3);
+      result = vec3.create(1, 2, 3);
       mat4.getScaling(result, out);
 
       t.equal_v3(result, [1, 1, 1]);
@@ -582,11 +582,11 @@ tap.test('mat4', t => {
 
     t.test('from a translation, rotation and scale matrix', t => {
       let R = quat.create();
-      let T = vec3.new(1, 2, 3);
-      let S = vec3.new(5, 6, 7);
-      R = quat.fromAxisAngle(R, vec3.new(0, 1, 0), 0.7);
+      let T = vec3.create(1, 2, 3);
+      let S = vec3.create(5, 6, 7);
+      R = quat.fromAxisAngle(R, vec3.create(0, 1, 0), 0.7);
       mat4.fromRTS(out, R, T, S);
-      result = vec3.new(5, 6, 7);
+      result = vec3.create(5, 6, 7);
       mat4.getScaling(result, out);
 
       t.equal_v3(result, [5, 6, 7]);
@@ -599,8 +599,8 @@ tap.test('mat4', t => {
 
   t.test('getRotation', t => {
     t.test('from the identity matrix', t => {
-      result = quat.new(1, 2, 3, 4);
-      out = quat.new(1, 2, 3, 4);
+      result = quat.create(1, 2, 3, 4);
+      out = quat.create(1, 2, 3, 4);
       result = mat4.getRotation(out, identity);
 
       t.equal(result, out);
@@ -613,8 +613,8 @@ tap.test('mat4', t => {
     });
 
     t.test('from a translation-only matrix', t => {
-      result = quat.new(1, 2, 3, 4);
-      out = quat.new(1, 2, 3, 4);
+      result = quat.create(1, 2, 3, 4);
+      out = quat.create(1, 2, 3, 4);
       result = mat4.getRotation(out, matB);
 
       let unitQuat = quat.create();
@@ -626,18 +626,18 @@ tap.test('mat4', t => {
 
     t.test('from a translation and rotation matrix', t => {
       let q = quat.create();
-      let outVec = vec3.new(5, 6, 7);
-      let testVec = vec3.new(1, 5, 2);
+      let outVec = vec3.create(5, 6, 7);
+      let testVec = vec3.create(1, 5, 2);
       let ang = 0.78972;
 
       vec3.normalize(testVec, testVec);
       q = quat.fromAxisAngle(q, testVec, ang);
       mat4.fromRT(out, q, outVec);
 
-      result = quat.new(2, 3, 4, 6);
+      result = quat.create(2, 3, 4, 6);
       mat4.getRotation(result, out);
 
-      let outaxis = vec3.zero();
+      let outaxis = vec3.create(0, 0, 0);
       let outangle = quat.getAxisAngle(outaxis, result);
 
       t.deepApprox(outaxis, testVec);
@@ -701,27 +701,27 @@ tap.test('mat4', t => {
   });
 
   t.test('lookAt', t => {
-    let eye = vec3.new(0, 0, 1);
-    let center = vec3.new(0, 0, -1);
-    let up = vec3.new(0, 1, 0);
-    let view = vec3.new(0, 0, 1);
-    let right = vec3.new(1, 0, 0);
+    let eye = vec3.create(0, 0, 1);
+    let center = vec3.create(0, 0, -1);
+    let up = vec3.create(0, 1, 0);
+    let view = vec3.create(0, 0, 1);
+    let right = vec3.create(1, 0, 0);
 
     t.test('looking down', t => {
-      view = vec3.new(0, -1, 0);
-      up = vec3.new(0, 0, -1);
-      right = vec3.new(1, 0, 0);
-      result = mat4.lookAt(out, vec3.new(0, 0, 0), view, up);
+      view = vec3.create(0, -1, 0);
+      up = vec3.create(0, 0, -1);
+      right = vec3.create(1, 0, 0);
+      result = mat4.lookAt(out, vec3.create(0, 0, 0), view, up);
 
       t.equal(result, out);
 
-      result = vec3.transformMat4(vec3.zero(), view, out);
+      result = vec3.transformMat4(vec3.create(0, 0, 0), view, out);
       t.equal_v3(result, [0, 0, -1]);
 
-      result = vec3.transformMat4(vec3.zero(), up, out);
+      result = vec3.transformMat4(vec3.create(0, 0, 0), up, out);
       t.equal_v3(result, [0, 1, 0]);
 
-      result = vec3.transformMat4(vec3.zero(), right, out);
+      result = vec3.transformMat4(vec3.create(0, 0, 0), right, out);
       t.equal_v3(result, [1, 0, 0]);
 
       t.end();
@@ -729,26 +729,26 @@ tap.test('mat4', t => {
 
     t.test('#74', t => {
       mat4.lookAt(out,
-        vec3.new(0, 2, 0),
-        vec3.new(0, 0.6, 0),
-        vec3.new(0, 0, -1)
+        vec3.create(0, 2, 0),
+        vec3.create(0, 0.6, 0),
+        vec3.create(0, 0, -1)
       );
 
-      result = vec3.transformMat4(vec3.zero(), vec3.new(0, 2, -1), out);
+      result = vec3.transformMat4(vec3.create(0, 0, 0), vec3.create(0, 2, -1), out);
       t.equal_v3(result, [0, 1, 0]);
 
-      result = vec3.transformMat4(vec3.zero(), vec3.new(1, 2, 0), out);
+      result = vec3.transformMat4(vec3.create(0, 0, 0), vec3.create(1, 2, 0), out);
       t.equal_v3(result, [1, 0, 0]);
 
-      result = vec3.transformMat4(vec3.zero(), vec3.new(0, 1, 0), out);
+      result = vec3.transformMat4(vec3.create(0, 0, 0), vec3.create(0, 1, 0), out);
       t.equal_v3(result, [0, 0, -1]);
 
       t.end();
     });
 
-    eye = vec3.new(0, 0, 1);
-    center = vec3.new(0, 0, -1);
-    up = vec3.new(0, 1, 0);
+    eye = vec3.create(0, 0, 1);
+    center = vec3.create(0, 0, -1);
+    up = vec3.create(0, 1, 0);
     result = mat4.lookAt(out, eye, center, up);
 
     t.equal(result, out);

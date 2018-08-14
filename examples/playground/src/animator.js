@@ -34,7 +34,7 @@
        * The character's normalized tranlating velocity.
        * @type {vec2}
        */
-      this._destMoveVelocity = cc.math.vec2.zero();
+      this._destMoveVelocity = cc.math.vec2.create(0, 0);
 
       /**
        * The character's speed.
@@ -161,11 +161,11 @@
       }
 
       // Set the blend result.
-      let pos = cc.math.vec3.zero();
+      let pos = cc.math.vec3.create(0, 0, 0);
       this._entity.getWorldPos(pos);
       if (this._lastPos == null)
         this._lastPos = cc.math.vec3.clone(pos);
-      let moveVelocity3D = cc.math.vec3.zero();
+      let moveVelocity3D = cc.math.vec3.create(0, 0, 0);
       cc.math.vec3.sub(moveVelocity3D, pos, this._lastPos);
       cc.math.vec3.normalize(moveVelocity3D, moveVelocity3D);
       let lastRot = cc.math.quat.create();
@@ -175,7 +175,7 @@
       // then perform the move direction that originally supposed no rotation applied.
       // That is to say the move direction becomes larger.
       cc.math.quat.rotateY(lastRot, lastRot, cc.math.toRadian(-this._lastRotAngle));
-      let faceVelocity3D = cc.math.vec3.zero();
+      let faceVelocity3D = cc.math.vec3.create(0, 0, 0);
       cc.math.vec3.transformQuat(faceVelocity3D, moveVelocity3D, lastRot);
       let blenderVelocity = new cc.math.vec2(faceVelocity3D.x * speed, faceVelocity3D.z * speed);
       this._setBlenderVelocity(blenderVelocity);

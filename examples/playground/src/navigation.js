@@ -16,7 +16,7 @@
     let m = new Material();
     m.effect = app.assets.get('builtin-effect-phong');
     m.define('USE_DIFFUSE_TEXTURE', true);
-    m.setProperty('diffuseColor', color4.new(cr, cg, cb, 1));
+    m.setProperty('diffuseColor', color4.create(cr, cg, cb, 1));
     modelComp.mesh = mesh;
     modelComp.material = m;
     models.push(modelComp);
@@ -90,15 +90,15 @@
   class FPCamera extends cc.ScriptComponent {
     constructor() {
       super();
-      this.id_forward = vec3.new(0, 0, 1);
-      this.id_right = vec3.new(1, 0, 0);
-      this.forward = vec3.new(0, 0, 1);
-      this.right = vec3.new(1, 0, 0);
-      this.euler = vec3.new(0, 0, 0);
+      this.id_forward = vec3.create(0, 0, 1);
+      this.id_right = vec3.create(1, 0, 0);
+      this.forward = vec3.create(0, 0, 1);
+      this.right = vec3.create(1, 0, 0);
+      this.euler = vec3.create(0, 0, 0);
       this.speed = 0.1;
       this.jumping = false;
-      this.posOff = vec3.zero();
-      this.rotOff = vec2.zero();
+      this.posOff = vec3.create(0, 0, 0);
+      this.rotOff = vec2.create(0, 0);
     }
 
     start() {
