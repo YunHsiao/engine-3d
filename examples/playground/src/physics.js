@@ -40,7 +40,7 @@
     modelComp.mesh = isBox ? box_mesh : sphere_mesh;
     modelComp.material = m;
     let col = ent.addComp('Collider', { type: isBox ? 'box' : 'sphere', mass: 1 });
-    col.body.setUpdateMode(true, true);
+    col.body.setUpdateMode(false, true);
     models.push(modelComp); colliders.push(col); colors.push(c);
   }
   let radius = 12.5;
@@ -55,7 +55,7 @@
   modelComp.material = m;
   let col = ground.addComp('Collider');
   col.size = size;
-  col.body.setUpdateMode(true, false);
+  col.body.setUpdateMode(false, true);
 
   // camera
   let camEnt = app.createEntity('camera');
@@ -72,13 +72,12 @@
   let static_color = color4.create(0.5, 0.5, 0.5, 1);
   app.on('tick', () => {
     for (let i = 0; i < models.length; i++) {
-      let model = models[i]._models[0];
       // handle bounds
-      if      (model._node.lpos.y <         -10) model._node.lpos.y =  30;
-      else if (model._node.lpos.x >  (radius+3)) model._node.lpos.x = -(radius+3);
-      else if (model._node.lpos.x < -(radius+3)) model._node.lpos.x =  (radius+3);
-      else if (model._node.lpos.z >  (radius+3)) model._node.lpos.z = -(radius+3);
-      else if (model._node.lpos.z < -(radius+3)) model._node.lpos.z =  (radius+3);
+      if      (colliders[i].body.position.y <         -10) colliders[i].body.position.y =  30;
+      else if (colliders[i].body.position.x >  (radius+3)) colliders[i].body.position.x = -(radius-3);
+      else if (colliders[i].body.position.x < -(radius+3)) colliders[i].body.position.x =  (radius-3);
+      else if (colliders[i].body.position.z >  (radius+3)) colliders[i].body.position.z = -(radius-3);
+      else if (colliders[i].body.position.z < -(radius+3)) colliders[i].body.position.z =  (radius-3);
       // visualize speed
       let speed = vec3.magnitude(colliders[i].body.velocity); speed /= speed + 1;
       color4.lerp(colors[i], static_color, colliders[i].type === 'box' ?
@@ -87,7 +86,7 @@
     // spin the ground once in a while
     if (dobj.pauseSpinning) return;
     let time = (app.totalTime + offset) * speed;
-    quat.fromEuler(ground.lrot, 0, 0, (Math.floor(time / interval) % 2 ? 1 : -1) * 
+    quat.fromEuler(col.body.quaternion, 0, 0, (Math.floor(time / interval) % 2 ? 1 : -1) * 
       clamp(time % interval, 0, 180));
   });
 })();

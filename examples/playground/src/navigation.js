@@ -26,7 +26,7 @@
       isTrigger: isTrigger
     });
     if (isTrigger) ent.on('collide', () => {
-      vec3.set(camEnt.lpos, tx, ty, tz);
+      vec3.set(camCol.body.position, tx, ty, tz);
       vec3.set(camEnt.getComp('FPCamera').euler, tyaw, tpitch, troll);
     });
     vec3.set(ent.lpos, x, y, z);
@@ -54,15 +54,14 @@
   // camera
   let camEnt = app.createEntity('camera');
   camEnt.addComp('Camera');
-  let col = camEnt.addComp('Collider', {
+  let camCol = camEnt.addComp('Collider', {
     mass: 1,
     type: 'box',
     size: [1, 4, 1],
     center: [0, -2, 0]
   });
   vec3.set(app.system('physics').world.gravity, 0, -50, 0);
-  col.body.setUpdateMode(true, true);
-  col.body.setFreezeRotation(true);
+  camCol.body.setFreezeRotation(true);
 
   // utils
   let dobj = {
@@ -102,12 +101,13 @@
     }
 
     start() {
-      this.pos = this._entity.lpos;
+      let rigidbody = this._entity.getComp('Collider').body;
+      this.pos = rigidbody.position;
       this.rot = this._entity.lrot;
       this.canvas = this._app._canvas;
       this.input = this._app._input;
       this.input._lock = cc.Input.LOCK_ALWAYS;
-      this.velocity = this._entity.getComp('Collider').body.velocity;
+      this.velocity = rigidbody.velocity;
       this._entity.on('collide', () => {
         this.jumping = false;
       });
@@ -132,7 +132,7 @@
     }
 
     tickMouse() {
-      this.rotOff.x = -this.input.mouseDeltaY;
+      this.rotOff.x = this.input.mouseDeltaY;
       this.rotOff.y = -this.input.mouseDeltaX;
     }
 
