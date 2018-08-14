@@ -1,6 +1,6 @@
 'use strict';
 
-const Input = require('./dist/input');
+const cc = require('../../dist/engine');
 
 let el = document.createElement('div');
 el.id = 'keyboard';
@@ -8,7 +8,8 @@ el.style.width = '0px';
 el.style.height = '0px';
 el.tabIndex = -1;
 document.body.appendChild(el);
-let input = new Input(document.getElementById('keyboard'));
+
+let input = new cc.Input(document.getElementById('keyboard'));
 
 suite(tap, 'input', t => {
 
