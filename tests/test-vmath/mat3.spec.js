@@ -9,25 +9,25 @@ tap.test('mat3', t => {
   let result = mat3.create();
 
   t.beforeEach(done => {
-    matA = mat3.new(
+    matA = mat3.create(
       1, 0, 0,
       0, 1, 0,
       1, 2, 1
     );
 
-    matB = mat3.new(
+    matB = mat3.create(
       1, 0, 0,
       0, 1, 0,
       3, 4, 1
     );
 
-    out = mat3.new(
+    out = mat3.create(
       0, 0, 0,
       0, 0, 0,
       0, 0, 0
     );
 
-    identity = mat3.new(
+    identity = mat3.create(
       1, 0, 0,
       0, 1, 0,
       0, 0, 1
@@ -37,7 +37,7 @@ tap.test('mat3', t => {
   });
 
   t.test('normalFromMat4', t => {
-    matA = mat4.new(
+    matA = mat4.create(
       1, 0, 0, 0,
       0, 1, 0, 0,
       0, 0, 1, 0,
@@ -47,7 +47,7 @@ tap.test('mat3', t => {
 
     t.equal(result, out);
 
-    mat4.translate(matA, matA, vec3.new(2, 4, 6));
+    mat4.translate(matA, matA, vec3.create(2, 4, 6));
     mat4.rotateX(matA, matA, Math.PI / 2);
     result = mat3.normalFromMat4(out, matA);
 
@@ -57,7 +57,7 @@ tap.test('mat3', t => {
       0,-1, 0
     ]);
 
-    mat4.scale(matA, matA, vec3.new(2, 3, 4));
+    mat4.scale(matA, matA, vec3.create(2, 3, 4));
     result = mat3.normalFromMat4(out, matA);
 
     t.equal_m3(result, [
@@ -70,16 +70,16 @@ tap.test('mat3', t => {
   });
 
   t.test('fromQuat', t => {
-    let q = quat.new(0, -0.7071067811865475, 0, 0.7071067811865475);
+    let q = quat.create(0, -0.7071067811865475, 0, 0.7071067811865475);
     result = mat3.fromQuat(out, q);
 
     t.equal(result, out);
     t.deepApprox(
-      vec3.transformMat3(vec3.zero(), vec3.new(0, 0, -1), out),
-      vec3.transformQuat(vec3.zero(), vec3.new(0, 0, -1), q)
+      vec3.transformMat3(vec3.create(0, 0, 0), vec3.create(0, 0, -1), out),
+      vec3.transformQuat(vec3.create(0, 0, 0), vec3.create(0, 0, -1), q)
     );
     t.equal_v3(
-      vec3.transformMat3(vec3.zero(), vec3.new(0, 0, -1), out),
+      vec3.transformMat3(vec3.create(0, 0, 0), vec3.create(0, 0, -1), out),
       [1, 0, 0]
     );
 
@@ -87,7 +87,7 @@ tap.test('mat3', t => {
   });
 
   t.test('fromViewUp', t => {
-    let v = vec3.new(0.5, 0, 0.5);
+    let v = vec3.create(0.5, 0, 0.5);
     vec3.normalize(v,v);
     result = mat3.fromViewUp(out, v);
 
@@ -103,7 +103,7 @@ tap.test('mat3', t => {
   });
 
   t.test('fromMat4', t => {
-    result = mat3.fromMat4(out, mat4.new(
+    result = mat3.fromMat4(out, mat4.create(
       1, 2, 3, 4,
       5, 6, 7, 8,
       9, 10, 11, 12,
@@ -121,7 +121,7 @@ tap.test('mat3', t => {
   });
 
   t.test('scale', t => {
-    result = mat3.scale(out, matA, vec2.new(2, 2));
+    result = mat3.scale(out, matA, vec2.create(2, 2));
 
     t.equal(result, out);
     t.equal_m3(out, [
@@ -451,7 +451,7 @@ tap.test('mat3', t => {
   });
 
   t.test('new', t => {
-    result = mat3.new(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    result = mat3.create(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
     t.equal_m3(result, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
 
@@ -541,7 +541,7 @@ tap.test('mat3', t => {
   t.test('exactEquals', t => {
     mat3.set(matA, 0, 1, 2, 3, 4, 5, 6, 7, 8);
     mat3.set(matB, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-    let matC = mat3.new(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    let matC = mat3.create(1, 2, 3, 4, 5, 6, 7, 8, 9);
     let r0 = mat3.exactEquals(matA, matB);
     let r1 = mat3.exactEquals(matA, matC);
 
@@ -556,8 +556,8 @@ tap.test('mat3', t => {
   t.test('equals', t => {
     mat3.set(matA, 0, 1, 2, 3, 4, 5, 6, 7, 8);
     mat3.set(matB, 0, 1, 2, 3, 4, 5, 6, 7, 8);
-    let matC = mat3.new(1, 2, 3, 4, 5, 6, 7, 8, 9);
-    let matD = mat3.new(1e-16, 1, 2, 3, 4, 5, 6, 7, 8);
+    let matC = mat3.create(1, 2, 3, 4, 5, 6, 7, 8, 9);
+    let matD = mat3.create(1e-16, 1, 2, 3, 4, 5, 6, 7, 8);
     let r0 = mat3.equals(matA, matB);
     let r1 = mat3.equals(matA, matC);
     let r2 = mat3.equals(matA, matD);

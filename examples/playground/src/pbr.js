@@ -30,17 +30,17 @@
 
   // lights
   let lightPos = [
-    vec3.new( 10,  10, 10),
-    vec3.new(-10,  10, 10),
-    vec3.new( 10, -10, 10),
-    vec3.new(-10, -10, 10),
+    vec3.create( 10,  10, 10),
+    vec3.create(-10,  10, 10),
+    vec3.create( 10, -10, 10),
+    vec3.create(-10, -10, 10),
   ];
   for (let i = 0; i < 4; i++) {
     let lightEnt = app.createEntity('point-light');
     vec3.set(lightEnt.lpos, lightPos[i].x, lightPos[i].y, lightPos[i].z);
     let light = lightEnt.addComp('Light');
     light.type = 'point';
-    light.color = color3.new(1, 1, 1);
+    light.color = color3.create(1, 1, 1);
     light.intensity = 2;
     light.range = 1000;
   }
@@ -56,7 +56,7 @@
       let m = new Material();
       m.effect = app.assets.get('builtin-effect-pbr');
       m.setProperty('ao', 1.0);
-      m.setProperty('albedo', color4.new(0.5, 0, 0, 1));
+      m.setProperty('albedo', color4.create(0.5, 0, 0, 1));
       m.setProperty('metallic', i/rows);
       m.setProperty('roughness', clamp(j/cols, 0.05, 1));
       m.define("USE_RGBE_IBL_DIFFUSE", true);

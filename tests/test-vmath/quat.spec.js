@@ -7,17 +7,17 @@ tap.test('quat', t => {
   let quatB = quat.create();
   let result = quat.create();
   let id = quat.create();
-  let vec = vec3.zero();
+  let vec = vec3.create(0, 0, 0);
   let deg90 = Math.PI / 2;
   let deg45 = Math.PI / 4;
   let deg30 = Math.PI / 6;
 
   t.beforeEach(done => {
-    quatA = quat.new(1, 2, 3, 4);
-    quatB = quat.new(5, 6, 7, 8);
-    out = quat.new(0, 0, 0, 0);
-    id = quat.new(0, 0, 0, 1);
-    vec = vec3.new(1, 1, -1);
+    quatA = quat.create(1, 2, 3, 4);
+    quatB = quat.create(5, 6, 7, 8);
+    out = quat.create(0, 0, 0, 0);
+    id = quat.create(0, 0, 0, 1);
+    vec = vec3.create(1, 1, -1);
     deg90 = Math.PI / 2;
 
     done();
@@ -25,7 +25,7 @@ tap.test('quat', t => {
 
   t.test('slerp', t => {
     t.test('the normal case', t => {
-      result = quat.slerp(out, quat.new(0, 0, 0, 1), quat.new(0, 1, 0, 0), 0.5);
+      result = quat.slerp(out, quat.create(0, 0, 0, 1), quat.create(0, 1, 0, 0), 0.5);
 
       t.equal(result, out);
       t.equal_v4(result, [0, 0.707106, 0, 0.707106]);
@@ -34,7 +34,7 @@ tap.test('quat', t => {
     });
 
     t.test('where a == b', t => {
-      result = quat.slerp(out, quat.new(0, 0, 0, 1), quat.new(0, 0, 0, 1), 0.5);
+      result = quat.slerp(out, quat.create(0, 0, 0, 1), quat.create(0, 0, 0, 1), 0.5);
 
       t.equal(result, out);
       t.equal_v4(result, [0, 0, 0, 1]);
@@ -43,8 +43,8 @@ tap.test('quat', t => {
     });
 
     t.test('where theta == 180deg', t => {
-      quat.rotateX(quatA, quat.new(1, 0, 0, 0), Math.PI); // 180 deg
-      result = quat.slerp(out, quat.new(1, 0, 0, 0), quatA, 1);
+      quat.rotateX(quatA, quat.create(1, 0, 0, 0), Math.PI); // 180 deg
+      result = quat.slerp(out, quat.create(1, 0, 0, 0), quatA, 1);
 
       t.equal_v4(result, [0, 0, 0, -1]);
 
@@ -52,7 +52,7 @@ tap.test('quat', t => {
     });
 
     t.test('where a == -b', t => {
-      result = quat.slerp(out, quat.new(1, 0, 0, 0), quat.new(-1, 0, 0, 0), 0.5);
+      result = quat.slerp(out, quat.create(1, 0, 0, 0), quat.create(-1, 0, 0, 0), 0.5);
 
       t.equal(result, out);
       t.equal_v4(result, [1, 0, 0, 0]);
@@ -67,7 +67,7 @@ tap.test('quat', t => {
     result = quat.rotateX(out, id, deg90);
 
     t.equal(result, out);
-    vec3.transformQuat(vec, vec3.new(0, 0, -1), out);
+    vec3.transformQuat(vec, vec3.create(0, 0, -1), out);
     t.equal_v3(vec, [0, 1, 0]);
 
     t.end();
@@ -77,7 +77,7 @@ tap.test('quat', t => {
     result = quat.rotateY(out, id, deg90);
 
     t.equal(result, out);
-    vec3.transformQuat(vec, vec3.new(0, 0, -1), out);
+    vec3.transformQuat(vec, vec3.create(0, 0, -1), out);
     t.equal_v3(vec, [-1, 0, 0]);
 
     t.end();
@@ -87,7 +87,7 @@ tap.test('quat', t => {
     result = quat.rotateZ(out, id, deg90);
 
     t.equal(result, out);
-    vec3.transformQuat(vec, vec3.new(0, 1, 0), out);
+    vec3.transformQuat(vec, vec3.create(0, 1, 0), out);
     t.equal_v3(vec, [-1, 0, 0]);
 
     t.end();
@@ -100,7 +100,7 @@ tap.test('quat', t => {
     quat.rotateX(rotx, id, deg30);
     quat.rotateY(roty, id, deg45);
     quat.mul(quatA, roty, rotx);
-    quat.rotateAround(quatA, quatA, vec3.new(0,1,0), -deg90);
+    quat.rotateAround(quatA, quatA, vec3.create(0,1,0), -deg90);
 
     quat.rotateX(rotx, id, deg30);
     quat.rotateY(roty, id, -deg45);
@@ -119,7 +119,7 @@ tap.test('quat', t => {
     quat.rotateY(quatA, rotx, deg45);
 
     quat.rotateX(rotx, id, deg30);
-    quat.rotateAroundLocal(quatB, rotx, vec3.new(0,1,0), deg45);
+    quat.rotateAroundLocal(quatB, rotx, vec3.create(0,1,0), deg45);
 
     let r0 = quat.equals(quatA, quatB);
     t.equal(r0, true);
@@ -129,7 +129,7 @@ tap.test('quat', t => {
 
   t.test('fromMat3', t => {
     t.test('legacy', t => {
-      let matr = mat3.new(
+      let matr = mat3.create(
         1, 0, 0,
         0, 0, -1,
         0, 1, 0
@@ -142,7 +142,7 @@ tap.test('quat', t => {
     });
 
     t.test('where trace > 0', t => {
-      let matr = mat3.new(
+      let matr = mat3.create(
         1, 0, 0,
         0, 0, -1,
         0, 1, 0
@@ -150,7 +150,7 @@ tap.test('quat', t => {
       result = quat.fromMat3(out, matr);
 
       t.equal(result, out);
-      result = vec3.transformQuat(vec3.zero(), vec3.new(0, 1, 0), out);
+      result = vec3.transformQuat(vec3.create(0, 0, 0), vec3.create(0, 1, 0), out);
 
       t.equal_v3(result, [0, 0, -1]);
 
@@ -164,9 +164,9 @@ tap.test('quat', t => {
           mat3.fromMat4(matr,
             mat4.lookAt(
               mat4.create(),
-              vec3.new(0, 0, 0),
-              vec3.new(0, 0, 1),
-              vec3.new(0, 1, 0)
+              vec3.create(0, 0, 0),
+              vec3.create(0, 0, 1),
+              vec3.create(0, 1, 0)
             )
           )
         )
@@ -175,8 +175,8 @@ tap.test('quat', t => {
 
       t.equal(result, out);
       t.deepApprox(
-        vec3.transformQuat(vec3.zero(), vec3.new(3, 2, -1), quat.normalize(out, out)),
-        vec3.transformMat3(vec3.zero(), vec3.new(3, 2, -1), matr)
+        vec3.transformQuat(vec3.create(0, 0, 0), vec3.create(3, 2, -1), quat.normalize(out, out)),
+        vec3.transformMat3(vec3.create(0, 0, 0), vec3.create(3, 2, -1), matr)
       );
 
       t.end();
@@ -189,9 +189,9 @@ tap.test('quat', t => {
           mat3.fromMat4(matr,
             mat4.lookAt(
               mat4.create(),
-              vec3.new(0, 0, 0),
-              vec3.new(-1, 0, 0),
-              vec3.new(0, -1, 0)
+              vec3.create(0, 0, 0),
+              vec3.create(-1, 0, 0),
+              vec3.create(0, -1, 0)
             )
           )
         )
@@ -200,8 +200,8 @@ tap.test('quat', t => {
 
       t.equal(result, out);
       t.deepApprox(
-        vec3.transformQuat(vec3.zero(), vec3.new(3, 2, -1), quat.normalize(out, out)),
-        vec3.transformMat3(vec3.zero(), vec3.new(3, 2, -1), matr)
+        vec3.transformQuat(vec3.create(0, 0, 0), vec3.create(3, 2, -1), quat.normalize(out, out)),
+        vec3.transformMat3(vec3.create(0, 0, 0), vec3.create(3, 2, -1), matr)
       );
 
       t.end();
@@ -214,9 +214,9 @@ tap.test('quat', t => {
           mat3.fromMat4(matr,
             mat4.lookAt(
               mat4.create(),
-              vec3.new(0, 0, 0),
-              vec3.new(0, 0, -1),
-              vec3.new(0, -1, 0)
+              vec3.create(0, 0, 0),
+              vec3.create(0, 0, -1),
+              vec3.create(0, -1, 0)
             )
           )
         )
@@ -225,8 +225,8 @@ tap.test('quat', t => {
 
       t.equal(result, out);
       t.deepApprox(
-        vec3.transformQuat(vec3.zero(), vec3.new(3, 2, -1), quat.normalize(out, out)),
-        vec3.transformMat3(vec3.zero(), vec3.new(3, 2, -1), matr)
+        vec3.transformQuat(vec3.create(0, 0, 0), vec3.create(3, 2, -1), quat.normalize(out, out)),
+        vec3.transformMat3(vec3.create(0, 0, 0), vec3.create(3, 2, -1), matr)
       );
 
       t.end();
@@ -249,7 +249,7 @@ tap.test('quat', t => {
 
       t.equal(result, out);
       t.equal_v3(
-        vec3.transformQuat(vec3.zero(), vec3.new(0, 1, 0), out),
+        vec3.transformQuat(vec3.create(0, 0, 0), vec3.create(0, 1, 0), out),
         [0, 0, -1]
       );
 
@@ -261,9 +261,9 @@ tap.test('quat', t => {
 
   t.test('fromAxes', t => {
     t.test('given opengl defaults', t => {
-      let xAxis = vec3.new(1, 0, 0);
-      let yAxis = vec3.new(0, 1, 0);
-      let zAxis = vec3.new(0, 0, 1);
+      let xAxis = vec3.create(1, 0, 0);
+      let yAxis = vec3.create(0, 1, 0);
+      let zAxis = vec3.create(0, 0, 1);
       result = quat.fromAxes(out, xAxis, yAxis, zAxis);
 
       t.equal(result, out);
@@ -273,9 +273,9 @@ tap.test('quat', t => {
     });
 
     t.test('looking left', t => {
-      let xAxis = vec3.new( 0, 0, 1);
-      let yAxis = vec3.new( 0, 1, 0);
-      let zAxis = vec3.new(-1, 0, 0);
+      let xAxis = vec3.create( 0, 0, 1);
+      let yAxis = vec3.create( 0, 1, 0);
+      let zAxis = vec3.create(-1, 0, 0);
       result = quat.fromAxes(out, xAxis, yAxis, zAxis);
 
       t.equal(result, out);
@@ -285,9 +285,9 @@ tap.test('quat', t => {
     });
 
     t.test('legacy example', t => {
-      let xAxis = vec3.new(1,  0,  0);
-      let yAxis = vec3.new(0,  0,  1);
-      let zAxis = vec3.new(0, -1,  0);
+      let xAxis = vec3.create(1,  0,  0);
+      let yAxis = vec3.create(0,  0,  1);
+      let zAxis = vec3.create(0, -1,  0);
       result = quat.fromAxes(out, xAxis, yAxis, zAxis);
 
       t.equal(result, out);
@@ -300,7 +300,7 @@ tap.test('quat', t => {
   });
 
   t.test('fromViewUp', t => {
-    let v = vec3.new(0.5, 0, 0.5);
+    let v = vec3.create(0.5, 0, 0.5);
     vec3.normalize(v,v);
     result = quat.fromViewUp(out, v);
 
@@ -317,12 +317,12 @@ tap.test('quat', t => {
   t.test('rotationTo', t => {
     let r;
     t.beforeEach(done => {
-      r = vec3.zero();
+      r = vec3.create(0, 0, 0);
       done();
     });
 
     t.test('at right angle', t => {
-      result = quat.rotationTo(out, vec3.new(0, 1, 0), vec3.new(1, 0, 0));
+      result = quat.rotationTo(out, vec3.create(0, 1, 0), vec3.create(1, 0, 0));
 
       t.equal(result, out);
       t.equal_v4(out, [0, 0, -0.707106, 0.707106]);
@@ -331,8 +331,8 @@ tap.test('quat', t => {
     });
 
     t.test('when vectors are parallel', t => {
-      result = quat.rotationTo(out, vec3.new(0, 1, 0), vec3.new(0, 1, 0));
-      vec3.transformQuat(r, vec3.new(0, 1, 0), out);
+      result = quat.rotationTo(out, vec3.create(0, 1, 0), vec3.create(0, 1, 0));
+      vec3.transformQuat(r, vec3.create(0, 1, 0), out);
 
       t.equal(result, out);
       t.equal_v3(r, [0, 1, 0]);
@@ -341,8 +341,8 @@ tap.test('quat', t => {
     });
 
     t.test('when vectors are opposed X', t => {
-      result = quat.rotationTo(out, vec3.new(1, 0, 0), vec3.new(-1, 0, 0));
-      vec3.transformQuat(r, vec3.new(1, 0, 0), out);
+      result = quat.rotationTo(out, vec3.create(1, 0, 0), vec3.create(-1, 0, 0));
+      vec3.transformQuat(r, vec3.create(1, 0, 0), out);
 
       t.equal(result, out);
       t.equal_v3(r, [-1, 0, 0]);
@@ -351,8 +351,8 @@ tap.test('quat', t => {
     });
 
     t.test('when vectors are opposed Y', t => {
-      result = quat.rotationTo(out, vec3.new(0, 1, 0), vec3.new(0, -1, 0));
-      vec3.transformQuat(r, vec3.new(0, 1, 0), out);
+      result = quat.rotationTo(out, vec3.create(0, 1, 0), vec3.create(0, -1, 0));
+      vec3.transformQuat(r, vec3.create(0, 1, 0), out);
 
       t.equal(result, out);
       t.equal_v3(r, [0, -1, 0]);
@@ -361,8 +361,8 @@ tap.test('quat', t => {
     });
 
     t.test('when vectors are opposed Z', t => {
-      result = quat.rotationTo(out, vec3.new(0, 0, 1), vec3.new(0, 0, -1));
-      vec3.transformQuat(r, vec3.new(0, 0, 1), out);
+      result = quat.rotationTo(out, vec3.create(0, 0, 1), vec3.create(0, 0, -1));
+      vec3.transformQuat(r, vec3.create(0, 0, 1), out);
 
       t.equal(result, out);
       t.equal_v3(r, [0, 0, -1]);
@@ -390,7 +390,7 @@ tap.test('quat', t => {
   });
 
   t.test('new', t => {
-    result = quat.new(1, 2, 3, 4);
+    result = quat.create(1, 2, 3, 4);
 
     t.equal_v4(result, [1, 2, 3, 4]);
 
@@ -425,7 +425,7 @@ tap.test('quat', t => {
   });
 
   t.test('fromAxisAngle', t => {
-    result = quat.fromAxisAngle(out, vec3.new(1, 0, 0), Math.PI * 0.5);
+    result = quat.fromAxisAngle(out, vec3.create(1, 0, 0), Math.PI * 0.5);
 
     t.equal(result, out);
     t.equal_v4(result, [0.707106, 0, 0, 0.707106]);
@@ -435,7 +435,7 @@ tap.test('quat', t => {
 
   t.test('getAxisAngle', t => {
     t.test('for a quaternion representing no rotation', t => {
-      result = quat.fromAxisAngle(out, vec3.new(0, 1, 0), 0.0);
+      result = quat.fromAxisAngle(out, vec3.create(0, 1, 0), 0.0);
       deg90 = quat.getAxisAngle(vec, out);
 
       t.equal(deg90 % (Math.PI * 2.0), 0.0);
@@ -444,7 +444,7 @@ tap.test('quat', t => {
     });
 
     t.test('for a simple rotation about X axis', t => {
-      result = quat.fromAxisAngle(out, vec3.new(1, 0, 0), 0.7778);
+      result = quat.fromAxisAngle(out, vec3.create(1, 0, 0), 0.7778);
       deg90 = quat.getAxisAngle(vec, out);
 
       t.equal(deg90, 0.7778);
@@ -454,7 +454,7 @@ tap.test('quat', t => {
     });
 
     t.test('for a simple rotation about Y axis', t => {
-      result = quat.fromAxisAngle(out, vec3.new(0, 1, 0), 0.879546);
+      result = quat.fromAxisAngle(out, vec3.create(0, 1, 0), 0.879546);
       deg90 = quat.getAxisAngle(vec, out);
 
       t.approx(deg90, 0.879546);
@@ -464,7 +464,7 @@ tap.test('quat', t => {
     });
 
     t.test('for a simple rotation about Z axis', t => {
-      result = quat.fromAxisAngle(out, vec3.new(0, 0, 1), 0.123456);
+      result = quat.fromAxisAngle(out, vec3.create(0, 0, 1), 0.123456);
       deg90 = quat.getAxisAngle(vec, out);
 
       t.approx(deg90, 0.123456);
@@ -474,7 +474,7 @@ tap.test('quat', t => {
     });
 
     t.test('for a slightly irregular axis and right angle', t => {
-      result = quat.fromAxisAngle(out, vec3.new(0.707106, 0, 0.707106), Math.PI * 0.5);
+      result = quat.fromAxisAngle(out, vec3.create(0.707106, 0, 0.707106), Math.PI * 0.5);
       deg90 = quat.getAxisAngle(vec, out);
 
       t.equal_v3(vec, [0.707106, 0, 0.707106]);
@@ -484,7 +484,7 @@ tap.test('quat', t => {
     });
 
     t.test('for a very irregular axis and negative input angle', t => {
-      quatA = quat.fromAxisAngle(quatA, quat.new(0.65538555, 0.49153915, 0.57346237), 8.8888);
+      quatA = quat.fromAxisAngle(quatA, quat.create(0.65538555, 0.49153915, 0.57346237), 8.8888);
       deg90 = quat.getAxisAngle(vec, quatA);
       quatB = quat.fromAxisAngle(quatB, vec, deg90);
 
@@ -763,7 +763,7 @@ tap.test('quat', t => {
   t.test('exactEquals', t => {
     quat.set(quatA, 0, 1, 2, 3);
     quat.set(quatB, 0, 1, 2, 3);
-    let quatC = quat.new(1, 2, 3, 4);
+    let quatC = quat.create(1, 2, 3, 4);
     let r0 = quat.exactEquals(quatA, quatB);
     let r1 = quat.exactEquals(quatA, quatC);
 
@@ -778,8 +778,8 @@ tap.test('quat', t => {
   t.test('equals', t => {
     quat.set(quatA, 0, 1, 2, 3);
     quat.set(quatB, 0, 1, 2, 3);
-    let quatC = quat.new(1, 2, 3, 4);
-    let quatD = quat.new(1e-16, 1, 2, 3);
+    let quatC = quat.create(1, 2, 3, 4);
+    let quatD = quat.create(1e-16, 1, 2, 3);
     let r0 = quat.equals(quatA, quatB);
     let r1 = quat.equals(quatA, quatC);
     let r2 = quat.equals(quatA, quatD);

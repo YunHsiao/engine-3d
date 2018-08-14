@@ -8,15 +8,15 @@ tap.test('node', t => {
   t.test('constructor', t => {
     let n0 = new Node();
     t.equal(n0.name, '');
-    t.assert(vec3.equals(n0.lpos, vec3.new(0,0,0)));
-    t.assert(vec3.equals(n0.lrot, quat.new(0,0,0,1)));
-    t.assert(vec3.equals(n0.lscale, vec3.new(1,1,1)));
+    t.assert(vec3.equals(n0.lpos, vec3.create(0,0,0)));
+    t.assert(vec3.equals(n0.lrot, quat.create(0,0,0,1)));
+    t.assert(vec3.equals(n0.lscale, vec3.create(1,1,1)));
 
     let n1 = new Node('foobar');
     t.equal(n1.name, 'foobar');
-    t.assert(vec3.equals(n1.lpos, vec3.new(0,0,0)));
-    t.assert(vec3.equals(n1.lrot, quat.new(0,0,0,1)));
-    t.assert(vec3.equals(n1.lscale, vec3.new(1,1,1)));
+    t.assert(vec3.equals(n1.lpos, vec3.create(0,0,0)));
+    t.assert(vec3.equals(n1.lrot, quat.create(0,0,0,1)));
+    t.assert(vec3.equals(n1.lscale, vec3.create(1,1,1)));
 
     t.end();
   });
@@ -36,9 +36,9 @@ tap.test('node', t => {
     foo1.append(foo2);
 
     t.equal(foo1.name, '');
-    t.assert(vec3.equals(foo1.lpos, vec3.new(0,0,0)));
-    t.assert(vec3.equals(foo1.lrot, quat.new(0,0,0,1)));
-    t.assert(vec3.equals(foo1.lscale, vec3.new(1,1,1)));
+    t.assert(vec3.equals(foo1.lpos, vec3.create(0,0,0)));
+    t.assert(vec3.equals(foo1.lrot, quat.create(0,0,0,1)));
+    t.assert(vec3.equals(foo1.lscale, vec3.create(1,1,1)));
     t.equal(foo2.parent, foo1);
 
     t.end();

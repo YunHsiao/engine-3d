@@ -5,9 +5,9 @@ tap.test('vec3', t => {
   let out, vecA, vecB, result;
 
   t.beforeEach(done => {
-    vecA = vec3.new(1, 2, 3);
-    vecB = vec3.new(4, 5, 6);
-    out = vec3.new(0, 0, 0);
+    vecA = vec3.create(1, 2, 3);
+    vecB = vec3.create(4, 5, 6);
+    out = vec3.create(0, 0, 0);
 
     done();
   });
@@ -86,7 +86,7 @@ tap.test('vec3', t => {
 
   t.test('transformMat4', t => {
     t.test('with an identity', t => {
-      let matr = mat4.new(
+      let matr = mat4.create(
         1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
@@ -103,9 +103,9 @@ tap.test('vec3', t => {
     t.test('with a lookAt', t => {
       let matr = mat4.lookAt(
         mat4.create(),
-        vec3.new(5, 6, 7),
-        vec3.new(2, 6, 7),
-        vec3.new(0, 1, 0)
+        vec3.create(5, 6, 7),
+        vec3.create(2, 6, 7),
+        vec3.create(0, 1, 0)
       );
       result = vec3.transformMat4(out, vecA, matr);
 
@@ -116,13 +116,13 @@ tap.test('vec3', t => {
     });
 
     t.test('with a perspective matrix (#92)', t => {
-      let matr = mat4.new(
+      let matr = mat4.create(
         0.750, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, -1.02, -1,
         0, 0, -2.02, 0
       );
-      result = vec3.transformMat4(mat4.create(), vec3.new(10, 20, 30), matr);
+      result = vec3.transformMat4(mat4.create(), vec3.create(10, 20, 30), matr);
 
       t.equal_v3(result, [-0.25, -0.666666, 1.087333]);
 
@@ -134,7 +134,7 @@ tap.test('vec3', t => {
 
   t.test('transformMat3', t => {
     t.test('with an identity', t => {
-      let matr = mat3.new(
+      let matr = mat3.create(
         1, 0, 0,
         0, 1, 0,
         0, 0, 1
@@ -148,7 +148,7 @@ tap.test('vec3', t => {
     });
 
     t.test('with 90deg about X', t => {
-      result = vec3.transformMat3(out, vec3.new(0,1,0), mat3.new(1, 0, 0, 0, 0, 1, 0, -1, 0));
+      result = vec3.transformMat3(out, vec3.create(0,1,0), mat3.create(1, 0, 0, 0, 0, 1, 0, -1, 0));
 
       t.equal_v3(out, [0, 0, 1]);
 
@@ -156,7 +156,7 @@ tap.test('vec3', t => {
     });
 
     t.test('with 90deg about Y', t => {
-      result = vec3.transformMat3(out, vec3.new(1, 0, 0), mat3.new(0, 0, -1, 0, 1, 0, 1, 0, 0));
+      result = vec3.transformMat3(out, vec3.create(1, 0, 0), mat3.create(0, 0, -1, 0, 1, 0, 1, 0, 0));
 
       t.equal_v3(out, [0, 0, -1]);
 
@@ -164,7 +164,7 @@ tap.test('vec3', t => {
     });
 
     t.test('with 90deg about Z', t => {
-      result = vec3.transformMat3(out, vec3.new(1, 0, 0), mat3.new(0, 1, 0, -1, 0, 0, 0, 0, 1));
+      result = vec3.transformMat3(out, vec3.create(1, 0, 0), mat3.create(0, 1, 0, -1, 0, 0, 0, 0, 1));
 
       t.equal_v3(out, [0, 1, 0]);
 
@@ -172,10 +172,10 @@ tap.test('vec3', t => {
     });
 
     t.test('with a lookAt normal matrix', t => {
-      let matr = mat4.lookAt(mat4.create(), vec3.new(5, 6, 7), vec3.new(2, 6, 7), vec3.new(0, 1, 0));
+      let matr = mat4.lookAt(mat4.create(), vec3.create(5, 6, 7), vec3.create(2, 6, 7), vec3.create(0, 1, 0));
       let n = mat3.create();
       matr = mat3.transpose(n, mat3.invert(n, mat3.fromMat4(n, matr)));
-      result = vec3.transformMat3(out, vec3.new(1, 0, 0), matr);
+      result = vec3.transformMat3(out, vec3.create(1, 0, 0), matr);
 
       t.equal_v3(out, [0, 0, 1]);
       t.equal(result, out);
@@ -187,7 +187,7 @@ tap.test('vec3', t => {
   });
 
   t.test('create', t => {
-    result = vec3.zero();
+    result = vec3.create(0, 0, 0);
 
     t.equal_v3(result, [0, 0, 0]);
 
@@ -203,7 +203,7 @@ tap.test('vec3', t => {
   });
 
   t.test('new', t => {
-    result = vec3.new(1, 2, 3);
+    result = vec3.create(1, 2, 3);
 
     t.equal_v3(result, [1, 2, 3]);
 
@@ -928,7 +928,7 @@ tap.test('vec3', t => {
     let vecC, r0, r1;
     vec3.set(vecA, 0, 1, 2);
     vec3.set(vecB, 0, 1, 2);
-    vecC = vec3.new(1, 2, 3);
+    vecC = vec3.create(1, 2, 3);
     r0 = vec3.exactEquals(vecA, vecB);
     r1 = vec3.exactEquals(vecA, vecC);
 
@@ -944,8 +944,8 @@ tap.test('vec3', t => {
     let vecC, vecD, r0, r1, r2;
     vec3.set(vecA, 0, 1, 2);
     vec3.set(vecB, 0, 1, 2);
-    vecC = vec3.new(1, 2, 3);
-    vecD = vec3.new(1e-16, 1, 2);
+    vecC = vec3.create(1, 2, 3);
+    vecD = vec3.create(1e-16, 1, 2);
     r0 = vec3.equals(vecA, vecB);
     r1 = vec3.equals(vecA, vecC);
     r2 = vec3.equals(vecA, vecD);

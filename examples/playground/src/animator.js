@@ -34,7 +34,7 @@
        * The character's normalized tranlating velocity.
        * @type {vec2}
        */
-      this._destMoveVelocity = cc.math.vec2.zero();
+      this._destMoveVelocity = cc.math.vec2.create(0, 0);
 
       /**
        * The character's speed.
@@ -161,11 +161,11 @@
       }
 
       // Set the blend result.
-      let pos = cc.math.vec3.zero();
+      let pos = cc.math.vec3.create(0, 0, 0);
       this._entity.getWorldPos(pos);
       if (this._lastPos == null)
         this._lastPos = cc.math.vec3.clone(pos);
-      let moveVelocity3D = cc.math.vec3.zero();
+      let moveVelocity3D = cc.math.vec3.create(0, 0, 0);
       cc.math.vec3.sub(moveVelocity3D, pos, this._lastPos);
       cc.math.vec3.normalize(moveVelocity3D, moveVelocity3D);
       let lastRot = cc.math.quat.create();
@@ -175,7 +175,7 @@
       // then perform the move direction that originally supposed no rotation applied.
       // That is to say the move direction becomes larger.
       cc.math.quat.rotateY(lastRot, lastRot, cc.math.toRadian(-this._lastRotAngle));
-      let faceVelocity3D = cc.math.vec3.zero();
+      let faceVelocity3D = cc.math.vec3.create(0, 0, 0);
       cc.math.vec3.transformQuat(faceVelocity3D, moveVelocity3D, lastRot);
       let blenderVelocity = new cc.math.vec2(faceVelocity3D.x * speed, faceVelocity3D.z * speed);
       this._setBlenderVelocity(blenderVelocity);
@@ -272,6 +272,8 @@
             let mainEntityAnimator = mainEntity.addComp('Animator');
             let mainEntityAnimation = mainEntity.getComp('Animation');
             mainEntityAnimation.enabled = false;
+            
+            let mainGraph = mainEntityAnimator.animationGraph.mainSubgraph;
             let animationGraph = mainEntityAnimator.animationGraph;
 
             let clips = [];
@@ -296,7 +298,7 @@
               let blendTree = new cc.animation.BlendTree(blender1D);
 
               movementMotion1D = new cc.animation.Motion("Movement 1D", blendTree);
-              animationGraph.addMotion(movementMotion1D);
+              mainGraph.addMotion(movementMotion1D);
             }
 
             { // Setup 2D movement motion.
@@ -313,63 +315,51 @@
                 new cc.animation.BlendItem2D(getClip("RunStrafeRight"), new cc.math.vec2(1.869793, -0.0276596)),
               ]);
               let blendTree = new cc.animation.BlendTree(blender2D);
+              movementMotion2D = new cc.animation.Motion("Movement 2D", blendTree);
+              mainGraph.addMotion(movementMotion2D);
 
-              let maskedAnimation = null;
-              {
-                let skeleton = mainEntityAnimator.skeleton;
-                if (skeleton) {
-                  let maskUpperBody = null;
-                  let maskLowwerBody = null;
+              // Setup mask.
+              let skeleton = mainEntityAnimator.skeleton;
+              if (skeleton) {
+                let maskUpperBody = null;
+                let maskLowwerBody = null;
 
-                  maskedAnimation = new cc.animation.MaskedAnimation();
-                  maskedAnimation.add(getClip("Idle"), maskUpperBody);
-                  maskedAnimation.add(blendTree, maskLowwerBody);
-
-                  let maskJointNames = ["LeftGun", "RightShoulder"];
-                  for (let i = 0; i < maskJointNames.length; ++i) {
-                    let maskJointName = maskJointNames[i];
-                    let idx = skeleton.getJointIndex(maskJointName);
-                    if (idx < 0) {
-                      console.log(`$Cannot find joint {maskJointName}.`);
-                    } else {
-                      if (!maskLowwerBody) {
-                        maskLowwerBody = skeleton.createMask();
-                      }
-                      maskLowwerBody.setMaskedRecursive(idx);
+                let maskUpperBodyJointNames = ["Spines"];
+                for (let i = 0; i < maskUpperBodyJointNames.length; ++i) {
+                  let maskJointName = maskUpperBodyJointNames[i];
+                  let idx = skeleton.getJointIndex(maskJointName);
+                  if (idx < 0) {
+                    console.log(`$Cannot find joint {maskJointName}.`);
+                  } else {
+                    if (!maskUpperBody) {
+                      maskUpperBody = skeleton.createMask();
                     }
-                  }
-                  if (maskLowwerBody) {
-                    maskUpperBody = maskLowwerBody.complement();
-                  }
-
-                  if (maskUpperBody && maskLowwerBody) {
-                    maskedAnimation = new cc.animation.MaskedAnimation();
-                    maskedAnimation.add(getClip("Idle"), maskUpperBody);
-                    maskedAnimation.add(blendTree, maskLowwerBody);
+                    maskUpperBody.setMaskedRecursive(idx);
                   }
                 }
-              }
+                if (maskUpperBody) {
+                  maskLowwerBody = maskUpperBody.complement();
+                }
 
-              if (maskedAnimation) {
-                movementMotion2D = new cc.animation.Motion("Movement 2D", maskedAnimation);
+                if (maskUpperBody && maskLowwerBody) {
+                  mainGraph.mask = maskLowwerBody;
+
+                  let upperBodyGraph = animationGraph.createSubgraph("UpperBody");
+                  upperBodyGraph.mask = maskUpperBody;
+                  upperBodyGraph.linearSwitch(getClip("Idle"));
+                }
               }
-              else {
-                movementMotion2D = new cc.animation.Motion("Movement 2D", blendTree);
-              }
-              animationGraph.addMotion(movementMotion2D);
             }
 
             let wanderComponent = mainEntity.addComp("WanderComponent");
             wanderComponent.blender = blender2D;
             wanderComponent.maxRotateTime = getClip("IdleWalk").length;
-            let turnAroundMotion = new cc.animation.Motion("Turn around", getClip("IdleWalk"));
-            animationGraph.addMotion(turnAroundMotion);
 
             let onUse2DMotionChanged = () => {
               if (dobj.use2DMotion)
-                animationGraph.linearSwitch(movementMotion2D);
+                mainGraph.linearSwitch(movementMotion2D);
               else
-                animationGraph.linearSwitch(movementMotion1D);
+                mainGraph.linearSwitch(movementMotion1D);
             };
             charFolder.add(dobj, "use2DMotion", true).name("Use 2D Motion").onChange(onUse2DMotionChanged);
 
@@ -388,7 +378,7 @@
             // Death motion is just a single animation clip.
             let deathMotion = new cc.animation.Motion("Death", getClip("ShootDown"));
             deathMotion.wrapMode = 'once';
-            animationGraph.addMotion(deathMotion);
+            mainGraph.addMotion(deathMotion);
 
             // Setup the transitions between these motions.
             // The "isHealth" parameter with type boolean is used to indicate whether

@@ -13,8 +13,8 @@
     ],
     properties: [
       {}, 
-      { "diffuseColor": color4.new(1, 1, 1, 0.3) },
-      { "diffuseColor": color4.new(1, 1, 1, 0.1) },
+      { "diffuseColor": color4.create(1, 1, 1, 0.3) },
+      { "diffuseColor": color4.create(1, 1, 1, 0.1) },
     ]
   };
   manifest.lights = {
@@ -24,12 +24,12 @@
       "point-light2",
     ],
     pos: [
-      vec3.new(10, 10, 5),
-      vec3.new(-10, 10, -5),
+      vec3.create(10, 10, 5),
+      vec3.create(-10, 10, -5),
     ],
     color: [
-      color3.new(1, 1, 1),
-      color3.new(0.3, 0.3, 0.3),
+      color3.create(1, 1, 1),
+      color3.create(0.3, 0.3, 0.3),
     ],
   };
   manifest.geometries = {
@@ -51,12 +51,12 @@
       cc.primitives.torus(),
     ],
     pos: [
-      vec3.new(0, 0, -1),
-      vec3.new(-4, 0, -1),
-      vec3.new(-2, 3, 1),
-      vec3.new(-2, 0, 4),
-      vec3.new(-2, 1, 1),
-      vec3.new(-4, -1, 2),
+      vec3.create(0, 0, -1),
+      vec3.create(-4, 0, -1),
+      vec3.create(-2, 3, 1),
+      vec3.create(-2, 0, 4),
+      vec3.create(-2, 1, 1),
+      vec3.create(-4, -1, 2),
     ],
   };
 
@@ -94,7 +94,7 @@
     geometries.push(e);
   }
   let bbhints = [];
-  let bbsize = vec3.zero();
+  let bbsize = vec3.create(0, 0, 0);
   for (let i = 0; i < manifest.geometries.num; i++) {
     let e = app.createEntity("bb_" + manifest.geometries.names[i]);
     let g = e.addComp('Model');
@@ -113,13 +113,13 @@
   class RaycastTest extends cc.ScriptComponent {
     constructor() {
       super();
-      this.pos = vec3.zero();
+      this.pos = vec3.create(0, 0, 0);
       this.hitInfo = {};
       this.input = app._input;
       this.canvas = app._canvas;
       this.camera = camera.getComp('Camera')._camera;
       
-      this.center = vec3.new(-2, 1, 1);
+      this.center = vec3.create(-2, 1, 1);
       this.dist = 10; this.height = 4; this.angle = 0;
     }
 

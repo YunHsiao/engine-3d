@@ -4,7 +4,7 @@
 
   let camEnt = app.createEntity('camera');
   vec3.set(camEnt.lpos, 10, 10, 10);
-  camEnt.lookAt(vec3.new(0, 0, 0));
+  camEnt.lookAt(vec3.create(0, 0, 0));
   camEnt.addComp('Camera');
 
   let screen = app.createEntity('screen');
@@ -17,7 +17,7 @@
   let scrollWidgetComp = entity.addComp('Widget');
   scrollWidgetComp.setSize(220, 220);
   let scrollSprite = entity.addComp('Image');
-  scrollSprite.color = color4.new(1, 1, 1, 0.5);
+  scrollSprite.color = color4.create(1, 1, 1, 0.5);
   let scrollView = entity.addComp('ScrollView');
 
   // 200x200
@@ -28,7 +28,7 @@
   maskWidgetComp.setSize(-20, -20);
   maskWidgetComp.setOffset(-10, 10);
   let viewMask = view.addComp('Mask');
-  viewMask.color = color4.new(1, 0, 1, 0.5);
+  viewMask.color = color4.create(1, 0, 1, 0.5);
 
   // 300x400
   let content = app.createEntity('content');
@@ -38,14 +38,14 @@
   contentWidgetComp.setPivot(1, 1);
   contentWidgetComp.setOffset(100, 100);
   let contentSprite = content.addComp('Image');
-  contentSprite.color = color4.new(0.8, 0.8, 0.8, 1);
+  contentSprite.color = color4.create(0.8, 0.8, 0.8, 1);
 
   let temp = app.createEntity('temp');
   temp.setParent(content);
   let tempWidget = temp.addComp('Widget');
   tempWidget.setSize(50, 50);
   let tempSprite = temp.addComp('Image');
-  tempSprite.color = color4.new(1, 1, 0, 1);
+  tempSprite.color = color4.create(1, 1, 0, 1);
 
   // 20x200
   let vScrollBarEnt = app.createEntity('vScrollBar');
@@ -56,7 +56,7 @@
   vScrollWidget.setSize(20, -20);
   vScrollWidget.setOffset(-10, 10);
   let vScrollBarSprite = vScrollBarEnt.addComp('Image');
-  vScrollBarSprite.color = color4.new(1, 1, 1, 1);
+  vScrollBarSprite.color = color4.create(1, 1, 1, 1);
   let vScrollBar = vScrollBarEnt.addComp('ScrollBar');
 
   let vScrollBarArea = app.createEntity('vScrollBarArea');
@@ -71,14 +71,14 @@
   vScrollBarWidgetComp.setAnchors(0, 1, 1, 1);
   vScrollBarWidgetComp.setSize(20, 20);
   let vScrollBarHandleSprite = vScrollBarHandle.addComp('Image');
-  vScrollBarHandleSprite.color = color4.new(0, 1, 1, 1);
+  vScrollBarHandleSprite.color = color4.create(0, 1, 1, 1);
 
   vScrollBar.background = vScrollBarHandleSprite;
   vScrollBar.transition = 'color';
-  vScrollBar.transitionColors.normal = color4.new(0, 1, 1, 1);
-  vScrollBar.transitionColors.highlight = color4.new(1, 1, 0, 1);
-  vScrollBar.transitionColors.pressed = color4.new(0.5, 0.5, 0.5, 1);
-  vScrollBar.transitionColors.disabled = color4.new(0.2, 0.2, 0.2, 1);
+  vScrollBar.transitionColors.normal = color4.create(0, 1, 1, 1);
+  vScrollBar.transitionColors.highlight = color4.create(1, 1, 0, 1);
+  vScrollBar.transitionColors.pressed = color4.create(0.5, 0.5, 0.5, 1);
+  vScrollBar.transitionColors.disabled = color4.create(0.2, 0.2, 0.2, 1);
   vScrollBar._updateState();
 
   vScrollBar.dragArea = screen;
@@ -95,7 +95,7 @@
   hScrollBarWidget.setSize(-20, 20);
   hScrollBarWidget.setOffset(-10, 10);
   let hScrollBarSprite = hScrollBarEnt.addComp('Image');
-  hScrollBarSprite.color = color4.new(1, 1, 1, 1);
+  hScrollBarSprite.color = color4.create(1, 1, 1, 1);
   let hScrollBar = hScrollBarEnt.addComp('ScrollBar');
 
   let hScrollBarArea = app.createEntity('hScrollBarArea');
@@ -110,13 +110,13 @@
   hScrollBarHandleWidget.setAnchors(0, 0, 0, 1);
   hScrollBarHandleWidget.setSize(20, 20);
   let hScrollBarHandleSprite = hScrollBarHandle.addComp('Image');
-  hScrollBarHandleSprite.color = color4.new(0, 1, 1, 1);
+  hScrollBarHandleSprite.color = color4.create(0, 1, 1, 1);
   hScrollBar.background = hScrollBarHandleSprite;
   hScrollBar.transition = 'color';
-  hScrollBar.transitionColors.normal = color4.new(0, 1, 1, 1);
-  hScrollBar.transitionColors.highlight = color4.new(1, 1, 0, 1);
-  hScrollBar.transitionColors.pressed = color4.new(0.5, 0.5, 0.5, 1);
-  hScrollBar.transitionColors.disabled = color4.new(0.2, 0.2, 0.2, 1);
+  hScrollBar.transitionColors.normal = color4.create(0, 1, 1, 1);
+  hScrollBar.transitionColors.highlight = color4.create(1, 1, 0, 1);
+  hScrollBar.transitionColors.pressed = color4.create(0.5, 0.5, 0.5, 1);
+  hScrollBar.transitionColors.disabled = color4.create(0.2, 0.2, 0.2, 1);
   hScrollBar._updateState();
 
   hScrollBar.dragArea = screen;

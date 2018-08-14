@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>spec-script-sprite</title>
+  <title>spec-script-mesh</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <style>
@@ -36,7 +36,7 @@
 
     let camEnt = app.createEntity('camera');
     vec3.set(camEnt.lpos, 10, 10, 10);
-    camEnt.lookAt(vec3.new(0, 0, 0));
+    camEnt.lookAt(vec3.create(0, 0, 0));
     camEnt.addComp('Camera');
 
     let screen = app.createEntity('screen');

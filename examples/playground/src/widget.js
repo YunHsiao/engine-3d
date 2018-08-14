@@ -21,17 +21,17 @@
   dgui.add(dobj, 'preset');
 
   function _debugUI(root) {
-    let color = color3.new(0.5, 0.5, 0.0);
-    let a = vec3.zero();
-    let b = vec3.zero();
-    let c = vec3.zero();
-    let d = vec3.zero();
-    let wpos = vec3.zero();
+    let color = color3.create(0.5, 0.5, 0.0);
+    let a = vec3.create(0, 0, 0);
+    let b = vec3.create(0, 0, 0);
+    let c = vec3.create(0, 0, 0);
+    let d = vec3.create(0, 0, 0);
+    let wpos = vec3.create(0, 0, 0);
     let wrot = quat.create();
 
     let curHover = null;
     let curMousedown = null;
-    let curLineColor = color3.new(0.5, 0.5, 0.0);
+    let curLineColor = color3.create(0.5, 0.5, 0.0);
 
     function _debugEvent(ent) {
       ent.on('mouseenter', () => {
@@ -62,19 +62,19 @@
           color3.set(curLineColor, 0, 1, 0);
 
           if (widget.color) {
-            widget.color = color4.new(0, 1, 0, 1);
+            widget.color = color4.create(0, 1, 0, 1);
           }
         } else if (ent === curHover) {
           color3.set(curLineColor, 1, 0, 0);
 
           if (widget) {
-            widget.color = color4.new(1, 0, 0, 1);
+            widget.color = color4.create(1, 0, 0, 1);
           }
         } else {
           color3.copy(curLineColor, color);
 
           if (widget) {
-            widget.color = color4.new(1, 1, 1, 1);
+            widget.color = color4.create(1, 1, 1, 1);
           }
         }
 
@@ -159,7 +159,7 @@
     // create camera
     let camEnt = app.createEntity('camera');
     vec3.set(camEnt.lpos, 10, 10, 10);
-    camEnt.lookAt(vec3.new(0, 0, 0));
+    camEnt.lookAt(vec3.create(0, 0, 0));
     camEnt.addComp('Camera');
 
     // create screen

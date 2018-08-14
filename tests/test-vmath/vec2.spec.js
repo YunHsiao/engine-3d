@@ -5,22 +5,22 @@ tap.test('vec2', t => {
   let out, vecA, vecB, result;
 
   t.beforeEach(done => {
-    vecA = vec2.new(1,2);
-    vecB = vec2.new(3,4);
-    out = vec2.new(0,0);
+    vecA = vec2.create(1,2);
+    vecB = vec2.create(3,4);
+    out = vec2.create(0,0);
 
     done();
   });
 
   t.test('create', t => {
-    result = vec2.zero();
+    result = vec2.create(0, 0);
     t.equal_v2(result, [0, 0]);
 
     t.end();
   });
 
   t.test('new', t => {
-    result = vec2.new(1, 2);
+    result = vec2.create(1, 2);
     t.equal_v2(result, [1, 2]);
 
     t.end();
@@ -756,7 +756,7 @@ tap.test('vec2', t => {
   t.test('exactEquals', t => {
     vec2.set(vecA, 0, 1);
     vec2.set(vecB, 0, 1);
-    let vecC = vec2.new(0, 1);
+    let vecC = vec2.create(0, 1);
 
     let r0 = vec2.exactEquals(vecA, vecB);
     let r1 = vec2.exactEquals(vecA, vecC);
@@ -772,8 +772,8 @@ tap.test('vec2', t => {
   t.test('equals', t => {
     vec2.set(vecA, 0, 1);
     vec2.set(vecB, 0, 1);
-    let vecC = vec2.new(1, 2);
-    let vecD = vec2.new(1e-16, 1);
+    let vecC = vec2.create(1, 2);
+    let vecD = vec2.create(1e-16, 1);
     let r0 = vec2.equals(vecA, vecB);
     let r1 = vec2.equals(vecA, vecC);
     let r2 = vec2.equals(vecA, vecD);

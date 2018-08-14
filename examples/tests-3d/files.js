@@ -1,6 +1,6 @@
 window.files = {
 	"animation": [
-		"spec-animation"
+		"spec-skeleton"
 	],
   "audio": [
     "spec-audio"

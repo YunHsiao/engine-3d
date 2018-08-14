@@ -5,9 +5,9 @@ tap.test('color4', t => {
   let out, colorA, colorB, result;
 
   t.beforeEach(done => {
-    colorA = color4.new(1, 2, 3, 4);
-    colorB = color4.new(5, 6, 7, 8);
-    out = color4.new(0, 0, 0, 0);
+    colorA = color4.create(1, 2, 3, 4);
+    colorB = color4.create(5, 6, 7, 8);
+    out = color4.create(0, 0, 0, 0);
 
     done();
   });
@@ -29,7 +29,7 @@ tap.test('color4', t => {
   });
 
   t.test('new', t => {
-    result = color4.new(1, 2, 3, 4);
+    result = color4.create(1, 2, 3, 4);
 
     t.equal_c4(result, [1, 2, 3, 4]);
 
@@ -280,7 +280,7 @@ tap.test('color4', t => {
   t.test('exactEquals', t => {
     color4.set(colorA, 0, 1, 2, 3);
     color4.set(colorB, 0, 1, 2, 3);
-    let colorC = color4.new(1, 2, 3, 4);
+    let colorC = color4.create(1, 2, 3, 4);
     let r0 = color4.exactEquals(colorA, colorB);
     let r1 = color4.exactEquals(colorA, colorC);
 
@@ -296,8 +296,8 @@ tap.test('color4', t => {
     color4.set(colorA, 0, 1, 2, 3);
     color4.set(colorB, 0, 1, 2, 3);
 
-    let colorC = color4.new(1, 2, 3, 4);
-    let vecD = color4.new(1e-16, 1, 2, 3);
+    let colorC = color4.create(1, 2, 3, 4);
+    let vecD = color4.create(1e-16, 1, 2, 3);
     let r0 = color4.equals(colorA, colorB);
     let r1 = color4.equals(colorA, colorC);
     let r2 = color4.equals(colorA, vecD);

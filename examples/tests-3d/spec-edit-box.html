@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>spec-script-simple</title>
+  <title>spec-edit-box</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <style>
@@ -28,19 +28,15 @@
 </head>
 
 <body class="fit">
-  <canvas id="canvas" tabindex="-1" class="fit"></canvas>
+  <div id="view" class="view">
+    <canvas id="canvas" tabindex="-1" class="fit"></canvas>
+  </div>
   <script src="../../dist/engine.dev.js"></script>
   <script src="./loadScene.js"></script>
   <script>
     // init app
     let canvas = document.getElementById('canvas');
-    let view = document.createElement('div');
-    view.id = 'view';
-    view.className = 'view';
-    canvas.parentNode.insertBefore(view, canvas);
     var app = new window.cc.App(canvas);
-
-    view.appendChild(canvas);
     app.resize();
 
     window.load('../assets/out', 'spec-edit-box');

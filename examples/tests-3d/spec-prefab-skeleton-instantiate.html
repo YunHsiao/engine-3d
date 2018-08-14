@@ -28,7 +28,7 @@
   <script src="./loadScene.js"></script>
   <script>
     // init app
-    const { vec3 } = window.cc.math;
+    const { vec3,quat } = window.cc.math;
     var app = new window.cc.App(document.getElementById('canvas'));
 
     app.resize();
@@ -40,10 +40,13 @@
 
       awake() {
         this._skeleton = this._test.instantiate();
-        this._skeleton.lscale = vec3.new(5, 5, 5);
+        this._skeleton.lscale = vec3.create(5, 5, 5);
         // todo: component active activation
         this._skeleton.active = false;
         this._skeleton.active = true;
+
+        let lrot = this._skeleton.lrot;
+        quat.rotateY(lrot, lrot, (2 * Math.PI * 90) / 360);
         let animComp = this._skeleton.getComp('Animation');
         animComp.play('Attack');
       }
