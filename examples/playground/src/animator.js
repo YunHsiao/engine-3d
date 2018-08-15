@@ -319,26 +319,31 @@
               mainGraph.addMotion(movementMotion2D);
 
               // Setup mask.
-              let skeleton = mainEntityAnimator.skeleton;
-              if (skeleton) {
+              let skeleton = null;
+              let skinningModels = mainEntity.getCompsInChildren('SkinningModel');
+              if (skinningModels.length > 0) {
+                skeleton = skinningModels[0].skeleton;
+              }
+              if (!skeleton) {
+                console.warn(`This entity has no skeleton.`);
+              } else {
                 let maskUpperBody = null;
                 let maskLowwerBody = null;
 
-                let maskUpperBodyJointNames = ["Spines"];
-                for (let i = 0; i < maskUpperBodyJointNames.length; ++i) {
-                  let maskJointName = maskUpperBodyJointNames[i];
-                  let idx = skeleton.getJointIndex(maskJointName);
+                ["Spine"].forEach((maskLowwerBodyJoint) => {
+                  let idx = skeleton.getJointIndex(maskLowwerBodyJoint);
                   if (idx < 0) {
-                    console.log(`$Cannot find joint {maskJointName}.`);
+                    console.log(`$Cannot find joint {$maskLowwerBodyJoint}.`);
                   } else {
-                    if (!maskUpperBody) {
-                      maskUpperBody = skeleton.createMask();
+                    if (!maskLowwerBody) {
+                      maskLowwerBody = skeleton.createMask();
                     }
-                    maskUpperBody.setMaskedRecursive(idx);
+                    maskLowwerBody.setMaskedRecursive(idx);
                   }
-                }
-                if (maskUpperBody) {
-                  maskLowwerBody = maskUpperBody.complement();
+                });
+
+                if (maskLowwerBody) {
+                  maskUpperBody = maskLowwerBody.complement();
                 }
 
                 if (maskUpperBody && maskLowwerBody) {
@@ -346,7 +351,7 @@
 
                   let upperBodyGraph = animationGraph.createSubgraph("UpperBody");
                   upperBodyGraph.mask = maskUpperBody;
-                  upperBodyGraph.linearSwitch(getClip("Idle"));
+                  upperBodyGraph.linearSwitch(new cc.animation.Motion("Idle", getClip("Idle")));
                 }
               }
             }
