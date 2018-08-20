@@ -52,8 +52,8 @@
         let col = ent.addComp('Collider', { type: 'sphere' });
         col.body.setCollisionFilter(group, mask);
         ent.on('collide', (event) => {
-          // event.body is always 'this entity'
-          let ent = event.body._entity;
+          // event.target is always 'this entity'
+          let ent = event.target._entity;
           if (ent.color.a > color.a) return;
           ent.color.a = 1;
           vec3.set(ent.velocity, 0, 0, 0);

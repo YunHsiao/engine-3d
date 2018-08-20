@@ -20,7 +20,7 @@
     modelComp.mesh = mesh;
     modelComp.material = m;
     models.push(modelComp);
-    let col = ent.addComp('Collider', {
+    ent.addComp('Collider', {
       size: [1, 1, 1],
       center: [0, mesh === quad ? -0.5 : 0, 0],
       isTrigger: isTrigger
@@ -32,8 +32,6 @@
     vec3.set(ent.lpos, x, y, z);
     quat.fromEuler(ent.lrot, yaw, pitch, roll);
     vec3.set(ent.lscale, sx, sy, sz);
-    // after transform changed, static objects must do a manual update
-    col.body.manualUpdate();
     return ent;
   };
   // walls               positions       rotations       scales           colors
@@ -114,9 +112,9 @@
     }
 
     tick() {
-      // do nothing if no inputs or already ended
-      if (this.ended || !this.input._pointerLocked
-        && !this.input.touchCount && !this.input._keys.length) return;
+      // do nothing if no inputs
+      if (!this.input._pointerLocked && !this.input.touchCount
+        && !this.input._keys.length) return;
       // update axis
       scaleToXZ(vec3.transformQuat(this.forward, this.id_forward, this.rot), this.speed);
       scaleToXZ(vec3.transformQuat(this.right, this.id_right, this.rot), this.speed);

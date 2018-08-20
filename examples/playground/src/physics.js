@@ -1,25 +1,8 @@
 (() => {
   const { cc, app, dgui } = window;
   const { Material } = cc;
-  const { vec3, quat, color4, randomRange, clamp } = cc.math;
+  const { vec3, quat, color4, randomRange } = cc.math;
   const { box, sphere } = cc.primitives;
-
-  // controllers
-  let dobj = {
-    gravityX: 0,
-    gravityY: -20,
-    gravityZ: 0,
-    pauseSpinning: false
-  };
-  let updateGravity = function() {
-    vec3.set(app.system('physics').world.gravity, dobj.gravityX, dobj.gravityY, dobj.gravityZ);
-  };
-  updateGravity();
-  dgui.remember(dobj);
-  dgui.add(dobj, 'gravityX', -20, 20).onFinishChange(updateGravity);
-  dgui.add(dobj, 'gravityY', -20, 20).onFinishChange(updateGravity);
-  dgui.add(dobj, 'gravityZ', -20, 20).onFinishChange(updateGravity);
-  dgui.add(dobj, 'pauseSpinning');
 
   // geometries
   let box_mesh = cc.utils.createMesh(app, box());
@@ -40,7 +23,6 @@
     modelComp.mesh = isBox ? box_mesh : sphere_mesh;
     modelComp.material = m;
     let col = ent.addComp('Collider', { type: isBox ? 'box' : 'sphere', mass: 1 });
-    col.body.setUpdateMode(false, true);
     models.push(modelComp); colliders.push(col); colors.push(c);
   }
   let radius = 12.5;
@@ -55,12 +37,13 @@
   modelComp.material = m;
   let col = ground.addComp('Collider');
   col.size = size;
-  col.body.setUpdateMode(false, true);
+  // keepping dataflow consistant for all object yield more natural result
+  col.body._setDataflowPushing();
 
   // camera
   let camEnt = app.createEntity('camera');
-  camEnt.lpos = vec3.create(20, 30, 40);
-  camEnt.lookAt(vec3.create(0, 0, 0));
+  camEnt.lpos = vec3.create(25, 15, 25);
+  camEnt.lookAt(vec3.create(0, 5, 0));
   camEnt.addComp('Camera');
 
   // light
@@ -68,7 +51,6 @@
   quat.fromEuler(light.lrot, -80, 20, -40);
   light.addComp('Light');
 
-  let speed = 30, interval = 900, offset = 180 / speed;
   let static_color = color4.create(0.5, 0.5, 0.5, 1);
   app.on('tick', () => {
     for (let i = 0; i < models.length; i++) {
@@ -83,10 +65,57 @@
       color4.lerp(colors[i], static_color, colliders[i].type === 'box' ?
         box_color : sphere_color, speed);
     }
-    // spin the ground once in a while
-    if (dobj.pauseSpinning) return;
-    let time = (app.totalTime + offset) * speed;
-    quat.fromEuler(col.body.quaternion, 0, 0, (Math.floor(time / interval) % 2 ? 1 : -1) * 
-      clamp(time % interval, 0, 180));
   });
+
+  // controllers
+  let dobj = {
+    gravityX: 0,
+    gravityY: -20,
+    gravityZ: 0,
+    pauseSpinning: false,
+    angle: 180
+  };
+  let updateGravity = function() {
+    vec3.set(app.system('physics').world.gravity, dobj.gravityX, dobj.gravityY, dobj.gravityZ);
+  };
+  updateGravity();
+  dgui.remember(dobj);
+  dgui.add(dobj, 'gravityX', -20, 20).onFinishChange(updateGravity);
+  dgui.add(dobj, 'gravityY', -20, 20).onFinishChange(updateGravity);
+  dgui.add(dobj, 'gravityZ', -20, 20).onFinishChange(updateGravity);
+  let angleControl = dgui.add(dobj, 'angle', 0, 180).listen();
+  let setActive = () => {
+    angleControl.domElement.style.pointerEvents = dobj.pauseSpinning ? "all" : "none";
+    angleControl.domElement.style.opacity = dobj.pauseSpinning ? 1.0 : 0.3;
+  };
+  setActive();
+  dgui.add(dobj, 'pauseSpinning').onFinishChange(setActive);
+  app.on('tick', () => { // user controller callback
+    if (!dobj.pauseSpinning) return;
+    quat.fromEuler(rot, 0, 0, dobj.angle);
+  });
+  // spin the ground once in a while
+  let duration = 5, interval = 20, startTime = app.totalTime, back = false;
+  let rot = col.body._dataflow === 'pushing' ? col.body.quaternion : ground.lrot;
+  let sineLerp = (b, e, t) => {
+    return b + (e - b) * (Math.sin((t - 0.5) * Math.PI) + 1) * 0.5;
+  };
+  let spinning = () => {
+    if (dobj.pauseSpinning) return;
+    dobj.angle = sineLerp(back ? 0 : 180, back ? 180 : 0,
+      (app.totalTime - startTime) / duration);
+    quat.fromEuler(rot, 0, 0, dobj.angle);
+  };
+  let begin = () => {
+    startTime = app.totalTime;
+    app.on('tick', spinning);
+  };
+  setTimeout(() => {
+    begin();
+    setInterval(begin, (interval + duration) * 1000);
+  }, interval * 1000);
+  setInterval(() => {
+    app.off('tick', spinning);
+    back = !back;
+  }, (interval + duration) * 1000);
 })();
