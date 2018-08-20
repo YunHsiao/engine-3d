@@ -63,9 +63,8 @@
         background: #474747;
       }
     </style>
-    <script src="../node_modules/lstats.js/dist/lstats.dev.js"></script>
-    <script src="../node_modules/memop/dist/memop.dev.js"></script>
-    <script src="../dist/input.dev.js"></script>
+    <script src="../../../node_modules/stats.js/build/stats.min.js"></script>
+    <script src="../../../dist/engine.dev.js"></script>
   </head>
 
   <body>
@@ -98,7 +97,10 @@
     <script>
       'use strict';
 
-      let memStats = new window.LStats(document.body, ['mb']);
+      // let memStats = new LStats(document.body, ['mb']);
+      let memStats = new Stats();
+      memStats.showPanel(2);
+      document.body.appendChild(memStats.dom);
 
       ['normal', 'mask', 'grab', 'lock'].forEach(id => {
         let el = document.getElementById(id);
@@ -111,7 +113,7 @@
           opts.lock = true;
         }
 
-        let input = new window.Input(el, opts);
+        let input = new cc.Input(el, opts);
         if (id === 'grab') {
           input.grabMouse(true);
         }
@@ -124,7 +126,7 @@
           hline.style.top = `${input.mouseY}px`;
 
           input.reset();
-          memStats.tick();
+          memStats.update();
 
           requestAnimationFrame(animate);
         }

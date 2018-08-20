@@ -58,9 +58,8 @@
     }
   </style>
   <!-- <script src="../node_modules/vconsole/dist/vconsole.min.js"></script> -->
-  <script src="../node_modules/lstats.js/dist/lstats.dev.js"></script>
-  <script src="../node_modules/memop/dist/memop.dev.js"></script>
-  <script src="../dist/input.dev.js"></script>
+  <script src="../../../dist/engine.dev.js"></script>
+  <script src="../../../node_modules/stats.js/build/stats.min.js"></script>
   <!-- <script>
     var vConsole = new VConsole();
   </script> -->
@@ -73,9 +72,12 @@
   </div>
   <script>
     'use strict';
-    let memStats = new window.LStats(document.body, ['mb']);
+    // let memStats = new LStats(document.body, ['mb']);
+    let memStats = new Stats();
+    memStats.showPanel(2);
+    document.body.appendChild(memStats.dom);
 
-    let input = new window.Input(document.getElementById('touchInput'));
+    let input = new cc.Input(document.getElementById('touchInput'));
     let info = document.getElementById('touchPos');
 
     function animate() {
@@ -94,7 +96,7 @@
 
       // end of the frame
       input.reset();
-      memStats.tick();
+      memStats.update();
 
       requestAnimationFrame(animate);
     }
