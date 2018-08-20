@@ -117,7 +117,7 @@
   });
 
   let camEnt = app.createEntity('camera');
-  vec3.set(camEnt.lpos, 0, 10, 80);
+  camEnt.setLocalPos(0, 10, 80);
   camEnt.lookAt(vec3.create(0, 10, 0));
   camEnt.addComp('Camera');
 
@@ -140,7 +140,7 @@
   // burst.repeatInterval = 3.0;
   // psys.addBurst(burst);
 
-  vec3.set(ent.lpos, 0, 0, 0);
+  ent.setLocalPos(0, 0, 0);
   psys.renderer.material = particleMaterial;
   psys.loop = true;
   psys.duration = 10;
@@ -165,7 +165,7 @@
 
   app.on('tick', () => {
     // do something here...
-    // quat.rotateY(ent.lrot, ent.lrot, app.deltaTime);
-    // vec3.set(ent.lpos, ent.lpos.x + app.deltaTime * 2.0, ent.lpos.y, ent.lpos.z);
+    // ent.setLocalRotFromEuler(0, cc.math.toDegree(app.totalTime), 0);
+    // ent.setLocalPos(ent._lpos.x + app.deltaTime * 2.0, ent._lpos.y, ent._lpos.z);
   });
 })();

@@ -1,6 +1,6 @@
 (() => {
   const { app, cc, dgui } = window;
-  const { vec3, color4, quat, randomRange } = cc.math;
+  const { vec3, color4, randomRange } = cc.math;
 
   let dobj = {
     maxObj: 100,
@@ -22,17 +22,17 @@
     if (delta > 0) {
       for (let i = 0; i < delta; ++i) {
         let ent = app.createEntity(`node_${i}`);
-        vec3.set(ent.lpos,
+        ent.setLocalPos(
           randomRange(-50, 50),
           randomRange(-10, 10),
           randomRange(-50, 50)
         );
-        quat.fromEuler(ent.lrot,
+        ent.setLocalRotFromEuler(
           randomRange(0, 360),
           randomRange(0, 360),
           randomRange(0, 360)
         );
-        vec3.set(ent.lscale,
+        ent.setLocalScale(
           randomRange(1, 5),
           randomRange(1, 5),
           randomRange(1, 5)
@@ -88,7 +88,7 @@
 
   // create camera
   let camEnt = app.createEntity('camera');
-  vec3.set(camEnt.lpos, 10, 10, 10);
+  camEnt.setLocalPos(10, 10, 10);
   camEnt.lookAt(vec3.create(0, 0, 0));
   camEnt.addComp('Camera');
 

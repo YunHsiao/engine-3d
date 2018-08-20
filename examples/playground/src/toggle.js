@@ -3,7 +3,7 @@
   const { vec3, color3, color4, quat } = cc.math;
 
   let camEnt = app.createEntity('camera');
-  vec3.set(camEnt.lpos, 10, 10, 10);
+  camEnt.setLocalPos(10, 10, 10);
   camEnt.lookAt(vec3.create(0, 0, 0));
   camEnt.addComp('Camera');
 

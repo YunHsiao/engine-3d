@@ -49,7 +49,7 @@
 
   function createBunny () {
     let entity = app.createEntity(`bunny-${bunnyCounts}`);
-    quat.fromEuler(entity.lrot, 0, 0, Math.random() * 90 - 45);
+    entity.setLocalRotFromEuler(0, 0, Math.random() * 90 - 45);
     entity.setParent(screen);
 
     let bunny = entity.addComp('Bunny');
@@ -71,7 +71,7 @@
 
   // create camera
   let camEnt = app.createEntity('camera');
-  vec3.set(camEnt.lpos, 10, 10, 10);
+  camEnt.setLocalPos(10, 10, 10);
   camEnt.lookAt(vec3.create(0, 0, 0));
   camEnt.addComp('Camera');
 

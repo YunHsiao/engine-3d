@@ -14,6 +14,7 @@
     return Math.abs(v.x) > border || Math.abs(v.y) > border || Math.abs(v.z) > border;
   };
 
+  let v3 = vec3.create();
   // encapsulate an interesting emitter, emitted particles will
   // annihilate after collision, if satisfying filter condition
   class Emitter {
@@ -35,7 +36,7 @@
       m.setProperty('diffuseColor', color);
       modelComp.mesh = cc.utils.createMesh(this.app, capsule(1));
       modelComp.material = m;
-      emitter.lpos = pos;
+      emitter.setLocalPos(pos);
       // particles
       let sphere_mesh = cc.utils.createMesh(this.app, sphere());
       for (let i = 0; i < poolSize; i++) {
@@ -67,8 +68,9 @@
     tick() {
       for (let i = 0; i < this.livepool.length; i++) {
         let ent = this.livepool.data[i];
-        vec3.add(ent.lpos, ent.lpos, ent.velocity);
-        if (outOfBounds(ent.lpos)) this.reap(ent);
+        vec3.add(v3, ent._lpos, ent.velocity);
+        ent.setLocalPos(v3);
+        if (outOfBounds(v3)) this.reap(ent);
       }
       if (!this.deadpool.length) return;
       this.resurrect();
@@ -89,7 +91,7 @@
         Math.cos(phi) * speed, Math.sin(theta) * Math.sin(phi) * speed);
       ent.color.a = this.color.a;
       ent.getComp('Collider').body.setCollisionFilter(this.group, this.mask);
-      vec3.copy(ent.lpos, this.pos);
+      ent.setLocalPos(this.pos);
       this.livepool.push(ent);
       ent.activate();
     }
@@ -97,13 +99,13 @@
 
   // camera
   let camEnt = app.createEntity('camera');
-  camEnt.lpos = vec3.create(-20, 7, 12);
+  camEnt.setLocalPos(-20, 7, 12);
   camEnt.lookAt(vec3.create(0, 0, 0));
   camEnt.addComp('Camera');
 
   // light
   let light = app.createEntity('light');
-  quat.fromEuler(light.lrot, -80, 20, -40);
+  light.setLocalRotFromEuler(-80, 20, -40);
   light.addComp('Light');
 
   // set the stage

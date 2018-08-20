@@ -1,7 +1,7 @@
 (() => {
   const { cc, app, dgui } = window;
   const { Material } = cc;
-  const { vec2, vec3, quat, color4, clamp } = cc.math;
+  const { vec2, vec3, color4, clamp } = cc.math;
   const { plane, box } = cc.primitives;
   
   // geometries
@@ -29,9 +29,9 @@
       vec3.set(camCol.body.position, tx, ty, tz);
       vec3.set(camEnt.getComp('FPCamera').euler, tyaw, tpitch, troll);
     });
-    vec3.set(ent.lpos, x, y, z);
-    quat.fromEuler(ent.lrot, yaw, pitch, roll);
-    vec3.set(ent.lscale, sx, sy, sz);
+    ent.setLocalPos(x, y, z);
+    ent.setLocalScale(sx, sy, sz);
+    ent.setLocalRotFromEuler(yaw, pitch, roll);
     return ent;
   };
   // walls               positions       rotations       scales           colors
@@ -101,7 +101,7 @@
     start() {
       let rigidbody = this._entity.getComp('Collider').body;
       this.pos = rigidbody.position;
-      this.rot = this._entity.lrot;
+      this.rot = this._entity._lrot;
       this.canvas = this._app._canvas;
       this.input = this._app._input;
       this.input._lock = cc.Input.LOCK_ALWAYS;
@@ -125,7 +125,7 @@
       if (this.input._keys.length) this.tickKeyboard();
       // apply to transform
       vec3.set(this.euler, clamp(this.euler.x + this.rotOff.x, -90, 90), this.euler.y + this.rotOff.y, 0);
-      quat.fromEuler(this.rot, this.euler.x, this.euler.y, this.euler.z);
+      this._entity.setLocalRotFromEuler(this.euler.x, this.euler.y, this.euler.z);
       vec3.add(this.pos, this.pos, this.posOff);
     }
 

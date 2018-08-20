@@ -13,8 +13,8 @@
   for (let i = 0; i < 70; i++) {
     let isBox = Math.random() < 0.5;
     let ent = app.createEntity((isBox ? 'box_' : 'sphere_') + i);
-    vec3.set(ent.lpos, randomRange(-2, 2), 3 + i * 5, randomRange(-2, 2));
-    quat.fromEuler(ent.lrot, randomRange(0, 180), randomRange(0, 180), randomRange(0, 180));
+    ent.setLocalPos(randomRange(-2, 2), 3 + i * 5, randomRange(-2, 2));
+    ent.setLocalRotFromEuler(randomRange(0, 180), randomRange(0, 180), randomRange(0, 180));
     let modelComp = ent.addComp('Model');
     let m = new Material();
     m.effect = app.assets.get('builtin-effect-phong');
@@ -28,7 +28,7 @@
   let radius = 12.5;
   let size = vec3.create(radius * 2, 0.2, radius * 2);
   let ground = app.createEntity('ground');
-  ground.lpos = vec3.create(0, 1, 0);
+  ground.setLocalPos(0, 1, 0);
   let modelComp = ground.addComp('Model');
   let m = new Material();
   m.effect = app.assets.get('builtin-effect-phong');
@@ -42,13 +42,13 @@
 
   // camera
   let camEnt = app.createEntity('camera');
-  camEnt.lpos = vec3.create(25, 15, 25);
+  camEnt.setLocalPos(25, 15, 25);
   camEnt.lookAt(vec3.create(0, 5, 0));
   camEnt.addComp('Camera');
 
   // light
   let light = app.createEntity('light');
-  quat.fromEuler(light.lrot, -80, 20, -40);
+  light.setLocalRotFromEuler(-80, 20, -40);
   light.addComp('Light');
 
   let static_color = color4.create(0.5, 0.5, 0.5, 1);
@@ -78,6 +78,11 @@
   let updateGravity = function() {
     vec3.set(app.system('physics').world.gravity, dobj.gravityX, dobj.gravityY, dobj.gravityZ);
   };
+  let setGroundRotation = col.body._dataflow === 'pushing' ? function(x, y, z) {
+    quat.fromEuler(col.body.quaternion, x, y, z);
+  } : function(x, y, z) {
+    ground.setLocalRotFromEuler(x, y, z);
+  };
   updateGravity();
   dgui.remember(dobj);
   dgui.add(dobj, 'gravityX', -20, 20).onFinishChange(updateGravity);
@@ -92,11 +97,10 @@
   dgui.add(dobj, 'pauseSpinning').onFinishChange(setActive);
   app.on('tick', () => { // user controller callback
     if (!dobj.pauseSpinning) return;
-    quat.fromEuler(rot, 0, 0, dobj.angle);
+    setGroundRotation(0, 0, dobj.angle);
   });
   // spin the ground once in a while
   let duration = 5, interval = 20, startTime = app.totalTime, back = false;
-  let rot = col.body._dataflow === 'pushing' ? col.body.quaternion : ground.lrot;
   let sineLerp = (b, e, t) => {
     return b + (e - b) * (Math.sin((t - 0.5) * Math.PI) + 1) * 0.5;
   };
@@ -104,7 +108,7 @@
     if (dobj.pauseSpinning) return;
     dobj.angle = sineLerp(back ? 0 : 180, back ? 180 : 0,
       (app.totalTime - startTime) / duration);
-    quat.fromEuler(rot, 0, 0, dobj.angle);
+    setGroundRotation(0, 0, dobj.angle);
   };
   let begin = () => {
     startTime = app.totalTime;

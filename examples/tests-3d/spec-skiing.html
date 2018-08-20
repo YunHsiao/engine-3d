@@ -37,14 +37,15 @@
       vec3.set(app.system('physics').world.gravity, 0, -50, -20); // gravity & forward
       let player = app.find('player');
       let cam = app.find('Main Camera');
-      let spawn = vec3.clone(player.lpos);
+      let spawn = player.getLocalPos();
       let cam_offset = vec3.create(0, 0, 0);
-      vec3.sub(cam_offset, cam.lpos, player.lpos);
+      vec3.sub(cam_offset, cam._lpos, player._lpos);
       let col = player.getComp('Collider');
       col.freezeRotation = true;
       app.on('tick', () => {
-        vec3.add(cam.lpos, player.lpos, cam_offset); // camera follows player
-        if (player.lpos.y < -25) { // respawn
+        vec3.add(cam._lpos, player._lpos, cam_offset); // camera follows player
+        cam.setLocalPos(cam._lpos);
+        if (player._lpos.y < -25) { // respawn
           vec3.copy(col.body.position, spawn);
           vec3.set(col.body.velocity, 0, 0, 0);
         }
