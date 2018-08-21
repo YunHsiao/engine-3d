@@ -53,7 +53,7 @@
 
       let t1 = 17, off2 = 5, t2 = 15;
       /* discrete callbacks *
-      ent.once('AudioSource:started', () => {
+      source.clip.once('started', () => {
         setTimeout(function(){ source.volume = 0.55; }, t1 * 500);
         setTimeout(function(){ source.volume = 0.1; }, t1 * 1000);
 
@@ -72,7 +72,7 @@
       let animation2 = () => {
         source2.volume = sineLerp(0.5, 1, (app.totalTime - startTime - off2) / t2);
       };
-      ent.once('AudioSource:started', () => {
+      source.clip.once('started', () => {
         // animate audio 1
         startTime = app.totalTime;
         setActive(volumes[0], false);
