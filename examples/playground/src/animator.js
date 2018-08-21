@@ -154,7 +154,7 @@
       }
       else { // Update character's position.
         this._moveTime -= deltaTimeSec;
-        let dmove = speed * deltaTimeSec;
+        let dmove = speed * 0.8 * deltaTimeSec;
         let realdmove = dmove;
         let offsetVelocity = new cc.math.vec3(this._destMoveVelocity.x, 0, this._destMoveVelocity.y);
         cc.math.vec3.scaleAndAdd(this._entity.lpos, this._entity.lpos, offsetVelocity, realdmove);
@@ -271,6 +271,9 @@
             let mainEntity = app.find(dobj.entityPath);
             let mainEntityAnimator = mainEntity.addComp('Animator');
             let mainEntityAnimation = mainEntity.getComp('Animation');
+            mainEntityAnimation.enabled = false;
+            
+            let mainGraph = mainEntityAnimator.animationGraph.mainLayer;
             let animationGraph = mainEntityAnimator.animationGraph;
 
             let clips = [];
@@ -295,7 +298,7 @@
               let blendTree = new cc.animation.BlendTree(blender1D);
 
               movementMotion1D = new cc.animation.Motion("Movement 1D", blendTree);
-              animationGraph.addMotion(movementMotion1D);
+              mainGraph.addMotion(movementMotion1D);
             }
 
             { // Setup 2D movement motion.
@@ -312,22 +315,56 @@
                 new cc.animation.BlendItem2D(getClip("RunStrafeRight"), new cc.math.vec2(1.869793, -0.0276596)),
               ]);
               let blendTree = new cc.animation.BlendTree(blender2D);
-
               movementMotion2D = new cc.animation.Motion("Movement 2D", blendTree);
-              animationGraph.addMotion(movementMotion2D);
+              mainGraph.addMotion(movementMotion2D);
+
+              // Setup mask.
+              let skeleton = null;
+              let skinningModels = mainEntity.getCompsInChildren('SkinningModel');
+              if (skinningModels.length > 0) {
+                skeleton = skinningModels[0].skeleton;
+              }
+              if (!skeleton) {
+                console.warn(`This entity has no skeleton.`);
+              } else {
+                let maskUpperBody = null;
+                let maskLowwerBody = null;
+
+                ["Spine"].forEach((maskLowwerBodyJoint) => {
+                  let idx = skeleton.getJointIndex(maskLowwerBodyJoint);
+                  if (idx < 0) {
+                    console.log(`$Cannot find joint {$maskLowwerBodyJoint}.`);
+                  } else {
+                    if (!maskLowwerBody) {
+                      maskLowwerBody = skeleton.createMask();
+                    }
+                    maskLowwerBody.setMaskedRecursive(idx);
+                  }
+                });
+
+                if (maskLowwerBody) {
+                  maskUpperBody = maskLowwerBody.complement();
+                }
+
+                if (maskUpperBody && maskLowwerBody) {
+                  mainGraph.mask = maskLowwerBody;
+
+                  let upperBodyGraph = animationGraph.createLayer("UpperBody");
+                  upperBodyGraph.mask = maskUpperBody;
+                  upperBodyGraph.linearSwitch(new cc.animation.Motion("Idle", getClip("Idle")));
+                }
+              }
             }
 
             let wanderComponent = mainEntity.addComp("WanderComponent");
             wanderComponent.blender = blender2D;
             wanderComponent.maxRotateTime = getClip("IdleWalk").length;
-            let turnAroundMotion = new cc.animation.Motion("Turn around", getClip("IdleWalk"));
-            animationGraph.addMotion(turnAroundMotion);
 
             let onUse2DMotionChanged = () => {
               if (dobj.use2DMotion)
-                animationGraph.linearSwitch(movementMotion2D);
+                mainGraph.linearSwitch(movementMotion2D);
               else
-                animationGraph.linearSwitch(movementMotion1D);
+                mainGraph.linearSwitch(movementMotion1D);
             };
             charFolder.add(dobj, "use2DMotion", true).name("Use 2D Motion").onChange(onUse2DMotionChanged);
 
@@ -346,7 +383,7 @@
             // Death motion is just a single animation clip.
             let deathMotion = new cc.animation.Motion("Death", getClip("ShootDown"));
             deathMotion.wrapMode = 'once';
-            animationGraph.addMotion(deathMotion);
+            mainGraph.addMotion(deathMotion);
 
             // Setup the transitions between these motions.
             // The "isHealth" parameter with type boolean is used to indicate whether
