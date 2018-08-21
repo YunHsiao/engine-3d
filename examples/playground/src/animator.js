@@ -273,7 +273,7 @@
             let mainEntityAnimation = mainEntity.getComp('Animation');
             mainEntityAnimation.enabled = false;
             
-            let mainGraph = mainEntityAnimator.animationGraph.mainSubgraph;
+            let mainGraph = mainEntityAnimator.animationGraph.mainLayer;
             let animationGraph = mainEntityAnimator.animationGraph;
 
             let clips = [];
@@ -349,7 +349,7 @@
                 if (maskUpperBody && maskLowwerBody) {
                   mainGraph.mask = maskLowwerBody;
 
-                  let upperBodyGraph = animationGraph.createSubgraph("UpperBody");
+                  let upperBodyGraph = animationGraph.createLayer("UpperBody");
                   upperBodyGraph.mask = maskUpperBody;
                   upperBodyGraph.linearSwitch(new cc.animation.Motion("Idle", getClip("Idle")));
                 }
