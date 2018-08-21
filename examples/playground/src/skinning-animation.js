@@ -5,15 +5,14 @@
   let dobj = {
     baseUrl: '../assets/out',
     scene: 'spec-skeleton',
-    entityPath: 'Hero',
     animationclips: [],
     speed: 1.0,
+    animatables: []
   };
 
   dgui.remember(dobj);
   dgui.add(dobj, 'baseUrl').name("Base URL").onFinishChange(() => load());
   dgui.add(dobj, 'scene').name("Scene").onFinishChange(() => load());
-  dgui.add(dobj, 'entityPath').name("Entity path");
 
   load();
 
@@ -35,21 +34,31 @@
           } else {
             app.loadLevel(level);
 
-            let mainEntity = app.find(dobj.entityPath);
-            let mainEntityAnimation = mainEntity.getComp('Animation');
+            let animatableEntities = app.findEntitiesOfWithComponent('Animation');
+            for (let entity of animatableEntities) {
+              let folder = dgui.addFolder(entity.name);
 
-            let clips = [];
-            for (let clip of mainEntityAnimation.clips)
-              clips.push(clip.name);
-            dgui.add(dobj, 'animationclips', clips).name("Clips").onFinishChange((value) => {
-              mainEntityAnimation.play(value);
-            });
+              let object = {
+                clips: [],
+                speed: 1.0
+              };
 
-            dgui.add(dobj, 'speed', 0.0, 4.0).name("Speed").onChange(() => {
-              if (mainEntityAnimation._animCtrl._current) {
-                mainEntityAnimation._animCtrl._current.speed = dobj.speed;
-              }
-            });
+              let animationComponent = entity.getComp('Animation');
+
+              let clips = [];
+              for (let clip of animationComponent.clips)
+                clips.push(clip.name);
+
+              folder.add(object, 'clips', clips).name("Clips").onFinishChange((value) => {
+                animationComponent.play(value);
+              });
+
+              folder.add(object, 'speed', 0.0, 4.0).name("Speed").onChange(() => {
+                if (animationComponent._animCtrl._current) {
+                  animationComponent._animCtrl._current.speed = dobj.speed;
+                }
+              });
+            }
           }
         });
       }
