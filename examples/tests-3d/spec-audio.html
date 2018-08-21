@@ -24,29 +24,97 @@
 
 <body class="fit">
   <canvas id="canvas" tabindex="-1" class="fit"></canvas>
+  <script src="../../node_modules/vconsole/dist/vconsole.min.js"></script>
+  <script src="../../node_modules/dat.gui/build/dat.gui.min.js"></script>
   <script src="../../dist/engine.dev.js"></script>
   <script src="./loadScene.js"></script>
   <script>
+    // new window.VConsole();
     // init app
     var app = new window.cc.App(document.getElementById('canvas'));
 
+    let dgui = new window.dat.GUI({ width: 300 });
+    dgui.domElement.classList.add('dgui');
+
     app.resize();
+
+    // explicitly using DOM mode
+    // window.cc.sys.supportWebAudio = false;
 
     window.load('../assets/out', 'spec-audio',() => {
       let ent = app.find('1');
-      let as = ent.getComp('AudioSource');
-      // as.play(); // playOnAwake from schema
-      setTimeout(function(){ as.volume = 0.5; }, 10000);
-      setTimeout(function(){ as.volume = 0.1; }, 17000);
-      setTimeout(function(){ as.stop(); }, 24000);
+      let source = ent.getComp('AudioSource');
+      // source.play(); // playOnAwake from schema
 
       let ent2 = app.find('2');
-      let as2 = ent2.getComp('AudioSource');
-      // as2.loop = true; // loop from schema
-      as2.volume = 0.5;
-      setTimeout(function(){ as2.play(); }, 5000);
-      setTimeout(function(){ as2.volume = 0.75; }, 10000);
-      setTimeout(function(){ as2.volume = 1; }, 20000);
+      let source2 = ent2.getComp('AudioSource');
+      // source2.loop = true; // loop from schema
+      source2.volume = 0.5;
+
+      let t1 = 17, off2 = 5, t2 = 15;
+      /* discrete callbacks *
+      source.clip.once('started', () => {
+        setTimeout(function(){ source.volume = 0.55; }, t1 * 500);
+        setTimeout(function(){ source.volume = 0.1; }, t1 * 1000);
+
+        setTimeout(function(){ source2.play(); }, off2 * 1000);
+        setTimeout(function(){ source2.volume = 0.75; }, (off2 + t2 * 0.5) * 1000);
+        setTimeout(function(){ source2.volume = 1; }, (off2 + t2) * 1000);
+      });
+      /* smooth transition */
+      let startTime = app.totalTime;
+      let sineLerp = (b, e, t) => {
+        return b + (e - b) * (Math.sin((t - 0.5) * Math.PI) + 1) * 0.5;
+      };
+      let animation1 = () => {
+        source.volume = sineLerp(1, 0.1, (app.totalTime - startTime) / t1);
+      };
+      let animation2 = () => {
+        source2.volume = sineLerp(0.5, 1, (app.totalTime - startTime - off2) / t2);
+      };
+      source.clip.once('started', () => {
+        // animate audio 1
+        startTime = app.totalTime;
+        setActive(volumes[0], false);
+        app.on('tick', animation1);
+        setTimeout(() => {
+          app.off('tick', animation1);
+          setActive(volumes[0], true);
+        }, t1 * 1000);
+        // animate audio 2
+        setTimeout(() => {
+          source2.play();
+          setActive(volumes[1], false);
+          app.on('tick', animation2);
+        }, off2 * 1000);
+        setTimeout(() => {
+          app.off('tick', animation2);
+          setActive(volumes[1], true);
+        }, (off2 + t2) * 1000);
+      });
+      /**/
+
+      // controlls
+      let sources = [source, source2];
+      let names = ['Morceaux de Fantasie', 'Nocturne'];
+      let volumes = [];
+      let setActive = (c, active) => {
+        c.domElement.style.pointerEvents = active ? "all" : "none";
+        c.domElement.style.opacity = active ? 1.0 : 0.3;
+      };
+      setActive(dgui.add(window.cc.sys, 'supportWebAudio').listen(), false);
+      for (let i = 0; i < sources.length; i++) {
+        let f = dgui.addFolder(names[i]);
+        f.add(sources[i], 'play');
+        f.add(sources[i], 'pause');
+        f.add(sources[i], 'stop');
+        volumes.push(f.add(sources[i], 'volume', 0, 1).listen());
+        f.add(sources[i], 'currentTime', 0, sources[i].duration).listen();
+        f.add(sources[i], 'loop').listen();
+        f.add(sources[i], 'playOnAwake').listen();
+        setActive(f.add(sources[i], 'playing').listen(), false);
+        f.open();
+      }
     });
 
     // run app

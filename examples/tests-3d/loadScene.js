@@ -23,4 +23,4 @@ window.load = function (baseUrl, sceneName, onLevelLoaded) {
       });
     }
   });
-}
+};
