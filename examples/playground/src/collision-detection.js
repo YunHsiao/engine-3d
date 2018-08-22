@@ -1,7 +1,7 @@
 (() => {
   const { cc, app } = window;
   const { Material } = cc;
-  const { vec3, quat, color4, randomRange, toRadian } = cc.math;
+  const { vec3, color4, randomRange, toRadian } = cc.math;
   const { sphere, capsule } = cc.primitives;
 
   // use built-in collision detection engine
@@ -44,22 +44,22 @@
         let modelComp = ent.addComp('Model');
         let m = new Material();
         m.effect = this.app.assets.get('builtin-effect-phong-transparent');
-        let c = color4.create(color.r * randomRange(0.3, 1), 
-          color.g * randomRange(0.3, 1), color.b * randomRange(0.3, 1), 1);
+        let c = color4.clone(color);
         m.setProperty('diffuseColor', c);
         modelComp.mesh = sphere_mesh;
         modelComp.material = m;
-        ent.color = c;
+        ent.color = c; ent.collided = false; ent.framesRemaining = 0;
+        ent.velocity = vec3.create();
         let col = ent.addComp('Collider', { type: 'sphere' });
         col.body.setCollisionFilter(group, mask);
         ent.on('collide', (event) => {
           // event.target is always 'this entity'
           let ent = event.target._entity;
-          if (ent.color.a > color.a) return;
-          ent.color.a = 1;
+          if (ent.color.a > 1) return;
+          ent.color.a = 2;
           vec3.set(ent.velocity, 0, 0, 0);
           col.body.setCollisionFilter(0, 0);
-          setTimeout(() => { this.reap(ent); }, 100);
+          ent.collided = true; ent.framesRemaining = 5;
         });
         this.reap(ent);
       }
@@ -68,12 +68,16 @@
     tick() {
       for (let i = 0; i < this.livepool.length; i++) {
         let ent = this.livepool.data[i];
-        vec3.add(v3, ent._lpos, ent.velocity);
-        ent.setLocalPos(v3);
-        if (outOfBounds(v3)) this.reap(ent);
+        if (ent.collided) {
+          if (ent.framesRemaining-- <= 0) this.reap(ent);
+        } else {
+          vec3.add(v3, ent._lpos, ent.velocity);
+          ent.setLocalPos(v3);
+          if (outOfBounds(v3)) this.reap(ent);
+        }
       }
-      if (!this.deadpool.length) return;
-      this.resurrect();
+      // if (this.deadpool.length > 0) this.resurrect(); // wtf: why is this even slower?
+      for (let i = 0; i < this.deadpool.length; i++) this.resurrect();
     }
 
     reap(ent) {
@@ -87,9 +91,9 @@
       let theta = randomRange(this.minAngle, this.maxAngle);
       let phi = randomRange(1, 2);
       let speed = randomRange(0.1, 0.3);
-      ent.velocity = vec3.create(Math.cos(theta) * Math.sin(phi) * speed,
+      vec3.set(ent.velocity, Math.cos(theta) * Math.sin(phi) * speed,
         Math.cos(phi) * speed, Math.sin(theta) * Math.sin(phi) * speed);
-      ent.color.a = this.color.a;
+      ent.color.a = this.color.a; ent.collided = false;
       ent.getComp('Collider').body.setCollisionFilter(this.group, this.mask);
       ent.setLocalPos(this.pos);
       this.livepool.push(ent);
@@ -99,7 +103,7 @@
 
   // camera
   let camEnt = app.createEntity('camera');
-  camEnt.setLocalPos(-20, 7, 12);
+  camEnt.setLocalPos(-20, 50, 12);
   camEnt.lookAt(vec3.create(0, 0, 0));
   camEnt.addComp('Camera');
 
@@ -109,11 +113,11 @@
   light.addComp('Light');
 
   // set the stage
-  let emitters = []; // particles collide with each other if they are emitted by different emitters
-  emitters.push(new Emitter(app, 1, ~1, vec3.create(-10, 0,  10),   0,  -90, color4.create(  1, 0.1, 0.1, 0.5)));
-  emitters.push(new Emitter(app, 2, ~2, vec3.create( 10, 0, -10),  90,  180, color4.create(0.1, 0.1,   1, 0.5)));
-  // emitters.push(new Emitter(app, 4, ~4, vec3.create(-10, 0, -10),   0,   90, color4.create(  1,   1, 0.1, 0.5)));
-  // emitters.push(new Emitter(app, 8, ~8, vec3.create( 10, 0,  10), -90, -180, color4.create(0.1,   1,   1, 0.5)));
+  let emitters = []; // a particle does not collide with those come from the same group
+  emitters.push(new Emitter(app, 1, ~1, vec3.create(-10, 0,  10),   0,  -90, color4.create(0.8, 0.7, 0.5, 0.2)));
+  emitters.push(new Emitter(app, 2, ~2, vec3.create( 10, 0, -10),  90,  180, color4.create(0.2, 0.3, 0.5, 0.2)));
+  emitters.push(new Emitter(app, 4, ~4, vec3.create(-10, 0, -10),   0,   90, color4.create(0.8, 0.3, 0.5, 0.2)));
+  emitters.push(new Emitter(app, 8, ~8, vec3.create( 10, 0,  10), -90, -180, color4.create(0.2, 0.7, 0.5, 0.2)));
 
   // tick
   app.on('tick', () => {

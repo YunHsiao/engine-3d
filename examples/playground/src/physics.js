@@ -8,8 +8,8 @@
   let box_mesh = cc.utils.createMesh(app, box());
   let sphere_mesh = cc.utils.createMesh(app, sphere());
   let models = [], colliders = [], colors = [];
-  let box_color = color4.create(0, 0.5, 0.5, 1);
-  let sphere_color = color4.create(0.5, 0, 0, 1);
+  let box_color = color4.create(0.2, 0.7, 0.5, 1);
+  let sphere_color = color4.create(0.8, 0.3, 0.5, 1);
   for (let i = 0; i < 70; i++) {
     let isBox = Math.random() < 0.5;
     let ent = app.createEntity((isBox ? 'box_' : 'sphere_') + i);
@@ -32,7 +32,7 @@
   let modelComp = ground.addComp('Model');
   let m = new Material();
   m.effect = app.assets.get('builtin-effect-phong');
-  m.setProperty('diffuseColor', color4.create(0.2, 0.2, 0.2, 1));
+  m.setProperty('diffuseColor', color4.create(0.2, 0.3, 0.5, 1));
   modelComp.mesh = cc.utils.createMesh(app, box(size.x, size.y, size.z));
   modelComp.material = m;
   let col = ground.addComp('Collider');
@@ -51,7 +51,7 @@
   light.setLocalRotFromEuler(-80, 20, -40);
   light.addComp('Light');
 
-  let static_color = color4.create(0.5, 0.5, 0.5, 1);
+  let static_color = color4.create(0.3, 0.3, 0.3, 1);
   app.on('tick', () => {
     for (let i = 0; i < models.length; i++) {
       // handle bounds
