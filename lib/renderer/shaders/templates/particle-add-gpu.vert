@@ -1,7 +1,7 @@
 // Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
-#include <particle-vs-legacy.vert>
+#include <particle-vs-gpu.vert>
 
 void main () {
-  lpvs_main();
+  gpvs_main();
 }
