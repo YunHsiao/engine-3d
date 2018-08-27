@@ -147,17 +147,21 @@
     a[i+1] = x * m.m01 + y * m.m04 + z * m.m07;
     a[i+2] = x * m.m02 + y * m.m05 + z * m.m08;
   };
+  let merge = function(f, v, a, i) {
+    vec3.set(v, f(v.x, a[i]), f(v.y, a[i+1]), f(v.z, a[i+2]));
+  };
   cam._camera.extractView(view, w, h);
   let frustum = geometries[0].getComp('Model');
   let nm = mat3.normalFromMat4(mat3.create(), view._matInvViewProj);
   let mesh = manifest.geometries.meshes[0];
   for (let i = 0; i < mesh.positions.length; i += 3) {
     mulPos(view._matInvViewProj, mesh.positions, i);
+    merge(Math.min, mesh.minPos, mesh.positions, i);
+    merge(Math.max, mesh.maxPos, mesh.positions, i);
     mulNorm(nm, mesh.normals, i);
   }
   frustum.mesh = cc.utils.createMesh(app, manifest.geometries.meshes[0]);
   frustum.material = materials[1]; // transparent material
-  frustum._models[0]._boundingBox = null; // disable frustum culling for this
 
   // debug controller
   dgui.remember(dobj);

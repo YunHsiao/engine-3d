@@ -140,7 +140,6 @@
   // burst.repeatInterval = 3.0;
   // psys.addBurst(burst);
 
-  ent.setLocalPos(0, 0, 0);
   psys.renderer.material = particleMaterial;
   psys.loop = true;
   psys.duration = 10;
