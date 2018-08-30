@@ -102,6 +102,10 @@
     {
       "name": "VELOCITY_OVERTIME_MODULE_ENABLE",
       "value": false
+    },
+    {
+      "name": "FORCE_OVERTIME_MODULE_ENABLE",
+      "value": false
     }
   ]
 }

@@ -29,6 +29,9 @@
 #define EVAL_CURVE_INTEGRAL(name, t, ts, rnd) \
   evaluateCurveRangeIntegral(u_##name##_curveMode, u_##name##_minConstant, u_##name##_maxConstant, u_##name##_minKeyTime, u_##name##_minKeyCoef, u_##name##_minIntegral, u_##name##_maxKeyTime, u_##name##_maxKeyCoef, u_##name##_maxIntegral, t, ts, rnd)
 
+#define EVAL_CURVE_INTEGRAL_TWICE(name, t, ts, rnd) \
+  evaluateCurveRangeIntegralTwice(u_##name##_curveMode, u_##name##_minConstant, u_##name##_maxConstant, u_##name##_minKeyTime, u_##name##_minKeyCoef, u_##name##_minIntegral, u_##name##_maxKeyTime, u_##name##_maxKeyCoef, u_##name##_maxIntegral, t, ts, rnd)
+
 attribute vec4 a_position_starttime; // center position,particle start time
 attribute vec4 a_vertIdx_size_angle;  // xy:vertex index,z:size,w:angle
 attribute vec4 a_color;
@@ -43,6 +46,13 @@ uniform float u_speedModifier;
 DECL_CURVE_STRUCT_INT(velocity_x)
 DECL_CURVE_STRUCT_INT(velocity_y)
 DECL_CURVE_STRUCT_INT(velocity_z)
+#endif
+
+#if FORCE_OVERTIME_MODULE_ENABLE
+uniform int u_force_space;
+DECL_CURVE_STRUCT_INT(force_x)
+DECL_CURVE_STRUCT_INT(force_y)
+DECL_CURVE_STRUCT_INT(force_z)
 #endif
 
 vec4 rotateQuat(vec4 p, vec4 q) {
@@ -167,6 +177,15 @@ void gpvs_main() {
     velocityTrack = rotateQuat(velocityTrack, u_worldRot);
   }
   pos += velocityTrack;
+#endif
+
+#if FORCE_OVERTIME_MODULE_ENABLE
+  vec4 forceTrack = vec4(EVAL_CURVE_INTEGRAL_TWICE(force_x, normalizedTime, a_dir_life.w, 1.),EVAL_CURVE_INTEGRAL_TWICE(force_y, normalizedTime, a_dir_life.w, 1.),EVAL_CURVE_INTEGRAL_TWICE(force_z, normalizedTime, a_dir_life.w, 1.),0);
+  forceTrack = forceTrack * speedModifier;
+  if (u_force_space == SIMULATE_SPACE_LOCAL) {
+    forceTrack = rotateQuat(forceTrack, u_worldRot);
+  }
+  pos += forceTrack;
 #endif
 
   vec2 cornerOffset = vec2((a_vertIdx_size_angle.x - 0.5) * a_vertIdx_size_angle.z, (a_vertIdx_size_angle.y - 0.5) * a_vertIdx_size_angle.z);
