@@ -74,7 +74,7 @@
   let lights = [];
   for (let i = 0; i < manifest.lights.num; i++) {
     let e = app.createEntity(manifest.lights.names[i]);
-    e.lpos = manifest.lights.pos[i];
+    e.setLocalPos(manifest.lights.pos[i]);
     let l = e.addComp('Light');
     l.type = 'point';
     l.color = manifest.lights.color[i];
@@ -89,7 +89,7 @@
     let e = app.createEntity(manifest.geometries.names[i]);
     let g = e.addComp('Model');
     g.mesh = cc.utils.createMesh(app, manifest.geometries.meshes[i]);
-    g.material = materials[1]; e.lpos = manifest.geometries.pos[i];
+    g.material = materials[1]; e.setLocalPos(manifest.geometries.pos[i]);
     g.material_bak = g.material;
     geometries.push(e);
   }
@@ -101,7 +101,7 @@
     vec3.sub(bbsize, geometries[i].getComp('Model').mesh._maxPos, 
       geometries[i].getComp('Model').mesh._minPos);
     g.mesh = cc.utils.createMesh(app, cc.primitives.box(bbsize.x, bbsize.y, bbsize.z));
-    g.material = materials[2]; e.lpos = manifest.geometries.pos[i];
+    g.material = materials[2]; e.setLocalPos(manifest.geometries.pos[i]);
     g.material_bak = g.material; e.layer = cc.utils.Layers.IgnoreRaycast;
     bbhints.push(e);
   }
@@ -156,7 +156,8 @@
     }
 
     updateCamera() {
-      vec3.set(camera.lpos, this.center.x + Math.sin(this.angle) * this.dist, 
+      camera.setLocalPos(
+        this.center.x + Math.sin(this.angle) * this.dist, 
         this.center.y + this.height, 
         this.center.z + Math.cos(this.angle) * this.dist);
       /* optimal */
@@ -164,12 +165,9 @@
       let sx = -this.height / len, cx = this.dist / len;
       sx = sx / (1 + cx); cx = Math.sqrt((1 + cx) / 2); sx *= cx; // half angle
       let sy = Math.sin(this.angle * 0.5), cy = Math.cos(this.angle * 0.5);
-      camera.lrot.x = sx * cy;
-      camera.lrot.y = cx * sy;
-      camera.lrot.z = - sx * sy;
-      camera.lrot.w = cx * cy;
+      camera.setLocalRot(sx * cy, cx * sy, - sx * sy, cx * cy);
       /* simple *
-      cc.math.quat.fromEuler(camera.lrot,
+      camera.setLocalRotFromEuler(
         cc.math.toDegree(-Math.atan2(this.height, this.dist)),
         cc.math.toDegree(this.angle), 0);
       /* horribly redundant *

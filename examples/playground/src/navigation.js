@@ -1,7 +1,7 @@
 (() => {
   const { cc, app, dgui } = window;
   const { Material } = cc;
-  const { vec2, vec3, quat, color4, clamp } = cc.math;
+  const { vec2, vec3, color4, clamp } = cc.math;
   const { plane, box } = cc.primitives;
   
   // geometries
@@ -20,20 +20,18 @@
     modelComp.mesh = mesh;
     modelComp.material = m;
     models.push(modelComp);
-    let col = ent.addComp('Collider', {
+    ent.addComp('Collider', {
       size: [1, 1, 1],
       center: [0, mesh === quad ? -0.5 : 0, 0],
       isTrigger: isTrigger
     });
     if (isTrigger) ent.on('collide', () => {
-      vec3.set(camEnt.lpos, tx, ty, tz);
+      vec3.set(camCol.body.position, tx, ty, tz);
       vec3.set(camEnt.getComp('FPCamera').euler, tyaw, tpitch, troll);
     });
-    vec3.set(ent.lpos, x, y, z);
-    quat.fromEuler(ent.lrot, yaw, pitch, roll);
-    vec3.set(ent.lscale, sx, sy, sz);
-    // after transform changed, static objects must do a manual update
-    col.body.manualUpdate();
+    ent.setLocalPos(x, y, z);
+    ent.setLocalScale(sx, sy, sz);
+    ent.setLocalRotFromEuler(yaw, pitch, roll);
     return ent;
   };
   // walls               positions       rotations       scales           colors
@@ -54,15 +52,14 @@
   // camera
   let camEnt = app.createEntity('camera');
   camEnt.addComp('Camera');
-  let col = camEnt.addComp('Collider', {
+  let camCol = camEnt.addComp('Collider', {
     mass: 1,
     type: 'box',
     size: [1, 4, 1],
     center: [0, -2, 0]
   });
   vec3.set(app.system('physics').world.gravity, 0, -50, 0);
-  col.body.setUpdateMode(true, true);
-  col.body.setFreezeRotation(true);
+  camCol.body.setFreezeRotation(true);
 
   // utils
   let dobj = {
@@ -102,21 +99,22 @@
     }
 
     start() {
-      this.pos = this._entity.lpos;
-      this.rot = this._entity.lrot;
+      let rigidbody = this._entity.getComp('Collider').body;
+      this.pos = rigidbody.position;
+      this.rot = this._entity._lrot;
       this.canvas = this._app._canvas;
       this.input = this._app._input;
       this.input._lock = cc.Input.LOCK_ALWAYS;
-      this.velocity = this._entity.getComp('Collider').body.velocity;
+      this.velocity = rigidbody.velocity;
       this._entity.on('collide', () => {
         this.jumping = false;
       });
     }
 
     tick() {
-      // do nothing if no inputs or already ended
-      if (this.ended || !this.input._pointerLocked
-        && !this.input.touchCount && !this.input._keys.length) return;
+      // do nothing if no inputs
+      if (!this.input._pointerLocked && !this.input.touchCount
+        && !this.input._keys.length) return;
       // update axis
       scaleToXZ(vec3.transformQuat(this.forward, this.id_forward, this.rot), this.speed);
       scaleToXZ(vec3.transformQuat(this.right, this.id_right, this.rot), this.speed);
@@ -127,12 +125,12 @@
       if (this.input._keys.length) this.tickKeyboard();
       // apply to transform
       vec3.set(this.euler, clamp(this.euler.x + this.rotOff.x, -90, 90), this.euler.y + this.rotOff.y, 0);
-      quat.fromEuler(this.rot, this.euler.x, this.euler.y, this.euler.z);
+      this._entity.setLocalRotFromEuler(this.euler.x, this.euler.y, this.euler.z);
       vec3.add(this.pos, this.pos, this.posOff);
     }
 
     tickMouse() {
-      this.rotOff.x = -this.input.mouseDeltaY;
+      this.rotOff.x = this.input.mouseDeltaY;
       this.rotOff.y = -this.input.mouseDeltaX;
     }
 

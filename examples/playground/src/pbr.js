@@ -37,7 +37,7 @@
   ];
   for (let i = 0; i < 4; i++) {
     let lightEnt = app.createEntity('point-light');
-    vec3.set(lightEnt.lpos, lightPos[i].x, lightPos[i].y, lightPos[i].z);
+    lightEnt.setLocalPos(lightPos[i].x, lightPos[i].y, lightPos[i].z);
     let light = lightEnt.addComp('Light');
     light.type = 'point';
     light.color = color3.create(1, 1, 1);
@@ -66,15 +66,15 @@
       let modelComp = ent.addComp('Model');
       modelComp.mesh = meshSphere;
       modelComp.material = m;
-      vec3.set(ent.lpos, (j-cols/2)*spacing, (i-rows/2)*spacing, -2);
+      ent.setLocalPos((j-cols/2)*spacing, (i-rows/2)*spacing, -2);
       entities.push(ent);
     }
   }
 
   // camera
   let camEnt = app.createEntity('camera');
-  vec3.set(camEnt.lpos, -15, 10, 12);
-  quat.fromEuler(camEnt.lrot, -27, 38-90, 0);
+  camEnt.setLocalPos(-15, 10, 12);
+  camEnt.setLocalRotFromEuler(-27, 38-90, 0);
   let camComp = camEnt.addComp('Camera');
   camComp.clearFlags |= cc.renderer.CLEAR_SKYBOX;
   // app._canvas.width = 1280; app._canvas.height = 720;

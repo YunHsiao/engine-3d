@@ -17,8 +17,8 @@
     modelComp.mesh = quad;
     modelComp.material = m;
     models.push(modelComp);
-    vec3.set(ent.lpos, x, y, z);
-    quat.fromEuler(ent.lrot, yaw, pitch, roll);
+    ent.setLocalPos(x, y, z);
+    ent.setLocalRotFromEuler(yaw, pitch, roll);
   };
   createQuad(0, 4, center.x, center.y, center.z - radius, 90, 0, 0);
   for (let i = 0; i < length; i++) {
@@ -31,8 +31,8 @@
 
   // camera
   let camEnt = app.createEntity('camera');
-  camEnt.lpos = center;
-  quat.fromEuler(camEnt.lrot, 0, 180, 0);
+  camEnt.setLocalPos(center);
+  camEnt.setLocalRotFromEuler(0, 180, 0);
   camEnt.addComp('Camera');
 
   // util functions

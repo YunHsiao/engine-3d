@@ -1,6 +1,6 @@
 (() => {
   const { cc, app, dgui } = window;
-  const { color4, color3, vec3, quat } = cc.math;
+  const { color4, color3, vec3, toDegree } = cc.math;
 
   let dobj = {
     cube1Cast: true,
@@ -69,13 +69,13 @@
   planeMat.setProperty('metallic', 1);
 
   let camEnt = app.createEntity('camera');
-  vec3.set(camEnt.lpos, 10, 10, 10);
+  camEnt.setLocalPos(10, 10, 10);
   camEnt.lookAt(vec3.create(0, 0, 0));
   camEnt.addComp('Camera');
 
   let cube1 = app.createEntity('cube1');
-  vec3.set(cube1.lpos, -5, 5, 0);
-  vec3.set(cube1.lscale, 5, 5, 5);
+  cube1.setLocalPos(-5, 5, 0);
+  cube1.setLocalScale(5, 5, 5);
   let cube1Model = cube1.addComp('Model');
   cube1Model.mesh = meshBox;
   cube1Model.material = cube1Mat;
@@ -83,33 +83,32 @@
   cube1Model.receiveShadows = true;
 
   let cube2 = app.createEntity('cube2');
-  vec3.set(cube2.lpos, -6, 12, 0);
-  quat.fromEuler(cube2.lrot, 30, 30, 30);
-  vec3.set(cube2.lscale, 5, 5, 5);
+  cube2.setLocalPos(-6, 12, 0);
+  cube2.setLocalScale(5, 5, 5);
   let cube2Model = cube2.addComp('Model');
   cube2Model.mesh = meshBox;
   cube2Model.material = cube2Mat;
   cube2Model.shadowCastingMode = 'on';
 
   let sphere1 = app.createEntity('sphere1');
-  vec3.set(sphere1.lpos, 5, 5, 0);
-  // vec3.set(sphere1.lscale, 5, 5, 5);
+  sphere1.setLocalPos(5, 5, 0);
+  // sphere1.setLocalScale(5, 5, 5);
   let sphere1Model = sphere1.addComp('Model');
   sphere1Model.mesh = meshSphere;
   sphere1Model.material = sphere1Mat;
   sphere1Model.shadowCastingMode = 'on';
 
   let plane = app.createEntity('plane');
-  vec3.set(plane.lpos, 0, -2, 0);
-  vec3.set(plane.lscale, 100, 1, 100);
+  plane.setLocalPos(0, -2, 0);
+  plane.setLocalScale(100, 1, 100);
   let planeModel = plane.addComp('Model');
   planeModel.mesh = meshBox;
   planeModel.material = planeMat;
   planeModel.receiveShadows = true;
 
   let light1 = app.createEntity('light1');
-  quat.fromEuler(light1.lrot, -90, 0, 0);
-  vec3.set(light1.lpos, 1, 50, 0);
+  light1.setLocalRotFromEuler(-90, 0, 0);
+  light1.setLocalPos(1, 50, 0);
 
   let lightComp1 = light1.addComp('Light');
   //lightComp1.type = cc.renderer.LIGHT_SPOT;
@@ -120,7 +119,7 @@
   lightComp1.shadowType = 'hard';
 
   app.on('tick', () => {
-    quat.rotateY(cube2.lrot, cube2.lrot, app.deltaTime);
+    cube2.setLocalRotFromEuler(30, 30 + toDegree(app.totalTime), 30);
   });
 
 })();

@@ -65,22 +65,19 @@
       dgui.domElement.classList.add('dgui');
       window.dgui = dgui;
 
-      let sourcejs = document.getElementById("sourcejs");
-      sourcejs.setAttribute("src", url);
+      let getCurAbsPath = () => {
+        let scripts = document.getElementsByTagName('script');
+        let lastScriptPath = scripts[scripts.length -1].src;
+        let segs = lastScriptPath.split('/');
+        if (segs.length >= 1) {
+          segs.pop();
+        }
+        let path = segs.join('/') + '/';
+        return path;
+      };
 
-      // let getCurAbsPath = () => {
-      //   let scripts = document.getElementsByTagName('script');
-      //   let lastScriptPath = scripts[scripts.length -1].src;
-      //   let segs = lastScriptPath.split('/');
-      //   if (segs.length >= 1) {
-      //     segs.pop();
-      //   }
-      //   let path = segs.join('/') + '/';
-      //   return path;
-      // };
-
-      // // init example modules
-      // eval(`${result}\n//# sourceURL=${getCurAbsPath() + url}`);
+      // init example modules
+      eval(`${result}\n//# sourceURL=${getCurAbsPath() + url}`);
 
       // start debugger
       if (localStorage.getItem('engine.enableDebugger') === 'true') {

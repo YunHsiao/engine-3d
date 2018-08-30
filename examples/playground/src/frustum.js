@@ -87,7 +87,7 @@
   let lights = [];
   for (let i = 0; i < manifest.lights.num; i++) {
     let e = app.createEntity(manifest.lights.names[i]);
-    e.lpos = manifest.lights.pos[i];
+    e.setLocalPos(manifest.lights.pos[i]);
     let l = e.addComp('Light');
     l.type = 'point';
     l.color = manifest.lights.color[i];
@@ -97,22 +97,24 @@
   }
 
   // geometries
+  let qt = quat.create();
   let geometries = [];
   for (let i = 0; i < manifest.geometries.num; i++) {
     let e = app.createEntity(manifest.geometries.names[i]);
     let g = e.addComp('Model');
     g.mesh = cc.utils.createMesh(app, manifest.geometries.meshes[i]);
-    g.material = materials[0]; e.lpos = manifest.geometries.pos[i];
+    g.material = materials[0]; e.setLocalPos(manifest.geometries.pos[i]);
     g.material_bak = g.material; e.active = manifest.geometries.active[i];
     let axis = manifest.geometries.axis[i];
     let angle = manifest.geometries.angle[i];
-    quat.fromAxisAngle(e.lrot, vec3.normalize(axis, axis), angle);
+    quat.fromAxisAngle(qt, vec3.normalize(axis, axis), angle);
+    e.setLocalRot(qt);
     geometries.push(e);
   }
 
   // camera
   let camera = app.createEntity('camera');
-  vec3.set(camera.lpos, 4, 5, 6);
+  camera.setLocalPos(4, 5, 6);
   let cam = camera.addComp('Camera');
   let view = new cc.renderer.View();
   cam.near = 0.5; cam.far = 100; cam.fov = 60;
@@ -145,17 +147,21 @@
     a[i+1] = x * m.m01 + y * m.m04 + z * m.m07;
     a[i+2] = x * m.m02 + y * m.m05 + z * m.m08;
   };
+  let merge = function(f, v, a, i) {
+    vec3.set(v, f(v.x, a[i]), f(v.y, a[i+1]), f(v.z, a[i+2]));
+  };
   cam._camera.extractView(view, w, h);
   let frustum = geometries[0].getComp('Model');
   let nm = mat3.normalFromMat4(mat3.create(), view._matInvViewProj);
   let mesh = manifest.geometries.meshes[0];
   for (let i = 0; i < mesh.positions.length; i += 3) {
     mulPos(view._matInvViewProj, mesh.positions, i);
+    merge(Math.min, mesh.minPos, mesh.positions, i);
+    merge(Math.max, mesh.maxPos, mesh.positions, i);
     mulNorm(nm, mesh.normals, i);
   }
   frustum.mesh = cc.utils.createMesh(app, manifest.geometries.meshes[0]);
   frustum.material = materials[1]; // transparent material
-  frustum._models[0]._boundingBox = null; // disable frustum culling for this
 
   // debug controller
   dgui.remember(dobj);

@@ -46,7 +46,7 @@
        * The circle area center on which the character can move.
        * @type {vec2}
        */
-      this._activityCenter = new cc.math.vec2(this._entity.lpos.x, this._entity.lpos.z);
+      this._activityCenter = new cc.math.vec2(this._entity._lpos.x, this._entity._lpos.z);
 
       /**
        * The circle area radius on which the character can move.
@@ -130,8 +130,7 @@
           let dAngle = this._rotationSpeed * deltaTimeSec;
           this._lastRotAngle = this._rotAngle;
           this._rotAngle += dAngle;
-          let lrot = this._entity.lrot;
-          cc.math.quat.rotateY(lrot, lrot, cc.math.toRadian(dAngle));
+          this._entity.setLocalRotFromEuler(0, this._rotAngle, 0);
         }
       }
       else if (this._nextRotatingStartTime > 0)
@@ -157,7 +156,9 @@
         let dmove = speed * 0.8 * deltaTimeSec;
         let realdmove = dmove;
         let offsetVelocity = new cc.math.vec3(this._destMoveVelocity.x, 0, this._destMoveVelocity.y);
-        cc.math.vec3.scaleAndAdd(this._entity.lpos, this._entity.lpos, offsetVelocity, realdmove);
+        let v3 = cc.math.vec3.create();
+        cc.math.vec3.scaleAndAdd(v3, this._entity._lpos, offsetVelocity, realdmove);
+        this._entity.setLocalPos(v3);
       }
 
       // Set the blend result.
@@ -203,7 +204,7 @@
         this._destSpeed = 0;
       }
       else {
-        let lastPos = new cc.math.vec2(this._entity.lpos.x, this._entity.lpos.z);
+        let lastPos = new cc.math.vec2(this._entity._lpos.x, this._entity._lpos.z);
         let angle = cc.math.randomRange(0, Math.PI * 2);
         this._destPos = new cc.math.vec2(
           this._activityCenter.x + Math.cos(angle) * this._activityRadius,
@@ -219,7 +220,7 @@
     }
 
     distanceToDestination() {
-      return cc.math.vec2.distance(new cc.math.vec2(this._entity.lpos.x, this._entity.lpos.z), this._destPos);
+      return cc.math.vec2.distance(new cc.math.vec2(this._entity._lpos.x, this._entity._lpos.z), this._destPos);
     }
   }
 

@@ -1,25 +1,8 @@
 (() => {
   const { cc, app, dgui } = window;
   const { Material } = cc;
-  const { vec3, quat, color4, randomRange, clamp } = cc.math;
+  const { vec3, quat, color4, randomRange } = cc.math;
   const { box, sphere } = cc.primitives;
-
-  // controllers
-  let dobj = {
-    gravityX: 0,
-    gravityY: -20,
-    gravityZ: 0,
-    pauseSpinning: false
-  };
-  let updateGravity = function() {
-    vec3.set(app.system('physics').world.gravity, dobj.gravityX, dobj.gravityY, dobj.gravityZ);
-  };
-  updateGravity();
-  dgui.remember(dobj);
-  dgui.add(dobj, 'gravityX', -20, 20).onFinishChange(updateGravity);
-  dgui.add(dobj, 'gravityY', -20, 20).onFinishChange(updateGravity);
-  dgui.add(dobj, 'gravityZ', -20, 20).onFinishChange(updateGravity);
-  dgui.add(dobj, 'pauseSpinning');
 
   // geometries
   let box_mesh = cc.utils.createMesh(app, box());
@@ -30,8 +13,8 @@
   for (let i = 0; i < 70; i++) {
     let isBox = Math.random() < 0.5;
     let ent = app.createEntity((isBox ? 'box_' : 'sphere_') + i);
-    vec3.set(ent.lpos, randomRange(-2, 2), 3 + i * 5, randomRange(-2, 2));
-    quat.fromEuler(ent.lrot, randomRange(0, 180), randomRange(0, 180), randomRange(0, 180));
+    ent.setLocalPos(randomRange(-2, 2), 3 + i * 5, randomRange(-2, 2));
+    ent.setLocalRotFromEuler(randomRange(0, 180), randomRange(0, 180), randomRange(0, 180));
     let modelComp = ent.addComp('Model');
     let m = new Material();
     m.effect = app.assets.get('builtin-effect-phong');
@@ -40,13 +23,12 @@
     modelComp.mesh = isBox ? box_mesh : sphere_mesh;
     modelComp.material = m;
     let col = ent.addComp('Collider', { type: isBox ? 'box' : 'sphere', mass: 1 });
-    col.body.setUpdateMode(true, true);
     models.push(modelComp); colliders.push(col); colors.push(c);
   }
   let radius = 12.5;
   let size = vec3.create(radius * 2, 0.2, radius * 2);
   let ground = app.createEntity('ground');
-  ground.lpos = vec3.create(0, 1, 0);
+  ground.setLocalPos(0, 1, 0);
   let modelComp = ground.addComp('Model');
   let m = new Material();
   m.effect = app.assets.get('builtin-effect-phong');
@@ -55,39 +37,89 @@
   modelComp.material = m;
   let col = ground.addComp('Collider');
   col.size = size;
-  col.body.setUpdateMode(true, false);
+  // keepping dataflow consistant for all object yield more natural result
+  col.body._setDataflowPushing();
 
   // camera
   let camEnt = app.createEntity('camera');
-  camEnt.lpos = vec3.create(20, 30, 40);
-  camEnt.lookAt(vec3.create(0, 0, 0));
+  camEnt.setLocalPos(25, 15, 25);
+  camEnt.lookAt(vec3.create(0, 5, 0));
   camEnt.addComp('Camera');
 
   // light
   let light = app.createEntity('light');
-  quat.fromEuler(light.lrot, -80, 20, -40);
+  light.setLocalRotFromEuler(-80, 20, -40);
   light.addComp('Light');
 
-  let speed = 30, interval = 900, offset = 180 / speed;
   let static_color = color4.create(0.5, 0.5, 0.5, 1);
   app.on('tick', () => {
     for (let i = 0; i < models.length; i++) {
-      let model = models[i]._models[0];
       // handle bounds
-      if      (model._node.lpos.y <         -10) model._node.lpos.y =  30;
-      else if (model._node.lpos.x >  (radius+3)) model._node.lpos.x = -(radius+3);
-      else if (model._node.lpos.x < -(radius+3)) model._node.lpos.x =  (radius+3);
-      else if (model._node.lpos.z >  (radius+3)) model._node.lpos.z = -(radius+3);
-      else if (model._node.lpos.z < -(radius+3)) model._node.lpos.z =  (radius+3);
+      if      (colliders[i].body.position.y <         -10) colliders[i].body.position.y =  30;
+      else if (colliders[i].body.position.x >  (radius+3)) colliders[i].body.position.x = -(radius-3);
+      else if (colliders[i].body.position.x < -(radius+3)) colliders[i].body.position.x =  (radius-3);
+      else if (colliders[i].body.position.z >  (radius+3)) colliders[i].body.position.z = -(radius-3);
+      else if (colliders[i].body.position.z < -(radius+3)) colliders[i].body.position.z =  (radius-3);
       // visualize speed
       let speed = vec3.magnitude(colliders[i].body.velocity); speed /= speed + 1;
       color4.lerp(colors[i], static_color, colliders[i].type === 'box' ?
         box_color : sphere_color, speed);
     }
-    // spin the ground once in a while
-    if (dobj.pauseSpinning) return;
-    let time = (app.totalTime + offset) * speed;
-    quat.fromEuler(ground.lrot, 0, 0, (Math.floor(time / interval) % 2 ? 1 : -1) * 
-      clamp(time % interval, 0, 180));
   });
+
+  // controllers
+  let dobj = {
+    gravityX: 0,
+    gravityY: -20,
+    gravityZ: 0,
+    pauseSpinning: false,
+    angle: 180
+  };
+  let updateGravity = function() {
+    vec3.set(app.system('physics').world.gravity, dobj.gravityX, dobj.gravityY, dobj.gravityZ);
+  };
+  let setGroundRotation = col.body._dataflow === 'pushing' ? function(x, y, z) {
+    quat.fromEuler(col.body.quaternion, x, y, z);
+  } : function(x, y, z) {
+    ground.setLocalRotFromEuler(x, y, z);
+  };
+  updateGravity();
+  dgui.remember(dobj);
+  dgui.add(dobj, 'gravityX', -20, 20).onFinishChange(updateGravity);
+  dgui.add(dobj, 'gravityY', -20, 20).onFinishChange(updateGravity);
+  dgui.add(dobj, 'gravityZ', -20, 20).onFinishChange(updateGravity);
+  let angleControl = dgui.add(dobj, 'angle', 0, 180).listen();
+  let setActive = () => {
+    angleControl.domElement.style.pointerEvents = dobj.pauseSpinning ? "all" : "none";
+    angleControl.domElement.style.opacity = dobj.pauseSpinning ? 1.0 : 0.3;
+  };
+  setActive();
+  dgui.add(dobj, 'pauseSpinning').onFinishChange(setActive);
+  app.on('tick', () => { // user controller callback
+    if (!dobj.pauseSpinning) return;
+    setGroundRotation(0, 0, dobj.angle);
+  });
+  // spin the ground once in a while
+  let duration = 5, interval = 20, startTime = app.totalTime, back = false;
+  let sineLerp = (b, e, t) => {
+    return b + (e - b) * (Math.sin((t - 0.5) * Math.PI) + 1) * 0.5;
+  };
+  let spinning = () => {
+    if (dobj.pauseSpinning) return;
+    dobj.angle = sineLerp(back ? 0 : 180, back ? 180 : 0,
+      (app.totalTime - startTime) / duration);
+    setGroundRotation(0, 0, dobj.angle);
+  };
+  let begin = () => {
+    startTime = app.totalTime;
+    app.on('tick', spinning);
+  };
+  setTimeout(() => {
+    begin();
+    setInterval(begin, (interval + duration) * 1000);
+  }, interval * 1000);
+  setInterval(() => {
+    app.off('tick', spinning);
+    back = !back;
+  }, (interval + duration) * 1000);
 })();
