@@ -39,11 +39,7 @@
   });
 
   // create mesh
-  let meshBox = cc.utils.createMesh(app, cc.primitives.box(1, 1, 1, {
-    widthSegments: 1,
-    heightSegments: 1,
-    lengthSegments: 1,
-  }));
+  let meshBox = cc.utils.createMesh(app, cc.primitives.box());
 
   let meshSphere = cc.utils.createMesh(app, cc.primitives.sphere(3, { segments: 64 }));
 

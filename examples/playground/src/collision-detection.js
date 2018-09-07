@@ -38,7 +38,7 @@
       modelComp.material = m;
       emitter.setLocalPos(pos);
       // particles
-      let sphere_mesh = cc.utils.createMesh(this.app, sphere());
+      let sphere_mesh = cc.utils.createMesh(this.app, sphere(1));
       for (let i = 0; i < poolSize; i++) {
         let ent = this.app.createEntity('sphere_' + i);
         let modelComp = ent.addComp('Model');

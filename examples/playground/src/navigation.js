@@ -6,7 +6,7 @@
   
   // geometries
   let quad = cc.utils.createMesh(app, plane(1, 1));
-  let block = cc.utils.createMesh(app, box(1, 1, 1));
+  let block = cc.utils.createMesh(app, box());
   let models = [];
   let createObject = function(mesh, x, y, z, yaw = 0, pitch = 0, roll = 0,
   sx = 1, sy = 1, sz = 1, cr = 0.5, cg = 0.5, cb = 0.5, isTrigger = false, 
@@ -21,7 +21,6 @@
     modelComp.material = m;
     models.push(modelComp);
     ent.addComp('Collider', {
-      size: [1, 1, 1],
       center: [0, mesh === quad ? -0.5 : 0, 0],
       isTrigger: isTrigger
     });
@@ -55,7 +54,7 @@
   let camCol = camEnt.addComp('Collider', {
     mass: 1,
     type: 'box',
-    size: [1, 4, 1],
+    size: [0.5, 2, 0.5],
     center: [0, -2, 0]
   });
   vec3.set(app.system('physics').world.gravity, 0, -50, 0);

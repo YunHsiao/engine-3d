@@ -10,10 +10,10 @@
   let models = [], colliders = [], colors = [];
   let box_color = color4.create(0.2, 0.7, 0.5, 1);
   let sphere_color = color4.create(0.8, 0.3, 0.5, 1);
-  for (let i = 0; i < 70; i++) {
+  for (let i = 0; i < 200; i++) {
     let isBox = Math.random() < 0.5;
     let ent = app.createEntity((isBox ? 'box_' : 'sphere_') + i);
-    ent.setLocalPos(randomRange(-2, 2), 3 + i * 5, randomRange(-2, 2));
+    ent.setLocalPos(randomRange(-2, 2), 3 + i * 2, randomRange(-2, 2));
     ent.setLocalRotFromEuler(randomRange(0, 180), randomRange(0, 180), randomRange(0, 180));
     let modelComp = ent.addComp('Model');
     let m = new Material();
@@ -22,23 +22,22 @@
     m.setProperty('diffuseColor', c);
     modelComp.mesh = isBox ? box_mesh : sphere_mesh;
     modelComp.material = m;
+    // default collider size matches default primitive accordingly, no need to set here
     let col = ent.addComp('Collider', { type: isBox ? 'box' : 'sphere', mass: 1 });
     models.push(modelComp); colliders.push(col); colors.push(c);
   }
   let radius = 12.5;
-  let size = vec3.create(radius * 2, 0.2, radius * 2);
   let ground = app.createEntity('ground');
   ground.setLocalPos(0, 1, 0);
+  ground.setLocalScale(radius * 2, 2, radius * 2);
   let modelComp = ground.addComp('Model');
   let m = new Material();
   m.effect = app.assets.get('builtin-effect-phong');
   m.setProperty('diffuseColor', color4.create(0.2, 0.3, 0.5, 1));
-  modelComp.mesh = cc.utils.createMesh(app, box(size.x, size.y, size.z));
+  modelComp.mesh = cc.utils.createMesh(app, box());
   modelComp.material = m;
   let col = ground.addComp('Collider');
-  col.size = size;
-  // keepping dataflow consistant for all object yield more natural result
-  col.body._setDataflowPushing();
+  // col.body._setDataflowPushing();
 
   // camera
   let camEnt = app.createEntity('camera');

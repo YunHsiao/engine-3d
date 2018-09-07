@@ -1,11 +1,13 @@
 (() => {
-  const { cc, app } = window;
-  const { vec3, color3, color4 } = cc.math;
+  const { cc, app, dgui } = window;
+  const { vec3, quat, color3, color4, randomRange } = cc.math;
+
+  // cannon raycast seems not as reliable as ours
+  app.system('physics').engine = 0;
 
   // manifest
   let manifest = {};
   manifest.materials = {
-    num: 3,
     names: [
       "builtin-effect-phong", 
       "builtin-effect-phong-transparent", 
@@ -18,7 +20,6 @@
     ]
   };
   manifest.lights = {
-    num:2,
     names: [
       "point-light1",
       "point-light2",
@@ -33,15 +34,7 @@
     ],
   };
   manifest.geometries = {
-    num: 6,
-    names: [
-      "sphere",
-      "box",
-      "capsule",
-      "cylinder",
-      "cone",
-      "torus",
-    ],
+    num: 100,
     meshes: [
       cc.primitives.sphere(),
       cc.primitives.box(),
@@ -49,30 +42,22 @@
       cc.primitives.cylinder(),
       cc.primitives.cone(),
       cc.primitives.torus(),
-    ],
-    pos: [
-      vec3.create(0, 0, -1),
-      vec3.create(-4, 0, -1),
-      vec3.create(-2, 3, 1),
-      vec3.create(-2, 0, 4),
-      vec3.create(-2, 1, 1),
-      vec3.create(-4, -1, 2),
-    ],
+    ]
   };
 
   // materials
-  let materials = [];
-  for (let i = 0; i < manifest.materials.num; i++) {
+  let materials = new Array(manifest.materials.names.length);
+  for (let i = 0; i < manifest.materials.names.length; i++) {
     let m = new cc.Material();
     m.effect = app.assets.get(manifest.materials.names[i]);
     for (let key in manifest.materials.properties[i])
       m.setProperty(key, manifest.materials.properties[i][key]);
-    materials.push(m);
+    materials[i] = m;
   }
 
   // lights
-  let lights = [];
-  for (let i = 0; i < manifest.lights.num; i++) {
+  let lights = new Array(manifest.lights.names.length);
+  for (let i = 0; i < manifest.lights.names.length; i++) {
     let e = app.createEntity(manifest.lights.names[i]);
     e.setLocalPos(manifest.lights.pos[i]);
     let l = e.addComp('Light');
@@ -80,30 +65,54 @@
     l.color = manifest.lights.color[i];
     l.intensity = 1.0;
     l.range = 1000.0;
-    lights.push(e);
+    lights[i] = e;
   }
 
   // geometries
-  let geometries = [];
+  let geo = app.createEntity(`geometries`);
+  geo.setLocalPos(1, 2, 3);
+  geo.setLocalRotFromEuler(1, 2, 3);
+  geo.setLocalScale(10, 10, 10);
+  let colSize = vec3.create();
+  let geometries = new Array(manifest.geometries.num);
   for (let i = 0; i < manifest.geometries.num; i++) {
-    let e = app.createEntity(manifest.geometries.names[i]);
+    let e = app.createEntity(`shape_${i}`, geo);
     let g = e.addComp('Model');
-    g.mesh = cc.utils.createMesh(app, manifest.geometries.meshes[i]);
-    g.material = materials[1]; e.setLocalPos(manifest.geometries.pos[i]);
-    g.material_bak = g.material;
-    geometries.push(e);
+    let id = Math.floor(randomRange(0, manifest.geometries.meshes.length));
+    g.mesh = cc.utils.createMesh(app, manifest.geometries.meshes[id]);
+    g.material = materials[1]; g.material_bak = g.material;
+    vec3.scale(colSize, vec3.sub(colSize, g.mesh._maxPos, g.mesh._minPos), 0.5);
+    e.addComp('Collider', {
+      type: Math.random() > 0.5 ? 'sphere' : 'box',
+      size: [colSize.x, colSize.y, colSize.z],
+      radius: manifest.geometries.meshes[id].boundingRadius
+    });
+    // uniformly sample inside a cylinder
+    let theta = randomRange(0, Math.PI * 2), r = Math.sqrt(Math.random());
+    e.setLocalPos(r * Math.cos(theta), randomRange(-1, 1), r * Math.sin(theta));
+    e.setLocalRotFromEuler(randomRange(0, 360), randomRange(0, 360), randomRange(0, 360));
+    e.setLocalScale(0.15, 0.15, 0.15);
+    // e.setLocalScale(randomRange(0.01, 0.2), randomRange(0.01, 0.2), randomRange(0.01, 0.2));
+    let phi = randomRange(0, Math.PI);
+    e.rotAxis = vec3.create(Math.cos(theta) * Math.sin(phi),
+      Math.sin(theta) * Math.sin(phi), Math.cos(phi));
+    geometries[i] = e;
   }
-  let bbhints = [];
-  let bbsize = vec3.create(0, 0, 0);
-  for (let i = 0; i < manifest.geometries.num; i++) {
-    let e = app.createEntity("bb_" + manifest.geometries.names[i]);
+
+  // collider hints
+  let colHints = new Array(geometries.length);
+  let boxHint = cc.primitives.box(2, 2, 2);
+  boxHint.indices = cc.primitives.wireframe(boxHint.indices);
+  boxHint.primitiveType = cc.gfx.PT_LINES;
+  let sphereHint = cc.primitives.sphere(1);
+  sphereHint.indices = cc.primitives.wireframe(sphereHint.indices);
+  sphereHint.primitiveType = cc.gfx.PT_LINES;
+  for (let i = 0; i < geometries.length; i++) {
+    let e = app.createEntity(`bs_hint_${i}`);
     let g = e.addComp('Model');
-    vec3.sub(bbsize, geometries[i].getComp('Model').mesh._maxPos, 
-      geometries[i].getComp('Model').mesh._minPos);
-    g.mesh = cc.utils.createMesh(app, cc.primitives.box(bbsize.x, bbsize.y, bbsize.z));
-    g.material = materials[2]; e.setLocalPos(manifest.geometries.pos[i]);
-    g.material_bak = g.material; e.layer = cc.utils.Layers.IgnoreRaycast;
-    bbhints.push(e);
+    let t = geometries[i].getComp('Collider').type;
+    g.mesh = cc.utils.createMesh(app, t === 'box' ? boxHint : sphereHint);
+    g.material = materials[1]; colHints[i] = e;
   }
 
   // camera
@@ -114,13 +123,17 @@
     constructor() {
       super();
       this.pos = vec3.create(0, 0, 0);
-      this.hitInfo = {};
       this.input = app._input;
       this.canvas = app._canvas;
       this.camera = camera.getComp('Camera')._camera;
+      this.pauseCameraRig = false;
+      this.pauseModelRig = false;
       
-      this.center = vec3.create(-2, 1, 1);
-      this.dist = 10; this.height = 4; this.angle = 0;
+      this.center = vec3.create(1, 2, 3);
+      this.dist = 35; this.height = 2; this.angle = 0;
+      this.qt = quat.create();
+      this.physics = app.system('physics');
+      this.result = app.system('physics').world.createRaycastResult();
     }
 
     tick() {
@@ -132,13 +145,18 @@
       if (this.input.keypress('d')) this.angle += 0.025;
       if (this.input.keypress('q')) this.height -= 0.1;
       if (this.input.keypress('e')) this.height += 0.1;
-      if (!this.input.keypress('Shift')) this.angle += 0.005;
+      if (!this.pauseCameraRig) this.angle += 0.003;
       this.updateCamera();
 
-      // reset materials
+      // reset materials, rig models
       for (let i = 0; i < geometries.length; i++) {
-        let model = geometries[i].getComp('Model');
+        let e = geometries[i];
+        let model = e.getComp('Model');
         model.material = model.material_bak;
+        if (!this.pauseModelRig) {
+          quat.fromAxisAngle(this.qt, e.rotAxis, 0.01);
+          e.setLocalRot(quat.mul(e._lrot, e._lrot, this.qt));
+        }
       }
 
       // get touch pos if there is one
@@ -150,8 +168,23 @@
 
       // raycasting
       let ray = this.camera.screenPointToRay(this.pos, this.canvas.width, this.canvas.height);
-      if (app.scene.raycast(this.hitInfo, ray)) {
-        this.hitInfo.entity.getComp('Model').material = materials[0];
+      if (this.physics.raycastClosest(ray, this.dist * 2, this.result)) {
+        this.result.body._entity.getComp('Model').material = materials[0];
+      }
+    }
+
+    postTick() {
+      // update collider hints
+      for (let i = 0; i < colHints.length; i++) {
+        let e = colHints[i];
+        let source = geometries[i].getComp('Collider').body;
+        let pos = source.shape.center || source.shape.c || source.position;
+        let radius = source.shape.r || source.shape.radius;
+        if (pos) e.setWorldPos(pos);
+        if (source.shape.halfExtents) e.setWorldScale(source.shape.halfExtents);
+        if (source.shape.orientation) e.setWorldRot(quat.fromMat3(e._rot, source.shape.orientation));
+        if (radius) e.setWorldScale(radius, radius, radius);
+        if (source.quaternion && source.shape.halfExtents) e.setWorldRot(source.quaternion);
       }
     }
 
@@ -180,6 +213,9 @@
     }
   }
   app.registerClass('RaycastTest', RaycastTest);
-  camera.addComp('RaycastTest');
+  let comp = camera.addComp('RaycastTest');
+  dgui.add(comp, "pauseCameraRig");
+  dgui.add(comp, "pauseModelRig");
+  dgui.add(comp, "dist", 3, 35).listen();
 
 })();
