@@ -54,7 +54,7 @@
   let camCol = camEnt.addComp('Collider', {
     mass: 1,
     type: 'box',
-    size: [0.5, 2, 0.5],
+    size: [1, 4, 1],
     center: [0, -2, 0]
   });
   vec3.set(app.system('physics').world.gravity, 0, -50, 0);

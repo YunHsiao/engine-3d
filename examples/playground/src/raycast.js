@@ -81,7 +81,7 @@
     let id = Math.floor(randomRange(0, manifest.geometries.meshes.length));
     g.mesh = cc.utils.createMesh(app, manifest.geometries.meshes[id]);
     g.material = materials[1]; g.material_bak = g.material;
-    vec3.scale(colSize, vec3.sub(colSize, g.mesh._maxPos, g.mesh._minPos), 0.5);
+    vec3.sub(colSize, g.mesh._maxPos, g.mesh._minPos);
     e.addComp('Collider', {
       type: Math.random() > 0.5 ? 'sphere' : 'box',
       size: [colSize.x, colSize.y, colSize.z],
@@ -129,8 +129,8 @@
       this.pauseCameraRig = false;
       this.pauseModelRig = false;
       
-      this.center = vec3.create(1, 2, 3);
-      this.dist = 35; this.height = 2; this.angle = 0;
+      this.center = vec3.create();
+      this.dist = 7; this.height = 2; this.angle = 0;
       this.qt = quat.create();
       this.physics = app.system('physics');
       this.result = app.system('physics').world.createRaycastResult();
@@ -168,7 +168,7 @@
 
       // raycasting
       let ray = this.camera.screenPointToRay(this.pos, this.canvas.width, this.canvas.height);
-      if (this.physics.raycastClosest(ray, this.dist * 2, this.result)) {
+      if (this.physics.raycastClosest(ray, 1e6, this.result)) {
         this.result.body._entity.getComp('Model').material = materials[0];
       }
     }

@@ -1,11 +1,33 @@
 (() => {
-  const { cc, app } = window;
+  const { cc, app, dgui } = window;
   const { Material } = cc;
   const { vec3, color4, randomRange, toRadian } = cc.math;
   const { sphere, capsule } = cc.primitives;
 
   // use built-in collision detection engine
   app.system('physics').engine = 0;
+  let dobj = {
+    playing: true,
+    play: () => {
+      dobj.playing = true;
+    },
+    pause: () => {
+      dobj.playing = false;
+    },
+    stop: () => {
+      dobj.playing = false;
+      emitters.forEach(e => {
+        e.reapAll();
+      });
+    },
+    step: () => {
+      dobj.playing = true;
+      emitters.forEach(e => {
+        e.tick();
+      });
+      dobj.playing = false;
+    }
+  };
 
   // util functions
   let border = 20;
@@ -50,7 +72,7 @@
         modelComp.material = m;
         ent.color = c; ent.collided = false; ent.framesRemaining = 0;
         ent.velocity = vec3.create();
-        let col = ent.addComp('Collider', { type: 'sphere' });
+        let col = ent.addComp('Collider', { type: 'sphere', radius: 1 });
         col.body.setCollisionFilter(group, mask);
         ent.on('collide', (event) => {
           // event.target is always 'this entity'
@@ -66,6 +88,7 @@
     }
 
     tick() {
+      if (!dobj.playing) return;
       for (let i = 0; i < this.livepool.length; i++) {
         let ent = this.livepool.data[i];
         if (ent.collided) {
@@ -76,7 +99,7 @@
           if (outOfBounds(v3)) this.reap(ent);
         }
       }
-      // if (this.deadpool.length > 0) this.resurrect(); // wtf: why is this even slower?
+      // if (this.deadpool.length > 0) this.resurrect();
       for (let i = 0; i < this.deadpool.length; i++) this.resurrect();
     }
 
@@ -84,6 +107,15 @@
       ent.deactivate();
       this.livepool.fastRemove(this.livepool.indexOf(ent));
       this.deadpool.push(ent);
+    }
+
+    reapAll() {
+      for (let i = 0; i < this.livepool.length; i++) {
+        let ent = this.livepool.data[i];
+        ent.deactivate();
+        this.deadpool.push(ent);
+      }
+      this.livepool.reset();
     }
 
     resurrect() {
@@ -125,4 +157,9 @@
       emitters[i].tick();
     }
   });
+
+  dgui.add(dobj, 'play');
+  dgui.add(dobj, 'pause');
+  dgui.add(dobj, 'stop');
+  dgui.add(dobj, 'step');
 })();
