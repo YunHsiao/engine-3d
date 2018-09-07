@@ -1,7 +1,7 @@
 (() => {
   const { cc, app, dgui } = window;
   const { Material } = cc;
-  const { vec3, color3, color4, quat, clamp } = cc.math;
+  const { vec3, color3, color4, clamp } = cc.math;
   const { sphere } = cc.primitives;
 
   /**
