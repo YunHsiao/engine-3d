@@ -46,8 +46,8 @@
     ],
     meshes: [
       cc.primitives.box(2, 2, 2, { invWinding: true }),
-      cc.primitives.sphere(),
-      cc.primitives.box(),
+      cc.primitives.sphere(1),
+      cc.primitives.box(2, 2, 2),
       cc.primitives.sphere(30),
       cc.primitives.box(30, 50, 30),
     ],
@@ -55,8 +55,8 @@
       vec3.create(0, 0, 0),
       vec3.create(7, 2, 5),
       vec3.create(1, 2, 3),
-      vec3.create(-90, 20, -135),
-      vec3.create(160, 20, -80),
+      vec3.create(-106, 20, -135),
+      vec3.create(170, 20, -80),
     ],
     axis: [
       vec3.create(0, 1, 0),
@@ -163,6 +163,24 @@
   frustum.mesh = cc.utils.createMesh(app, manifest.geometries.meshes[0]);
   frustum.material = materials[1]; // transparent material
 
+  // bounding shape hints
+  app.scene.tick(); // update world space bounding shapes
+  for (let i = 0; i < geometries.length; i++) {
+    let e = app.createEntity(`bs_hint_${i}`);
+    let g = e.addComp('Model');
+    let mesh = cc.primitives.box(2, 2, 2);
+    mesh.primitiveType = cc.gfx.PT_LINES;
+    mesh.indices = cc.primitives.wireframe(mesh.indices);
+    g.mesh = cc.utils.createMesh(app, mesh);
+    g.material = materials[1];
+
+    let source = geometries[i].getComp('Model')._models[0]._boundingShape;
+    e.setWorldPos(source.center || source.c);
+    if (source.halfExtents) e.setWorldScale(source.halfExtents);
+    else e.setWorldScale(source.r, source.r, source.r);
+    if (source.orientation) e.setWorldRot(quat.fromMat3(e._rot, source.orientation));
+  }
+
   // debug controller
   dgui.remember(dobj);
   dgui.add(dobj, 'accurateFrustumCulling').onFinishChange(() => {
@@ -200,8 +218,9 @@
   textComp.fontSize = 14;
   // sync the result to screen every frame
   app.on('tick', () => {
-    textComp.text = "Drawing models:\n";
-    for (let m in submitted) textComp.text += m + "\n";
+    let text = "Drawing models:\n";
+    for (let m in submitted) text += `${m}\n`;
+    textComp.text = text;
     submitted = {};
   });
 

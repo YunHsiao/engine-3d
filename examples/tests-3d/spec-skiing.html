@@ -38,7 +38,7 @@
       let player = app.find('player');
       let cam = app.find('Main Camera');
       let spawn = player.getLocalPos();
-      let cam_offset = vec3.create(0, 0, 0);
+      let cam_offset = vec3.create();
       vec3.sub(cam_offset, cam._lpos, player._lpos);
       let col = player.getComp('Collider');
       col.freezeRotation = true;
