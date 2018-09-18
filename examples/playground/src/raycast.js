@@ -112,7 +112,7 @@
     let g = e.addComp('Model');
     let t = geometries[i].getComp('Collider').type;
     g.mesh = cc.utils.createMesh(app, t === 'box' ? boxHint : sphereHint);
-    g.material = materials[1]; colHints[i] = e;
+    g.material = materials[2]; colHints[i] = e;
   }
 
   // camera
