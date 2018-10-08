@@ -1,7 +1,7 @@
 'use strict';
 
 const fsJetpack = require('fs-jetpack');
-const resolve = require('@gamedev-js/rollup-plugin-node-resolve');
+const resolve = require('rollup-plugin-node-resolve');
 
 console.log('rollup mappings...');
 
