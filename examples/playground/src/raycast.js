@@ -117,7 +117,8 @@
 
   // camera
   let camera = app.createEntity('camera');
-  camera.addComp('Camera');
+  let camComp = camera.addComp('Camera');
+  camComp.projection = 'ortho';
 
   class RaycastTest extends cc.ScriptComponent {
     constructor() {
@@ -128,6 +129,7 @@
       this.camera = camera.getComp('Camera')._camera;
       this.pauseCameraRig = false;
       this.pauseModelRig = false;
+      this.ray = cc.geometry.ray.create();
       
       this.center = vec3.create();
       this.dist = 7; this.height = 2; this.angle = 0;
@@ -167,8 +169,8 @@
       } else vec3.set(this.pos, this.input.mouseX, this.input.mouseY, 1);
 
       // raycasting
-      let ray = this.camera.screenPointToRay(this.pos, this.canvas.width, this.canvas.height);
-      if (this.physics.raycastClosest(ray, 1e6, this.result)) {
+      this.camera.screenPointToRay(this.pos.x, this.pos.y, this.canvas.width, this.canvas.height, this.ray);
+      if (this.physics.raycastClosest(this.ray, 1e6, this.result)) {
         this.result.body._entity.getComp('Model').material = materials[0];
       }
     }
